@@ -2,6 +2,7 @@ import express from 'express';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import userRoutes from './routes/user.route.js';  // Import user routes
+import authRoutes from './routes/auth.route.js';  // Import auth routes
 
 dotenv.config();
 
@@ -16,8 +17,12 @@ mongoose
 
 const app = express();
 
+// Allow Express to parse JSON and extended URL encoded data into req.body
+app.use(express.json());
+
 app.listen(3000, () => {
     console.log('Server is running on port 3000');
 });
 
 app.use('/api/user', userRoutes);  // Use user routes
+app.use('/api/auth', authRoutes);  // Use auth routes
