@@ -1,7 +1,8 @@
 import { Alert, Button, Label, Spinner, TextInput } from "flowbite-react";
 import { set } from "mongoose";
-import React, { useState } from "react";
+import React, { useState, useEffect} from "react";
 import { Link, useNavigate } from "react-router-dom";
+
 
 export default function SignUp() {
   const [formData, setFormData] = useState({});
@@ -44,81 +45,101 @@ export default function SignUp() {
       setLoading(false);
     }
   };
+
   return (
-    <div className="min-h-screen mt-20">
-      <div className="flex p-3 max-w-3xl mx-auto flex-col md:flex-row md:items-center gap-5">
-        {/* Left side */}
-        <div className="flex-1">
-          <Link to="/" className="font-bold dark:text-white text-4xl">
-            <span
-              className="px-2 py-1 bg-gradient-to-r from-indigo-500
-            via-purple-500 to-pink-500 rounded-lg text-white"
-            >
-              Codelformat's
-            </span>
-            Blog
-          </Link>
-          <p className="text-sm mt-5">
-            You can sign up with your email and password or with Google.
-          </p>
-        </div>
-        {/* Right side */}
-        <div className="flex-1">
-          <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
-            <div>
-              <Label value="Your Username" />
-              <TextInput
-                type="text"
-                placeholder="Username..."
-                id="username"
-                onChange={handleChange}
-              />
-            </div>
-            <div>
-              <Label value="Your Email" />
-              <TextInput
-                type="email"
-                placeholder="name@company.com"
-                id="email"
-                onChange={handleChange}
-              />
-            </div>
-            <div>
-              <Label value="Your Password" />
-              <TextInput
-                type="password"
-                placeholder="Password..."
-                id="password"
-                onChange={handleChange}
-              />
-            </div>
-            <Button
-              gradientDuoTone="purpleToPink"
-              type="submit"
-              disabled={loading}
-            >
-              Sign Up
-            </Button>
-          </form>
-          <div className="flex gap-2 text-sm mt-5">
-            <span>Have an account?</span>
-            <Link to="/sign-in" className="text-blue-500">
-              {loading ? (
-                <>
-                  <Spinner size="sm" />
-                  <span className="pl-3">Loading...</span>
-                </>
-              ) : (
-                "Sign Up"
-              )}
-            </Link>
+    <div className="flex justify-center items-center h-screen 
+    bg-gradient-to-r from-pink-600 via-purple-600 to-red-500">
+      <div className="h-4/5 w-4/5 bg-white mx-auto rounded-xl border flex">
+        {/* <div className="flex p-1 max-w-3xl mx-auto flex-col md:flex-row md:items-center gap-20"> */}
+          {/* Left side */}
+          <div className="flex-1 h-full bg-purple-600 rounded-xl flex flex-col items-center justify-center">
+            <p className="text-sm mt-5 text-white">
+              Welcome!
+            </p>
           </div>
-          {errorMessage && (
-            <Alert className="mt-5" color="failure">
-              {errorMessage}
-            </Alert>
-          )}
-        </div>
+
+          {/* <div className="flex-1 h-full bg-purple-600 rounded-xl ">
+            <Link to="/" className="font-bold dark:text-white text-4xl">
+              <span
+                className="px-2 py-1 bg-gradient-to-r from-indigo-500
+              via-purple-500 to-pink-500 rounded-lg text-white"
+              >
+                Codelformat's
+              </span>
+              Blog
+            </Link>
+            <p className="text-sm mt-5">
+              Welcome!
+            </p>
+          </div> */}
+          {/* Right side */}
+          <div className="flex-1 flex flex-col items-center justify-center">
+            {/* <div className="text-3xl font-bold mb-4">
+              Sign Up
+            </div> */}
+            <div className="text-4xl font-bold mb-4 mt-[-1rem]">
+              Sign Up
+            </div>
+            <form className="flex flex-col gap-10 w-full max-w-md justify-center items-center" onSubmit={handleSubmit}>
+              <div className="w-4/5">
+                <Label value="用户名" />
+                <input
+                  type="text"
+                  placeholder="Username..."
+                  id="username"
+                  onChange={handleChange}
+                  className="border-b-2 border-gray-300 focus:outline-none focus:border-purple-500 bg-transparent w-full py-1"
+                />
+              </div>
+              <div className="w-4/5">
+                <Label value="邮箱地址" />
+                <input
+                  type="email"
+                  placeholder="name@company.com"
+                  id="email"
+                  onChange={handleChange}
+                  className="border-b-2 border-gray-300 focus:outline-none focus:border-purple-500 bg-transparent w-full py-1"
+                />
+              </div>
+              <div className="w-4/5">
+                <Label value="密码" />
+                <input
+                  type="password"
+                  placeholder="Password..."
+                  id="password"
+                  onChange={handleChange}
+                  className="border-b-2 border-gray-300 focus:outline-none focus:border-purple-500 bg-transparent w-full py-1"
+                />
+              </div>
+              <Button
+                gradientDuoTone="purpleToPink"
+                type="submit"
+                disabled={loading}
+                className="w-4/5"
+              >
+                Sign Up
+              </Button>
+            </form>
+            {/* <div className="flex gap-2 text-sm mt-5">
+              <span>Have an account?</span>
+              <Link to="/sign-in" className="text-blue-500">
+                {loading ? (
+                  <>
+                    <Spinner size="sm" />
+                    <span className="pl-3">Loading...</span>
+                  </>
+                ) : (
+                  "Sign Up"
+                )}
+              </Link>
+            </div> */}
+            {errorMessage && (
+              <Alert className="mt-5" color="failure">
+                {errorMessage}
+              </Alert>
+            )}
+          </div>
+        {/* </div> */}
       </div>
     </div>
   );
