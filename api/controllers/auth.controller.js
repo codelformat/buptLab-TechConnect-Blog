@@ -31,7 +31,7 @@ export const signup = async (req, res, next) => {
 export const signin = async (req, res, next) => {
     const { email, password } = req.body;
 
-    if(!email || !password || email === '' || password === '') {
+    if (!email || !password || email === '' || password === '') {
         next(errorHandler(400, 'All fields are required'));
     }
 
@@ -52,17 +52,63 @@ export const signin = async (req, res, next) => {
 
         // Create a token if everything is valid
         const token = jwt.sign(
-            {id: validUser._id},
+            { id: validUser._id },
             process.env.JWT_SECRET
         );
         // Seperate the password from the rest of the user data
-        const { password: pass, ...rest} = validUser._doc;
-        
+        const { password: pass, ...rest } = validUser._doc;
+
         res.status(200).cookie('access_token', token, {
             httpOnly: true,
-        }).json({rest});
+        }).json({ rest });
 
-    } catch(error) {
+    } catch (error) {
+        next(error);
+    }
+}
+
+export const google = async (req, res, next) => {
+    const { name, email, googlePhotoURL } = req.body;
+
+    if (!name || !email || name === '' || email === '') {
+        next(errorHandler(400, 'All fields are required'));
+    }
+
+    try {
+        // Check if the user already exists
+        const user = await User.findOne({ email });
+
+        // If the user does not exist, create a new user
+        if (!user) {
+            const generatedPassword = Math.random().toString(36).slice(-8) + Math.random().toString(36).slice(-8);
+            const hashedPassword = bcryptjs.hashSync(generatedPassword, 10);
+
+            const newUser = new User({
+                username: name.toLowerCase().split(' ').join('') + Math.random().toString(9).slice(-4),
+                email,
+                password: hashedPassword,
+                profilePicture: googlePhotoURL,
+            });
+            await newUser.save();
+            // Create a token
+            const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET);
+            const { password: pass, ...rest } = newUser._doc;
+            res
+                .status(200)
+                .cookie('access_token', token, {
+                    httpOnly: true,
+                })
+                .json({ rest });
+            res.json(newUser);
+        } else {
+            // If the user already exists, send the user data
+            const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
+            const { password: pass, ...rest } = user._doc;
+            res.status(200).cookie('access_token', token, {
+                httpOnly: true,
+            }).json({ rest });
+        }
+    } catch (error) {
         next(error);
     }
 }
