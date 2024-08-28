@@ -2,16 +2,18 @@ import { Avatar, Button, Dropdown, Navbar, TextInput } from "flowbite-react";
 import { Link, useLocation } from "react-router-dom";
 import { AiOutlineSearch } from "react-icons/ai";
 import { FaMoon } from "react-icons/fa";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { toggleTheme } from "../redux/theme/themeSlice";
 
 export default function Header() {
   var currentUser = null;
   const path = useLocation().pathname;
+  const dispatch = useDispatch();
   const userData = useSelector((state) => state.user.currentUser);
 
   // If the userData has attribute 'rest'
   if (userData?.rest) {
-    currentUser= userData.rest;
+    currentUser = userData.rest;
   }
   console.log(currentUser);
   return (
@@ -41,7 +43,12 @@ export default function Header() {
         <AiOutlineSearch />
       </Button>
       <div className="flex gap-2 md:order-2">
-        <Button className="w-12 h-10 hidden sm:inline" color="gray" pill>
+        <Button
+          className="w-12 h-10 hidden sm:inline"
+          color="gray"
+          pill
+          onClick={() => dispatch(toggleTheme())}
+        >
           <FaMoon />
         </Button>
         {currentUser ? (
