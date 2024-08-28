@@ -40,7 +40,7 @@ export default function SignIn() {
       if (data.success === false) {
         dispatch(signInFailure(data.message)); // message is actually action.payload
       }
-      setLoading(false);
+      // setLoading(false);
       if (res.ok) {
         // Redirect the user to the sign in page if the request is successful
         dispatch(signInSuccess(data));
