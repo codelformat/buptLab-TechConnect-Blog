@@ -5,7 +5,7 @@ const initialState = {
     error: null,
     loading: false,
 }
-
+//简化版本的redux 解构生成了actor creator
 const userSlice = createSlice({
     name: "user",
     initialState,
