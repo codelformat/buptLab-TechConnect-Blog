@@ -27,6 +27,7 @@ export default function SignIn() {
     }
     try {
       // Set loading to true to display the loading spinner
+      //dispatch(action)
       dispatch(signInStart());
       const res = await fetch("/api/auth/signin", {
         method: "POST",
