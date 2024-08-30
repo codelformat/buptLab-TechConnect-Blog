@@ -11,6 +11,8 @@ export default function DashProfile() {
   const [imageFileURL, setImageURL] = useState(null);
   //转换链接 把对fileInput的引用传给filePickerRef
   const filePickerRef = useRef(null);
+
+  const [formdata, setFormdata] = useState({});
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -18,17 +20,18 @@ export default function DashProfile() {
       setImageURL(URL.createObjectURL(file));
     }
   };
+
   //后端上传图片
   useEffect(() => {
     if (imageFile) {
       uploadImage();
     }
   }, [imageFile]);
-  const uploadImage = async () => { 
+  const uploadImage = async () => {
     console.log("uploading image");
     //需要
-  }
-
+  };
+  const   handleChange = (e) => {};
 
   //currentUser里面有rest 要用 currentUser.rest.username
   //数据库里没有profilePicture 有profiePicture
@@ -64,6 +67,7 @@ export default function DashProfile() {
           id="email"
           placeholder="email"
           defaultValue={currentUser.rest.email}
+          onChange={handleChange}
         ></TextInput>
         <TextInput
           type="password "
