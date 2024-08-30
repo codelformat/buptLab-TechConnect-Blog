@@ -4,8 +4,9 @@ import { errorHandler } from '../utils/error.js';
 export const test = (req, res) => {
     res.json({ message: 'API working!' });
 };
-
+//更新控制器
 export const updateUser = async (req, res, next) => {
+    //判断是不是该用户发出的请求
     if (req.user.id !== req.params.userId) {
         return next(errorHandler(403, 'You are not allowed to update this user'));
     }
@@ -27,6 +28,7 @@ export const updateUser = async (req, res, next) => {
             return next(errorHandler(400, 'Username must contain only letters and numbers'));
         }
         try {
+            //更新数据库
             const updataUser = await User.findByIdAndUpdate(req.params.userId, {
                 $set: {
                     username: req.body.username,
@@ -35,6 +37,7 @@ export const updateUser = async (req, res, next) => {
                     password: req.body.password,
                 },
             }, { new: true });
+            //解构 不返回password
             const { password, ...rest } = updataUser._doc;
             res.status(200).json(rest);
         }
