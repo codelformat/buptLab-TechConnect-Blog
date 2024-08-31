@@ -23,10 +23,24 @@ const userSlice = createSlice({
             state.loading = false;
             state.error = action.payload;
         },
+        updateStart: (state) => {
+            state.loading = true;
+            state.error = null;
+        },
+        updateSuccess: (state, action) => {
+            state.loading = false;
+            state.error = null;
+            state.currentUser = action.payload; // userdata is payload
+
+        },
+        updateFailure: (state, action) => {
+            state.loading = false;
+            state.error = action.payload;
+        },
     },
 });
 
-export const { signInStart, signInSuccess, signInFailure } = userSlice.actions;
+export const { signInStart, signInSuccess, signInFailure,updateFailure,updateStart,updateSuccess } = userSlice.actions;
 
 
 // export as default, so that we can import it with other names
