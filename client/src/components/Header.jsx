@@ -10,13 +10,15 @@ export default function Header() {
   const path = useLocation().pathname;
   const dispatch = useDispatch();
   const userData = useSelector((state) => state.user.currentUser);
-  const {theme} = useSelector((state) => state.theme);
+  const { theme } = useSelector((state) => state.theme);
+  console.log(userData);
 
   // If the userData has attribute 'rest'
   if (userData?.rest) {
     currentUser = userData.rest;
+  } else {
+    currentUser = userData;
   }
-  console.log(currentUser);
   return (
     <Navbar className="border-b-2">
       <Link
