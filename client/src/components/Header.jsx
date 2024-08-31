@@ -11,7 +11,7 @@ export default function Header() {
   const dispatch = useDispatch();
   const userData = useSelector((state) => state.user.currentUser);
   const { theme } = useSelector((state) => state.theme);
-  console.log(userData)
+  console.log(userData);
 
   // If the userData has attribute 'rest'
   if (userData?.rest) {

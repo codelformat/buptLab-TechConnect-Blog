@@ -17,7 +17,7 @@ mongoose
     });
 
 const app = express();
-
+app.use(cookieParser());
 // Allow Express to parse JSON and extended URL encoded data into req.body
 app.use(express.json());
 
@@ -27,7 +27,7 @@ app.listen(3000, () => {
 
 app.use('/api/user', userRoutes);  // Use user routes
 app.use('/api/auth', authRoutes);  // Use auth routes
-app.use(cookieParser());
+
 // Middleware to handle errors
 app.use((err, req, res, next) => {
     const statusCode = err.statusCode || 500;
