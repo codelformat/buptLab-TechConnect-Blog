@@ -20,7 +20,8 @@ import { useDispatch } from "react-redux";
 
 export default function DashProfile() {
   const { currentUser } = useSelector((state) => state.user);
-  //上传profiePicture
+
+  //上传profilePicture
   const [imageFile, setImageFile] = useState(null);
   //不直接传图片 而是给出地址
   const [imageFileURL, setImageURL] = useState(null);
@@ -31,38 +32,60 @@ export default function DashProfile() {
     useState(0);
   // 图片上传错误钩子
   const [imageFileUploadError, setImageFileUploadError] = useState(null);
+  const [imageFileUploading, setImageFileUploading] = useState(false);
+  const [updateUserSuccess, setUpdateUserSuccess] = useState(null);
+  const [updateUserError, setUpdateUserError] = useState(null);
   const [formData, setFormData] = useState({});
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
+  // console.log(formData);
+  console.log(currentUser);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setUpdateUserError(null);
+    setUpdateUserSuccess(null);
     console.log(formData);
     if (Object.keys(formData).length === 0) {
+      setUpdateUserError("No changes made");
       return;
     }
+
+    if (imageFileUploading) {
+      setUpdateUserError("Please wait for image to upload");
+      return;
+    }
+
     try {
       dispatch(updateStart());
-      const res = await fetch(`api/user/update/${currentUser.rest._id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
+      const res = await fetch(
+        `api/user/update/${
+          currentUser.rest ? currentUser.rest._id : currentUser._id
+        }`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        }
+      );
       const data = await res.json();
       console.log(data);
-      log(data);
+
       if (!res.ok) {
         dispatch(updateFailure(data.message));
+        setUpdateUserError(data.message);
       } else {
         dispatch(updateSuccess(data));
+        setUpdateUserSuccess("User updated successfully");
       }
     } catch (error) {
       dispatch(updateFailure(error.message));
+      setUpdateUserError(error.message);
     }
-    console.log({currentUser});
-
+    console.log({ currentUser });
   };
 
   const handleImageChange = (e) => {
@@ -81,6 +104,7 @@ export default function DashProfile() {
     }
   }, [imageFile]);
   const uploadImage = async () => {
+    setImageFileUploading(true);
     setImageFileUploadError(null);
     const storage = getStorage(app);
     const fileName = new Date().getTime() + "-" + imageFile.name;
@@ -101,11 +125,14 @@ export default function DashProfile() {
         setImageFileUploadingProgress(0);
         setImageFile(null);
         setImageURL(null);
+        setImageFileUploading(false);
       },
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
           setImageURL(downloadURL);
-          setFormData({ ...formData, profiePicture: downloadURL });
+          // 上传成功后，将图片地址存储到formData中
+          setFormData({ ...formData, profilePicture: downloadURL });
+          setImageFileUploading(false);
         });
       }
     );
@@ -113,7 +140,6 @@ export default function DashProfile() {
   };
 
   //currentUser里面有rest 要用 currentUser.rest.username
-  //数据库里没有profilePicture 有profiePicture
   return (
     <div className="max-w-lg mx-auto p-3 w-full">
       <h1 className="my-7 text-center font-semibold">Profile</h1>
@@ -151,7 +177,11 @@ export default function DashProfile() {
             />
           )}
           <img
-            src={imageFileURL || currentUser.rest.profiePicture}
+            src={
+              currentUser.rest
+                ? imageFileURL || currentUser.rest.profilePicture
+                : imageFileURL || currentUser.profilePicture
+            }
             alt="user"
             className={`rounded-full w-full h-full object-cover border-8 border-[lightgray] 
             ${
@@ -170,14 +200,18 @@ export default function DashProfile() {
           type="text "
           id="username"
           placeholder="username"
-          defaultValue={currentUser.rest.username}
+          defaultValue={
+            currentUser.rest ? currentUser.rest.username : currentUser.username
+          }
           onChange={handleChange}
         ></TextInput>
         <TextInput
           type="email "
           id="email"
           placeholder="email"
-          defaultValue={currentUser.rest.email}
+          defaultValue={
+            currentUser.rest ? currentUser.rest.email : currentUser.email
+          }
           onChange={handleChange}
         ></TextInput>
         <TextInput
@@ -190,11 +224,13 @@ export default function DashProfile() {
         <Button type="submit" gradientDuoTone="purpleToBlue" outline>
           Update
         </Button>
-        <div className="text-red-500 flex justify-between mt-5">
-          <span className="cursor-pointer">Delete Account</span>
-          <span className="cursor-pointer">Sign Out</span>
-        </div>
       </form>
+      <div className="text-red-500 flex justify-between mt-5">
+        <span className="cursor-pointer">Delete Account</span>
+        <span className="cursor-pointer">Sign Out</span>
+      </div>
+      {updateUserSuccess && <Alert color="success">{updateUserSuccess}</Alert>}
+      {updateUserError && <Alert color="failure">{updateUserError}</Alert>}
     </div>
   );
 }

@@ -40,7 +40,7 @@ const userSlice = createSlice({
     },
 });
 
-export const { signInStart, signInSuccess, signInFailure,updateFailure,updateStart,updateSuccess } = userSlice.actions;
+export const { signInStart, signInSuccess, signInFailure, updateFailure, updateStart, updateSuccess } = userSlice.actions;
 
 
 // export as default, so that we can import it with other names
