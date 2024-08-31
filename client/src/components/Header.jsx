@@ -16,6 +16,8 @@ export default function Header() {
   // If the userData has attribute 'rest'
   if (userData?.rest) {
     currentUser = userData.rest;
+  } else {
+    currentUser = userData;
   }
   return (
     <Navbar className="border-b-2">
