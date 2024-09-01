@@ -40,7 +40,7 @@ export default function ProfileForm({
       dispatch(updateStart());
       const res = await fetch(
         `api/user/update/${
-          currentUser.rest ? currentUser.rest._id : currentUser._id
+          currentUser._id
         }`,
         {
           method: "PUT",
@@ -73,7 +73,7 @@ export default function ProfileForm({
           id="username"
           placeholder="username"
           defaultValue={
-            currentUser.rest ? currentUser.rest.username : currentUser.username
+            currentUser.username
           }
           onChange={handleChange}
         />
@@ -82,7 +82,7 @@ export default function ProfileForm({
           id="email"
           placeholder="email"
           defaultValue={
-            currentUser.rest ? currentUser.rest.email : currentUser.email
+            currentUser.email
           }
           onChange={handleChange}
         />
