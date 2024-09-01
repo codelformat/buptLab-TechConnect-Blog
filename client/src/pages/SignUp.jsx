@@ -3,6 +3,10 @@ import { set } from "mongoose";
 import React, { useState, useEffect} from "react";
 import { Link, useNavigate } from "react-router-dom";
 import OAuth from "../components/OAuth";
+import * as THREE from 'three'; // Import three.js explicitly
+import Waves from "../components/Waves";
+import Clouds from "../components/Clouds";
+
 
 
 export default function SignUp() {
@@ -49,15 +53,17 @@ export default function SignUp() {
 
   return (
     <div className="flex justify-center items-center h-screen 
-    bg-gradient-to-r from-pink-600 via-purple-600 to-red-500">
-      <div className="h-4/5 w-4/5 bg-white mx-auto rounded-xl border flex">
+    bg-gradient-to-r from-pink-300 to-pink-400">
+      <div className="h-4/5 w-4/5 bg-white mx-auto rounded-3xl border flex">
         {/* <div className="flex p-1 max-w-3xl mx-auto flex-col md:flex-row md:items-center gap-20"> */}
           {/* Left side */}
-          <div className="flex-1 h-full bg-purple-600 rounded-xl flex flex-col items-center justify-center">
+          {/* <div className="flex-1 h-full bg-purple-600 rounded-xl flex flex-col items-center justify-center">
             <p className="text-sm mt-5 text-white">
               Welcome!
             </p>
-          </div>
+          </div> */}
+          <Clouds></Clouds>
+          {/* <Waves></Waves> */}
 
           {/* <div className="flex-1 h-full bg-purple-600 rounded-xl ">
             <Link to="/" className="font-bold dark:text-white text-4xl">
@@ -78,8 +84,8 @@ export default function SignUp() {
             {/* <div className="text-3xl font-bold mb-4">
               Sign Up
             </div> */}
-            <div className="text-4xl font-bold mb-4 mt-[-1rem]">
-              Sign Up
+            <div className="text-4xl font-bold mb-4 mt-[-1rem] text-black">
+              注册
             </div>
             <form className="flex flex-col gap-10 w-full max-w-md justify-center items-center" onSubmit={handleSubmit}>
               <div className="w-4/5">
@@ -89,7 +95,7 @@ export default function SignUp() {
                   placeholder="Username..."
                   id="username"
                   onChange={handleChange}
-                  className="border-b-2 border-gray-300 focus:outline-none focus:border-purple-500 bg-transparent w-full py-1"
+                  className="border-b-2 border-gray-300 focus:outline-none focus:border-purple-500 bg-transparent w-full py-1 text-lg font-bold text-black"
                 />
               </div>
               <div className="w-4/5">
@@ -99,7 +105,7 @@ export default function SignUp() {
                   placeholder="name@company.com"
                   id="email"
                   onChange={handleChange}
-                  className="border-b-2 border-gray-300 focus:outline-none focus:border-purple-500 bg-transparent w-full py-1"
+                  className="border-b-2 border-gray-300 focus:outline-none focus:border-purple-500 bg-transparent w-full py-1 text-lg font-bold text-black"
                 />
               </div>
               <div className="w-4/5">
@@ -109,7 +115,7 @@ export default function SignUp() {
                   placeholder="Password..."
                   id="password"
                   onChange={handleChange}
-                  className="border-b-2 border-gray-300 focus:outline-none focus:border-purple-500 bg-transparent w-full py-1"
+                  className="border-b-2 border-gray-300 focus:outline-none focus:border-purple-500 bg-transparent w-full py-1 text-lg font-bold text-black"
                 />
               </div>
               <Button

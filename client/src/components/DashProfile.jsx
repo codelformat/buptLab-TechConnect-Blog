@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from 'react-router-dom';
 import { useSelector } from "react-redux";
 import ProfileImageUploader from "./widgets/ProfileImageUploader";
 import ProfileForm from "./widgets/ProfileForm";
@@ -25,6 +26,17 @@ export default function DashProfile() {
         formData={formData}
         setFormData={setFormData}
       />
+      {currentUser.isAdmin && (
+          <Link to={'/create-post'}>
+            <Button
+              type='button'
+              gradientDuoTone='purpleToPink'
+              className='w-full'
+            >
+              Create a post
+            </Button>
+          </Link>
+        )}
       <AccountActions currentUser={currentUser} />
       {error && <Alert color="failure">{error}</Alert>}
     </div>
