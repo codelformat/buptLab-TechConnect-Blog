@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import userRoutes from './routes/user.route.js';  // Import user routes
 import authRoutes from './routes/auth.route.js';  // Import auth routes
+import cookieParser from 'cookie-parser';
 import commentRoutes from './routes/comment.route.js';
 dotenv.config();
 
@@ -16,7 +17,7 @@ mongoose
     });
 
 const app = express();
-
+app.use(cookieParser());
 // Allow Express to parse JSON and extended URL encoded data into req.body
 app.use(express.json());
 
