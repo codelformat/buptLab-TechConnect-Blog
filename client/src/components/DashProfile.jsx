@@ -17,6 +17,7 @@ import {
   deleteUserStart,
   deleteUserFailure,
   deleteUserSuccess,
+  signoutSuccess,
 } from "../redux/user/userSlice";
 import { useDispatch } from "react-redux";
 import { HiOutlineExclamationCircle } from "react-icons/hi";
@@ -163,6 +164,24 @@ export default function DashProfile() {
       dispatch(deleteUserFailure(error.message));
     }
   };
+
+  const handleSignout = async () => {
+    try{
+      console.log("signout");
+      const res = await fetch("/api/user/signout", {
+        method: "POST",
+      });
+      const data = await res.json();
+      if(!res.ok){
+        console.log(data.message);
+      } else {
+        dispatch(signoutSuccess());
+        
+      }
+    } catch (error){
+      console.log(error);
+    }
+  };
   //currentUser里面有rest 要用 currentUser.rest.username
   return (
     <div className="max-w-lg mx-auto p-3 w-full">
@@ -253,7 +272,7 @@ export default function DashProfile() {
         <span className="cursor-pointer" onClick={() => setShowModal(true)}>
           Delete Account
         </span>
-        <span className="cursor-pointer">Sign Out</span>
+        <span onClick={handleSignout} className="cursor-pointer">Sign Out</span>
       </div>
       {updateUserSuccess && <Alert color="success">{updateUserSuccess}</Alert>}
       {updateUserError && <Alert color="failure">{updateUserError}</Alert>}

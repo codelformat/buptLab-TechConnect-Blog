@@ -55,6 +55,7 @@ export const signin = async (req, res, next) => {
             { id: validUser._id },
             process.env.JWT_SECRET
         );
+        console.log(token);
         // Seperate the password from the rest of the user data
         const { password: pass, ...rest } = validUser._doc;
 
@@ -99,10 +100,12 @@ export const google = async (req, res, next) => {
                     httpOnly: true,
                 })
                 .json({ rest });
+            console.log(token);
             res.json(newUser);
         } else {
             // If the user already exists, send the user data
             const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
+            console.log(token);
             const { password: pass, ...rest } = user._doc;
             res.status(200).cookie('access_token', token, {
                 httpOnly: true,

@@ -1,6 +1,7 @@
 import bcryptjs from 'bcryptjs';
 import User from '../models/user.model.js';
 import { errorHandler } from '../utils/error.js';
+import e from 'express';
 export const test = (req, res) => {
     res.json({ message: 'API working!' });
 };
@@ -54,7 +55,7 @@ export const updateUser = async (req, res, next) => {
 export const deleteUser = async (req, res, next) => {
     console.log(req.user.id.trim());
     console.log(req.params.userId.trim());
-    
+
     if (req.user.id.trim() !== req.params.userId.trim()) {
         return next(errorHandler(403, 'You are not allowed to delete this user'));
     }
@@ -63,5 +64,17 @@ export const deleteUser = async (req, res, next) => {
         res.status(200).json({ message: 'User has been deleted' });
     } catch (error) {
         next(error); // handle error with middleware
+    }
+};
+
+export const signout = (req, res) => {
+    try {
+        res
+            .clearCookie('access_token')
+            .status(200)
+            .json({ message: 'Signout successful' });
+        
+    }catch(error){
+        next(error);
     }
 };
