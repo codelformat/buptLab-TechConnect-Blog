@@ -12,7 +12,7 @@ export default function AccountActions({ currentUser }) {
     setShowModal(false);
     try {
       dispatch(deleteUserStart());
-      const res = await fetch(`/api/user/delete/${currentUser.rest ? currentUser.rest._id : currentUser._id}`, {
+      const res = await fetch(`/api/user/delete/${currentUser._id}`, {
         method: "DELETE",
       });
       const data = await res.json();

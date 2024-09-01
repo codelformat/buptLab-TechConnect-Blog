@@ -7,7 +7,11 @@ import AccountActions from "./widgets/AccountActions";
 import { Alert, Button } from "flowbite-react";
 
 export default function DashProfile() {
-  const { currentUser, error } = useSelector((state) => state.user);
+  const tempUser = useSelector((state) => state.user);
+  const error = tempUser.error;
+  console.log(tempUser);
+  const currentUser = tempUser.currentUser.rest? tempUser.currentUser.rest : tempUser.currentUser;
+  console.log(currentUser);
   const [formData, setFormData] = useState({});
   const [imageFileUploading, setImageFileUploading] = useState(false);
 

@@ -19,6 +19,8 @@ export default function ProfileImageUploader({ currentUser, setFormData }) {
   const [imageFileUploading, setImageFileUploading] = useState(false);
   const filePickerRef = useRef(null);
 
+  console.log(currentUser);
+
   useEffect(() => {
     if (imageFile) {
       uploadImage();
@@ -69,7 +71,7 @@ export default function ProfileImageUploader({ currentUser, setFormData }) {
     );
   };
 
-    console.log(imageFileUploading);
+  console.log(imageFileUploading);
   return (
     <div className="flex justify-center items-center">
       <div
@@ -97,20 +99,20 @@ export default function ProfileImageUploader({ currentUser, setFormData }) {
                 left: 0,
               },
               path: {
-                stroke: `rgba(62,152,199, ${imageFileUploading? imageFileUploadingProgress / 100 : 1})`,
+                stroke: `rgba(62,152,199, ${
+                  imageFileUploading ? imageFileUploadingProgress / 100 : 1
+                })`,
               },
             }}
           />
         )}
         <img
-          src={
-            currentUser.rest
-              ? imageFileURL || currentUser.rest.profilePicture
-              : imageFileURL || currentUser.profilePicture
-          }
+          src={imageFileURL || currentUser.profilePicture}
           alt="user"
           className={`rounded-full w-full h-full object-cover border-8 border-[lightgray] ${
-            imageFileUploading? imageFileUploadingProgress < 100 && "opacity-60" : ""
+            imageFileUploading
+              ? imageFileUploadingProgress < 100 && "opacity-60"
+              : ""
           }`}
         />
         {imageFileUploadError && (

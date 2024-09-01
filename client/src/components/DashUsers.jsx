@@ -6,6 +6,7 @@ import { FaCheck, FaTimes } from 'react-icons/fa';
 
 export default function DashUsers() {
   const { currentUser } = useSelector((state) => state.user);
+  console.log(currentUser);
   const [users, setUsers] = useState([]);
   const [showMore, setShowMore] = useState(true);
   const [showModal, setShowModal] = useState(false);
