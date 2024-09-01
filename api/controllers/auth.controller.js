@@ -5,6 +5,7 @@ import jwt from 'jsonwebtoken';
 
 export const signup = async (req, res, next) => {
     const { username, email, password } = req.body;
+    console.log(username, email, password);
 
     if (!username || !email || !password || username === '' || email === '' || password === '') {
         next(errorHandler(400, 'All fields are required'));
@@ -52,9 +53,10 @@ export const signin = async (req, res, next) => {
 
         // Create a token if everything is valid
         const token = jwt.sign(
-            { id: validUser._id },
+            { id: validUser._id, isAdmin: validUser.isAdmin },
             process.env.JWT_SECRET
         );
+        console.log(token);
         // Seperate the password from the rest of the user data
         const { password: pass, ...rest } = validUser._doc;
 
@@ -91,7 +93,7 @@ export const google = async (req, res, next) => {
             });
             await newUser.save();
             // Create a token
-            const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET);
+            const token = jwt.sign({ id: newUser._id, isAdmin: user.isAdmin }, process.env.JWT_SECRET);
             const { password: pass, ...rest } = newUser._doc;
             res
                 .status(200)
@@ -99,10 +101,12 @@ export const google = async (req, res, next) => {
                     httpOnly: true,
                 })
                 .json({ rest });
+            console.log(token);
             res.json(newUser);
         } else {
             // If the user already exists, send the user data
-            const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
+            const token = jwt.sign({ id: user._id, isAdmin: user.isAdmin }, process.env.JWT_SECRET);
+            console.log(token);
             const { password: pass, ...rest } = user._doc;
             res.status(200).cookie('access_token', token, {
                 httpOnly: true,
