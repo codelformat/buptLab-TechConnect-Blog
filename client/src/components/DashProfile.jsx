@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import ProfileImageUploader from "./widgets/ProfileImageUploader";
 import ProfileForm from "./widgets/ProfileForm";
 import AccountActions from "./widgets/AccountActions";
+import { Alert, Button } from "flowbite-react";
 
 export default function DashProfile() {
   const { currentUser, error } = useSelector((state) => state.user);

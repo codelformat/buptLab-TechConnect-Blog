@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
 import * as THREE from 'three';
-import WAVES from 'vanta/dist/vanta.waves';
+import WAVES from 'vanta/dist/vanta.waves.min.js';
 
 const Waves = (props) => {
   const [vantaEffect, setVantaEffect] = useState(null)
