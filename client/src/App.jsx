@@ -7,10 +7,12 @@ import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
 import Header from './components/Header';
 import Footer from './components/Footer';
-
+import PostPage from './pages/PostPage';
+import ScrollToTop from './components/ScrollToTop';
 export default function App() {
   return (
     <BrowserRouter>
+      <ScrollToTop/>
       <Header />
       <Routes>
         <Route path="/" element={<Home />} />
@@ -19,6 +21,7 @@ export default function App() {
         <Route path="/sign-in" element={<SignIn />} />
         <Route path="/sign-up" element={<SignUp />} />
         <Route path="/projects" element={<Projects />} />
+        <Route path="/post/:postslug" element={<PostPage/>}/>
       </Routes>
         <Footer />
       
