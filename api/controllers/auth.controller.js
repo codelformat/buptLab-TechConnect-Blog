@@ -52,7 +52,7 @@ export const signin = async (req, res, next) => {
 
         // Create a token if everything is valid
         const token = jwt.sign(
-            { id: validUser._id },
+            { id: validUser._id, isAdmin: validUser.isAdmin },
             process.env.JWT_SECRET
         );
         console.log(token);
@@ -92,7 +92,7 @@ export const google = async (req, res, next) => {
             });
             await newUser.save();
             // Create a token
-            const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET);
+            const token = jwt.sign({ id: newUser._id, isAdmin: user.isAdmin }, process.env.JWT_SECRET);
             const { password: pass, ...rest } = newUser._doc;
             res
                 .status(200)
@@ -104,7 +104,7 @@ export const google = async (req, res, next) => {
             res.json(newUser);
         } else {
             // If the user already exists, send the user data
-            const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
+            const token = jwt.sign({ id: user._id, isAdmin: user.isAdmin }, process.env.JWT_SECRET);
             console.log(token);
             const { password: pass, ...rest } = user._doc;
             res.status(200).cookie('access_token', token, {
