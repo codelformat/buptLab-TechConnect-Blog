@@ -4,8 +4,10 @@ import ModalChange from "./widgets/ModalChange";
 import DashUserChange from "./widgets/DashUserChange";
 
 export default function DashUsers() {
-  const { currentUser } = useSelector((state) => state.user);
-  console.log(currentUser);
+  // const { currentUser } = useSelector((state) => state.user);
+  const tempUser = useSelector((state) => state.user);
+  // const error = tempUser.error;
+  const currentUser = tempUser.currentUser.rest? tempUser.currentUser.rest : tempUser.currentUser;
   const [users, setUsers] = useState([]);
   const [showMore, setShowMore] = useState(true);
   const [showModal, setShowModal] = useState(false);

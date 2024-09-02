@@ -6,7 +6,9 @@ import { HiOutlineExclamationCircle } from 'react-icons/hi';
 import { set } from 'mongoose';
 
 export default function DashPosts() {
-  const { currentUser } = useSelector((state) => state.user);
+  // const { currentUser } = useSelector((state) => state.user);
+  const tempUser = useSelector((state) => state.user);
+  const currentUser = tempUser.currentUser.rest? tempUser.currentUser.rest : tempUser.currentUser;
   const [userPosts, setUserPosts] = useState([]);
   const [showMore, setShowMore] = useState(true);
   const [showModal, setShowModal] = useState(false);

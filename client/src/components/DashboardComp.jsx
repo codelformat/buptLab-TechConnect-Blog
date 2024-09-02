@@ -19,7 +19,9 @@ export default function DashboardComp() {
   const [lastMonthUsers, setLastMonthUsers] = useState(0);
   const [lastMonthPosts, setLastMonthPosts] = useState(0);
   const [lastMonthComments, setLastMonthComments] = useState(0);
-  const { currentUser } = useSelector((state) => state.user);
+  // const { currentUser } = useSelector((state) => state.user);
+  const tempUser = useSelector((state) => state.user);
+  const currentUser = tempUser.currentUser.rest? tempUser.currentUser.rest : tempUser.currentUser;
   useEffect(() => {
     const fetchUsers = async () => {
       try {
