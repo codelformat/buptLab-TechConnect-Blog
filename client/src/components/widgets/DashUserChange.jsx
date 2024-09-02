@@ -53,7 +53,7 @@ export default function DashUserChange({
 
   return currentUser.isAdmin && users.length > 0 ? (
     <>
-      <Table hoverable className="shadow-md">
+      <Table hoverable className="shadow-md mt-1" >
         <Table.Head>
           <Table.HeadCell>Date created</Table.HeadCell>
           <Table.HeadCell>User image</Table.HeadCell>
@@ -115,7 +115,7 @@ export default function DashUserChange({
         setShowModal={setShowModal}
         showModal={showModal}
       ></ModalChange>
-      ;
+
     </>
   ) : (
     <p>You have no users yet!</p>
