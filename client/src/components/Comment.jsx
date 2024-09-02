@@ -7,12 +7,16 @@ import { Button, Textarea } from 'flowbite-react';
 
 export default function Comment({ comment, onLike ,onEdit,onDelete}) {
     const [user, setUser] = useState({});
-    const { currentUser } = useSelector((state) => state.user);
+    const { currentUser:{rest:currentUser} } = useSelector((state) => state.user);
     const [isEditing, setIsEditing] = useState(false);
     const [editedContent, setEditedContent] = useState(comment.content);
+    console.log('currentUser',currentUser);
+    console.log('comment',comment);
+    console.log('user',user);
     const getUser = async () => {
         try {
-            const res = await fetch(`/api/user/${comment.userId}`);
+            const res = await fetch(`/api/user/${comment.userId}`,{method:'GET'});
+            console.log('getUser:',res);
             const data = await res.json();
             if (res.ok) {
                 setUser(data);
@@ -22,9 +26,8 @@ export default function Comment({ comment, onLike ,onEdit,onDelete}) {
             console.log(error.message);
         }
     };
-    useEffect(() => {
-        getUser();
-    }, [comment]);
+    //useEffect不能使用带有返回值的函数，async会返回Promise
+    useEffect(() => { getUser()}, [comment]);
     const handleEdit = () => {
         setIsEditing(true);
         setEditedContent(comment.content);
@@ -50,11 +53,12 @@ export default function Comment({ comment, onLike ,onEdit,onDelete}) {
     return (
         <div className='flex p-4 border-b dark:border-gray-600 text-sm'>
             <div className='flex-shrink-0 mr-3'>
-                <imag className='w-10 h-10 rounded-full bg-gray-200' src={user.profilePicture} alt={user.username} />
+                <img className='w-10 h-10 rounded-full bg-gray-200' src={user.profilePicture} alt={user.username} />
             </div>
             <div className='flex-1'>
                 <div className='flex items-center mb-1'>
                     <span className='font-bold mr-1 text-xs truncate'>
+                        
                         {user ? `@${user.username}` : 'anonymous user'}
                     </span>
                     <span className='text-gray-500 text-xs'>

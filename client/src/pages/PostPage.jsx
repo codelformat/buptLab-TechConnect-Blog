@@ -56,6 +56,14 @@ export default function PostPage() {
   if(!post) return <h1 className='text-3xl text-center p-10 font-serif m-5  '>Post Not Found.</h1>
   return (
     <main className='p-3 flex flex-col max-w-6xl mx-auto min-h-screen'>
+      
+
+      <img src={post&& post.image} alt={post && post.title} className='mt=18 p-3 max-h-[600px] w-full  object-cover'/>
+      
+      <div className="flex justify-between p-3 border-b border-slate-500 mx-auto w-full max-w-2xl text-xs">
+        <span>Created at: {post && new Date(post.createdAt).toLocaleDateString()}</span>
+        <span className='italic'>{post && (post.content.length / 1000).toFixed(0)} mins to read</span>
+      </div>
       <h1 className='text-3xl mt-10 p-3 text-center font-serif max-w-2xl mx-auto lg:text-4xl'>
         {post && post.title}
       </h1>
@@ -64,13 +72,6 @@ export default function PostPage() {
           {post&& post.category}
         </Button>
       </Link>
-
-      <img src={post&& post.image} alt={post && post.title} className='mt=18 p-3 max-h-[600px] w-full  object-cover'/>
-      
-      <div className="flex justify-between p-3 border-b border-slate-500 mx-auto w-full max-w-2xl text-xs">
-        <span>{post && new Date(post.createAt).toLocaleDateString()}</span>
-        <span className='italic'>{post && (post.content.length / 1000).toFixed(0)}mins to read</span>
-      </div>
       <div className='p-3 max-w-2xl mx-auto w-full post-content' dangerouslySetInnerHTML={{__html:post&& post.content}}>
       </div>
       <CommentSection postId={post._id} />

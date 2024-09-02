@@ -1,16 +1,18 @@
-import Comment from "../models/comment.model";
-import { errorHandler } from "../utils/error";
+import Comment from "../models/comment.model.js";
+import { errorHandler } from "../utils/error.js";
 export const createComment = async (req, res, next) => {
     try {
         const { content, postId, userId } = req.body;
+        console.log('req.body', req.body);
         if (userId !== req.user.id) {
-            
+            console.log(userId, req.user.id);
             return next(errorHandler(403, 'You are not allowed to create this comment'));
         }
         const newComment = new Comment({
             content, postId, userId,
         });
         await newComment.save();
+        res.status(200).json(newComment);
     }
     catch (error) {
         next(error);
@@ -48,9 +50,7 @@ export const likeComment = async (req, res, next) => {
     catch (error) {
         next(error);
     }
-  return (
-    <div>comment.controller</div>
-  )
+  
 }
 
 export const editComment = async (req, res, next) => {

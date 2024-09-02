@@ -2,8 +2,6 @@ import bcryptjs from 'bcryptjs';
 import User from '../models/user.model.js';
 import { errorHandler } from '../utils/error.js';
 import e from 'express';
-import User from "../models/user.model";
-import { errorHandler } from "../utils/error";
 
 export const test = (req, res) => {
     res.json({ message: 'API working!' });
@@ -129,8 +127,10 @@ export const getUsers = async (req, res, next) => {
 //Add from Post part.
 export const getUser = async (req,res,next) => {
     try {
-        const user = await User.findById(req, parma.userId);
+        const user = await User.findById(req.params.userId);
+        console.log('f getUser', user);
         if (!user) {
+            
             return next(errorHandler(404, 'User not found'));
         }
         const { password, ...rest } = user._doc;
