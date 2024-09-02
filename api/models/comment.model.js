@@ -1,6 +1,11 @@
 import mongoose from "mongoose";
+
 const commentSchema = new mongoose.Schema({
     content: {
+        type: String,
+        required: true,
+    },
+    postId: {
         type: String,
         required: true,
     },
@@ -10,14 +15,14 @@ const commentSchema = new mongoose.Schema({
     },
     likes: {
         type: Array,
-       default:[],
+        default: [],
     },
     numberOfLikes: {
         type: Number,
-        defualt: 0,
+        default: 0,
     },
-    },
-    {timestamps:true}
-);
+}, { timestamps: true });
+
 const Comment = mongoose.model('Comment', commentSchema);
+
 export default Comment;
