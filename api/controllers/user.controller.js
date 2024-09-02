@@ -107,8 +107,10 @@ export const getUsers = async (req, res, next) => {
             now.getMonth() - 1,
             now.getDate()
         );
+
+        console.log(oneMonthAgo);
         // Find users created in the last month
-        const lastMonthUsers = await User.find({
+        const lastMonthUsers = await User.countDocuments({
             createdAt: { $gte: oneMonthAgo },
         });
 

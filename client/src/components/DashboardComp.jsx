@@ -10,6 +10,7 @@ import { Button, Table } from 'flowbite-react';
 import { Link } from 'react-router-dom';
 
 export default function DashboardComp() {
+  console.log("dashboardComp called");
   const [users, setUsers] = useState([]);
   const [comments, setComments] = useState([]);
   const [posts, setPosts] = useState([]);
@@ -33,6 +34,7 @@ export default function DashboardComp() {
           setLastMonthUsers(data.lastMonthUsers);
         }
       } catch (error) {
+        console.log("fetch users error");
         console.log(error.message);
       }
     };
@@ -46,6 +48,7 @@ export default function DashboardComp() {
           setLastMonthPosts(data.lastMonthPosts);
         }
       } catch (error) {
+        console.log("fetch posts error");
         console.log(error.message);
       }
     };
@@ -59,6 +62,7 @@ export default function DashboardComp() {
           setLastMonthComments(data.lastMonthComments);
         }
       } catch (error) {
+        console.log("fetch comments error");
         console.log(error.message);
       }
     };
@@ -68,6 +72,18 @@ export default function DashboardComp() {
       fetchComments();
     }
   }, [currentUser]);
+  console.log("dashboardComp rendering");
+
+  console.log(totalUsers);
+  console.log(totalPosts);
+  console.log(totalComments);
+  console.log(lastMonthUsers);
+  console.log(lastMonthPosts);
+  console.log(lastMonthComments);
+  console.log(users);
+  console.log(posts);
+  console.log(comments);
+
   return (
     <div className='p-3 md:mx-auto'>
       <div className='flex-wrap flex gap-4 justify-center'>
