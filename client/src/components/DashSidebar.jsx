@@ -18,9 +18,9 @@ export default function DashSidebar() {
   const location = useLocation();
   const dispatch = useDispatch();
   const tempUser  = useSelector((state) => state.user.currentUser);
-  console.log(tempUser);
+  //console.log(tempUser);
   const currentUser = tempUser.rest? tempUser.rest : tempUser;
-  console.log(currentUser);
+  //console.log(currentUser);
   const [tab, setTab] = useState("");
   useEffect(() => {
     const urlParams = new URLSearchParams(location.search);
@@ -70,7 +70,6 @@ export default function DashSidebar() {
               Profile
             </Sidebar.Item>
           </Link>
-          {/* 非管理员账号测试使用，最后需删除 */}
           {currentUser.isAdmin && (
             <Link to="/dashboard?tab=posts">
               <Sidebar.Item

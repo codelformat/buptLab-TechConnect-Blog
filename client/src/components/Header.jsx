@@ -29,7 +29,7 @@ export default function Header() {
       console.log(error);
     }
   };
-  console.log(userData);
+  //console.log(userData);
 
   // If the userData has attribute 'rest'
   if (userData?.rest) {
