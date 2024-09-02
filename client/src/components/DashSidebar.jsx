@@ -13,6 +13,7 @@ export default function DashSidebar() {
   console.log(currentUser);
   const [tab, setTab] = useState("");
 
+  console.log("dashsidebar rendering")
   return (
     <DashSidebarChange currentUser={currentUser} tab={tab} setTab={setTab} />
   );
