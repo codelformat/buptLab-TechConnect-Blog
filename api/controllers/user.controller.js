@@ -2,6 +2,7 @@ import bcryptjs from 'bcryptjs';
 import User from '../models/user.model.js';
 import { errorHandler } from '../utils/error.js';
 import e from 'express';
+
 export const test = (req, res) => {
     res.json({ message: 'API working!' });
 };
@@ -107,8 +108,10 @@ export const getUsers = async (req, res, next) => {
             now.getMonth() - 1,
             now.getDate()
         );
+
+        console.log(oneMonthAgo);
         // Find users created in the last month
-        const lastMonthUsers = await User.find({
+        const lastMonthUsers = await User.countDocuments({
             createdAt: { $gte: oneMonthAgo },
         });
 
@@ -122,3 +125,20 @@ export const getUsers = async (req, res, next) => {
         next(error);
     }
 };
+
+//Add from Post part.
+export const getUser = async (req,res,next) => {
+    try {
+        const user = await User.findById(req.params.userId);
+        console.log('f getUser', user);
+        if (!user) {
+            
+            return next(errorHandler(404, 'User not found'));
+        }
+        const { password, ...rest } = user._doc;
+        res.status(200).json(rest);
+    }
+    catch (error) {
+        next(error);
+    }
+}

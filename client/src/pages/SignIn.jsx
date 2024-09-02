@@ -113,7 +113,7 @@ export default function SignIn() {
               Sign Up
             </Link>
           </div>
-          {errorMessage && (
+          {errorMessage && console.log(errorMessage)&&(
             <Alert className="mt-5" color="failure">
               {errorMessage}
             </Alert>
