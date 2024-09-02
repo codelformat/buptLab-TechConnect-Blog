@@ -93,7 +93,7 @@ export default function ProfileForm({
           defaultValue="*********"
           onChange={handleChange}
         />
-        <Button type="submit" gradientDuoTone="purpleToBlue" outline>
+        <Button type="submit" gradientDuoTone="purpleToBlue" outline className="mb-2">
           Update
         </Button>
         {updateUserSuccess && (
@@ -101,6 +101,7 @@ export default function ProfileForm({
         )}
         {updateUserError && <Alert color="failure">{updateUserError}</Alert>}
       </form>
+
     </div>
   );
 }
