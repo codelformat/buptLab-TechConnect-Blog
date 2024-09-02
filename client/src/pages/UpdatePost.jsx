@@ -25,7 +25,8 @@ export default function UpdatePost() {
   console.log(postId);
 
   const navigate = useNavigate();
-  const { currentUser } = useSelector((state) => state.user);
+  const tempUser = useSelector((state) => state.user);
+  const currentUser = tempUser.currentUser.rest? tempUser.currentUser.rest : tempUser.currentUser;
 
   useEffect(() => {
     try {
