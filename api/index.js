@@ -6,7 +6,6 @@ import authRoutes from './routes/auth.route.js';  // Import auth routes
 import postRoutes from './routes/post.route.js';  // Import post routes
 import commentRoutes from './routes/comment.route.js';  // Import comment routes
 import cookieParser from 'cookie-parser';
-
 dotenv.config();
 
 mongoose
