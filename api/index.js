@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import userRoutes from './routes/user.route.js';  // Import user routes
 import authRoutes from './routes/auth.route.js';  // Import auth routes
+import postRoutes from './routes/post.route.js'
 import cookieParser from 'cookie-parser';
 import commentRoutes from './routes/comment.route.js';
 dotenv.config();
@@ -27,6 +28,7 @@ app.listen(3000, () => {
 
 app.use('/api/user', userRoutes);  // Use user routes
 app.use('/api/auth', authRoutes);  // Use auth routes
+app.use('/api/post', postRoutes);
 //Add from Post part.
 app.use('/api/comment', commentRoutes);
 // Middleware to handle errors
