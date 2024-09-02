@@ -37,7 +37,7 @@ export default function DashPosts() {
         console.log(error.message);
       }
     };
-    if (currentUser && currentUser.rest.isAdmin) {
+    if (currentUser && currentUser.isAdmin) {
       fetchPosts();
     }
   }, [currentUser]);
@@ -46,7 +46,7 @@ export default function DashPosts() {
     const startIndex = userPosts.length;
     try {
       const res = await fetch(
-        `/api/post/getposts?userId=${currentUser.rest._id}&startIndex=${startIndex}`
+        `/api/post/getposts?userId=${currentUser._id}&startIndex=${startIndex}`
       );
       const data = await res.json();
       if (res.ok) {
@@ -74,7 +74,7 @@ export default function DashPosts() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ user:currentUser.rest, postId: postIdToDelete }),
+        body: JSON.stringify({ user:currentUser, postId: postIdToDelete }),
       })
       const data = await res.json();
       if (!res.ok) {
@@ -91,7 +91,7 @@ export default function DashPosts() {
 
   return (
     <div className='table-auto overflow-x-scroll md:mx-auto p-3 scrollbar scrollbar-track-slate-100 scrollbar-thumb-slate-300 dark:scrollbar-track-slate-700 dark:scrollbar-thumb-slate-500'>
-      {currentUser && currentUser.rest.isAdmin && userPosts.length > 0 ? (
+      {currentUser && currentUser.isAdmin && userPosts.length > 0 ? (
         <>
           <Table hoverable className='shadow-md'>
             <Table.Head>
