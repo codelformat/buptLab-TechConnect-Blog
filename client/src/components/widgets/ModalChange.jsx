@@ -26,7 +26,7 @@ export default function ModalChange({
         console.log(error.message);
       }
     };
-    if (currentUser.rest.isAdmin) {
+    if (currentUser.isAdmin) {
       fetchUsers();
     }
   }, [currentUser._id]);

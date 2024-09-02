@@ -30,7 +30,7 @@ export default function DashUserChange({
         console.log(error.message);
       }
     };
-    if (currentUser.rest.isAdmin) {
+    if (currentUser.isAdmin) {
       fetchUsers();
     }
   }, [currentUser._id]);
@@ -51,7 +51,7 @@ export default function DashUserChange({
     }
   };
 
-  return currentUser.rest.isAdmin && users.length > 0 ? (
+  return currentUser.isAdmin && users.length > 0 ? (
     <>
       <Table hoverable className="shadow-md">
         <Table.Head>
