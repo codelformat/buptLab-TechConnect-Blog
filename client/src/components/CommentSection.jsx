@@ -8,34 +8,42 @@ import { HiOutlineExclamationCircle } from 'react-icons/hi';
 import { Alert } from 'flowbite-react';
 export default function CommentSection({postId}) {
   const maxCommentLength = 500;
-  const { currentUser: { rest:currentUser } } = useSelector(state => state.user);
+  const tempUser = useSelector((state) => state.user);
+  //console.log(tempUser);
+  const currentUser = tempUser.currentUser?(tempUser.currentUser.rest? tempUser.currentUser.rest : tempUser.currentUser):null;
+
+  
   //console.log(currentUser);
-  const [comment, setComment] = useState('');
+  const [writingComment, setWritingComment] = useState('');
   const [commentError, setCommentError] = useState(null);
   const [comments, setComments] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [commentToDelete, setCommentToDelete] = useState(null);
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (comment === '') {
+    if (!currentUser) {
+      useNavigate()('/sign-in');
       return;
     }
-    if (comment.length > maxCommentLength) {
+    if (writingComment === '') {
       return;
     }
-    console.log('handle submit')
+    if (writingComment.length > maxCommentLength) {
+      return;
+    }
+    //console.log('handle submit')
     try {
       const res = await fetch('/api/comment/create', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ content: comment, postId, userId: currentUser._id, }),
+        body: JSON.stringify({ content: writingComment, postId, userId: currentUser._id, }),
       });
       const data = await res.json();
-      console.log('res',res)
+      //console.log('fetch create comment res',res)
       if (res.ok) {
-        setComment('');
+        setWritingComment('');
         setCommentError(null);
         setComments([data, ...comments]);
       }
@@ -60,15 +68,23 @@ export default function CommentSection({postId}) {
       }
     };
     getComments();
-  }, [postId])
+  }, [postId,comments])
   const handleLike = async (commentId) => {
-    console.log(commentId);
+    //console.log(commentId);
     try {
       if (!currentUser) {
         useNavigate()('/sign-in');
         return;
       }
-      const res = await fetch(`api/comment/likeComment/${commentId}`,{method:'PUT',});
+      const res = await fetch(`/api/comment/likeComment/${commentId}`, {
+        method: 'PUT',
+        headers: {
+        'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userId: currentUser._id,
+        })
+      });
       if (res.ok) {
         const data = await res.json();
         setComments(comments.map((comment) => {
@@ -137,11 +153,11 @@ export default function CommentSection({postId}) {
           <Textarea placeholder='Write your comment...'
             rows='4'
             maxLength={`${maxCommentLength}`}
-            onChange={e=>setComment(e.target.value) } value={comment}
+            onChange={e=>setWritingComment(e.target.value) } value={writingComment}
           />
           <div className='flex justify-between items-center mt-5'>
             <p className='text-gray-500 text-sm'>
-              {maxCommentLength-comment.length} characters reamaining
+              {maxCommentLength-writingComment.length} characters reamaining
             </p>
             <Button outline gradientDuoTone='purpleToBlue'
             type='submit'>
