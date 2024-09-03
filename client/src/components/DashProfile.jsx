@@ -7,6 +7,7 @@ import AccountActions from "./widgets/AccountActions";
 import { Alert, Button } from "flowbite-react";
 
 export default function DashProfile() {
+  //从redux中获取用户信息
   const tempUser = useSelector((state) => state.user);
   const error = tempUser.error;
   console.log(tempUser);

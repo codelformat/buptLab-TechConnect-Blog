@@ -37,8 +37,9 @@ export default function ProfileForm({
       setUpdateUserError("请稍等，图片正在上传");
       return;
     }
-
+    //发送请求
     try {
+      //更新redux
       dispatch(updateStart());
       const res = await fetch(`api/user/update/${currentUser._id}`, {
         method: "PUT",
@@ -100,6 +101,7 @@ export default function ProfileForm({
         {updateUserSuccess && (
           <Alert color="success">{updateUserSuccess}</Alert>
         )}
+        {/* 拆出了alert */}
         
       </form>
     </div>
