@@ -48,19 +48,19 @@ export default function PostPage()
 
   //console.log("Post slug is", postslug);
   useEffect(() => {
+    console.log('Post Page useEffect');
     try {
       const fetchRecentPosts = async () => {
+        const res = await fetch('/api/post/getposts',{
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },  
+          body: JSON.stringify({ limit: 3 }),
+        });
         //const res = await fetch(`/api/post/getposts?limit=3`);
-        //console.log('fetchRecentPosts')
-        const res = await fetch('/api/post/getposts', {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ limit: 3 }),
-          }
-        )
         const data = await res.json();
+        console.log('recent posts', data.posts);
         if (res.ok) {
           console.log('data:')
           console.log(data)
@@ -70,9 +70,8 @@ export default function PostPage()
           console.log('res is not ok! ',data.message);
         }
       }
+      
       fetchRecentPosts();
-      // console.log('recent posts:');
-      // console.log(recentPosts)
     }
     catch (error) {
       console.log(error.message);
@@ -106,7 +105,7 @@ export default function PostPage()
       <CommentSection postId={post._id} />
       <div className='flex flex-col justify-center items-center mb-5'>
         <h1 className='text-xl mt-5'>Recent articles</h1>
-        <div className='flex flex-wrap gap-5 mt-5 justify-center'>
+        <div className='flex flex-wrap gap-5 mt-5 justify-center w-auto'>
           {
             recentPosts && recentPosts.map((post) => 
               <PostCard key={post._id} post={post}/> 

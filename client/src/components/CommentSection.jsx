@@ -6,7 +6,8 @@ import { useEffect } from 'react';
 import Comment from './Comment';
 import { HiOutlineExclamationCircle } from 'react-icons/hi';
 import { Alert } from 'flowbite-react';
-export default function CommentSection({postId}) {
+export default function CommentSection({ postId }) {
+  console.log('Comment Section!');
   const maxCommentLength = 500;
   const tempUser = useSelector((state) => state.user);
   //console.log(tempUser);
@@ -19,6 +20,7 @@ export default function CommentSection({postId}) {
   const [comments, setComments] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [commentToDelete, setCommentToDelete] = useState(null);
+  const [editedFlag,setEditedFlag] = useState(false);
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!currentUser) {
@@ -68,7 +70,7 @@ export default function CommentSection({postId}) {
       }
     };
     getComments();
-  }, [postId])
+  }, [postId,editedFlag])
   const handleLike = async (commentId) => {
     //console.log(commentId);
     try {
@@ -105,6 +107,7 @@ export default function CommentSection({postId}) {
     }
   }
   const handleEdit = async (comment, editedContent) => {
+    setEditedFlag(!editedFlag);
     setComments(comments.map((c) => {
       if (c._id === comment.id) {
         return ({ ...c, content: editedContent });
