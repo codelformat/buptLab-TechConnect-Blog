@@ -47,7 +47,7 @@ export default function DashboardComp() {
           headers: {
             'Content-Type': 'application/json',
           },  
-          body: JSON.stringify({ limit: 5 }),
+          body: JSON.stringify({ limit: 5  }),
         });
         const data = await res.json();
         if (res.ok) {
@@ -146,8 +146,8 @@ export default function DashboardComp() {
           </div>
         </div>
       </div>
-      <div className='flex flex-wrap gap-4 py-3 mx-auto justify-center'>
-        <div className='flex flex-col w-full md:w-auto shadow-md p-2 rounded-md dark:bg-gray-800'>
+      <div className='flex flex-wrap gap-3 py-3 mx-auto justify-center'>
+        <div className='flex flex-col w-full  md:w-auto shadow-md p-2 rounded-md dark:bg-gray-800'>
           <div className='flex justify-between  p-3 text-sm font-semibold'>
             <h1 className='text-center p-2'>Recent users</h1>
             <Button outline gradientDuoTone='purpleToPink'>
@@ -176,7 +176,7 @@ export default function DashboardComp() {
               ))}
           </Table>
         </div>
-        <div className='flex flex-col w-full md:w-auto shadow-md p-2 rounded-md dark:bg-gray-800'>
+        <div className='flex flex-col w-full  md:w-auto shadow-md p-2 rounded-md dark:bg-gray-800'>
           <div className='flex justify-between  p-3 text-sm font-semibold'>
             <h1 className='text-center p-2'>Recent comments</h1>
             <Button outline gradientDuoTone='purpleToPink'>
@@ -192,8 +192,8 @@ export default function DashboardComp() {
               comments.map((comment) => (
                 <Table.Body key={comment._id} className='divide-y'>
                   <Table.Row className='bg-white dark:border-gray-700 dark:bg-gray-800'>
-                    <Table.Cell className='w-96'>
-                        <p className='line-clamp-2'>{comment.content}</p>
+                    <Table.Cell className='w-40'>
+                        <p className='line-clamp-2'>{comment.content.slice(0, 10)}</p>
                     </Table.Cell>
                     <Table.Cell>{comment.numberOfLikes}</Table.Cell>
                   </Table.Row>
@@ -201,7 +201,7 @@ export default function DashboardComp() {
               ))}
           </Table>
         </div>
-        <div className='flex flex-col w-full md:w-auto shadow-md p-2 rounded-md dark:bg-gray-800'>
+        <div className='flex flex-col w-full  md:w-auto shadow-md p-2 rounded-md dark:bg-gray-800'>
           <div className='flex justify-between  p-3 text-sm font-semibold'>
             <h1 className='text-center p-2'>Recent posts</h1>
             <Button outline gradientDuoTone='purpleToPink'>
@@ -219,13 +219,22 @@ export default function DashboardComp() {
                 <Table.Body key={post._id} className='divide-y'>
                   <Table.Row className='bg-white dark:border-gray-700 dark:bg-gray-800'>
                     <Table.Cell>
-                      <img
-                        src={post.image}
-                        alt='user'
-                        className='w-14 h-10 rounded-md bg-gray-500'
-                      />
+                      <Link to={`/post/${post.slug}`}>
+                        <img
+                          src={post.image}
+                          alt='user'
+                          className='w-20 h-10 object-cover bg-gray-500'
+                        />
+                      </Link>
                     </Table.Cell>
-                    <Table.Cell className='w-96'>{post.title}</Table.Cell>
+                    <Table.Cell className='w-30'>
+                      <Link
+                        className='font-medium text-gray-900 dark:text-white'
+                        to={`/post/${post.slug}`}
+                      >
+                        {post.title}
+                      </Link>
+                    </Table.Cell>
                     <Table.Cell className='w-5'>{post.category}</Table.Cell>
                   </Table.Row>
                 </Table.Body>
