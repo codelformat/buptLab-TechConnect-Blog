@@ -22,7 +22,7 @@ export default function FooterComponent() {
       label: "Github",
     },
     {
-      href: "#",
+      href: "https://github.com/codelformat",
       label: "Github",
     },
   ];
@@ -40,9 +40,10 @@ export default function FooterComponent() {
 
   return (
     <Footer container className="border border-t-8 border-teal-500">
-      <div className="w-full max-w-7xl mx-auto">
-        <div className="grid w-full justify-between sm:flex md:grid-cols-1">
+      <div className="w-full max-w-screen-2xl mx-auto">
+        <div className="flex justify-between items-start">
           <FooterLogo />
+
           <div className="grid grid-cols-2 gap-8 mt-4 sm:grid-cols-3 sm:gap-6">
             <FooterLinksGroup title="About" links={aboutLinks} />
             <FooterLinksGroup title="Follow Us" links={followUsLinks} />

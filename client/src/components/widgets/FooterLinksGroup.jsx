@@ -2,7 +2,7 @@ import { Footer } from "flowbite-react";
 
 export default function FooterLinksGroup({ title, links }) {
   return (
-    <div>
+    <div className="w-48">
       <Footer.Title title={title} />
       <Footer.LinkGroup col>
         {links.map((link, index) => (
