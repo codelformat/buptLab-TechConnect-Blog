@@ -1,3 +1,4 @@
+// /api/routes/post.route.js
 import express from 'express';
 import { verifyToken } from '../utils/verifyUser.js';
 import { create, deletepost, getposts, updatepost,get_required_post ,getpostBySlug} from '../controllers/post.controller.js';

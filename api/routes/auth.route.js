@@ -1,3 +1,4 @@
+// /api/routes/auth.route.js
 import express from 'express';
 import { signup, signin, google } from '../controllers/auth.controller.js';
 
