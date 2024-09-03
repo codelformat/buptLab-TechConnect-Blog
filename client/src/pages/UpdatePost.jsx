@@ -21,6 +21,8 @@ export default function UpdatePost() {
   const [formData, setFormData] = useState({});
   const [publishError, setPublishError] = useState(null);
   const { postId } = useParams();
+  console.log('postId:')
+  console.log(postId);
 
   const navigate = useNavigate();
   const tempUser = useSelector((state) => state.user);
@@ -29,7 +31,14 @@ export default function UpdatePost() {
   useEffect(() => {
     try {
       const fetchPost = async () => {
-        const res = await fetch(`/api/post/getposts?postId=${postId}`);
+        //const res = await fetch(`/api/post/getposts?postId=${postId}`);
+        const res = await fetch('/api/post/get_required_post', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ postId }),
+        })
         const data = await res.json();
         if (!res.ok) {
           console.log(data.message);
@@ -38,7 +47,12 @@ export default function UpdatePost() {
         }
         if (res.ok) {
           setPublishError(null);
-          setFormData(data.posts[0]);
+          console.log('data:');
+          console.log(data[0])
+          setFormData(data[0]);
+          //setFormData(data.post);
+          console.log('formData:');
+          console.log(formData)
         }
       };
 
@@ -87,12 +101,17 @@ export default function UpdatePost() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch(`/api/post/updatepost/${formData._id}/${currentUser._id}`, {
+      const res = await fetch(`/api/post/update-post/${formData._id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          title: formData.title,
+          content: formData.content,
+          category: formData.category,
+          image: formData.image
+        })
       });
       const data = await res.json();
       if (!res.ok) {
