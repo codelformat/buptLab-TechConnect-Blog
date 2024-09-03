@@ -49,7 +49,7 @@ export default function DashSidebarChange({ currentUser, tab, setTab }) {
                 icon={HiChartPie}
                 as="div"
               >
-                Dashboard
+                控制面板
               </Sidebar.Item>
             </Link>
           )}
@@ -57,11 +57,11 @@ export default function DashSidebarChange({ currentUser, tab, setTab }) {
             <Sidebar.Item
               active={tab === "profile"}
               icon={HiUser}
-              label={currentUser.isAdmin ? "Admin" : "User"}
+              label={currentUser.isAdmin ? "管理员" : "普通用户"}
               labelColor="dark"
               as="div"
             >
-              Profile
+              个人简介
             </Sidebar.Item>
           </Link>
           {/* 非管理员账号测试使用，最后需删除 */}
@@ -72,7 +72,7 @@ export default function DashSidebarChange({ currentUser, tab, setTab }) {
                 icon={HiDocumentText}
                 as="div"
               >
-                Posts
+                帖子
               </Sidebar.Item>
             </Link>
           )}
@@ -84,7 +84,7 @@ export default function DashSidebarChange({ currentUser, tab, setTab }) {
                   icon={HiOutlineUserGroup}
                   as="div"
                 >
-                  Users
+                  用户
                 </Sidebar.Item>
               </Link>
               <Link to="/dashboard?tab=comments">
@@ -93,7 +93,7 @@ export default function DashSidebarChange({ currentUser, tab, setTab }) {
                   icon={HiAnnotation}
                   as="div"
                 >
-                  Comments
+                  评论
                 </Sidebar.Item>
               </Link>
             </>
@@ -103,7 +103,7 @@ export default function DashSidebarChange({ currentUser, tab, setTab }) {
             className="cursor-pointer"
             onClick={handleSignout}
           >
-            Sign Out
+            登出
           </Sidebar.Item>
         </Sidebar.ItemGroup>
       </Sidebar.Items>

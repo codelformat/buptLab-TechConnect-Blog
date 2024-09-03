@@ -59,10 +59,10 @@ export default function ModalChange({
           </h3>
           <div className="flex justify-center gap-4">
             <Button color="failure" onClick={handleDeleteUser}>
-              Yes, I'm sure
+              是，确定
             </Button>
             <Button color="gray" onClick={() => setShowModal(false)}>
-              No, cancel
+              不，取消
             </Button>
           </div>
         </div>

@@ -5,7 +5,7 @@ export default function AuthButton() {
   return (
     <Link to="/sign-in">
       <Button gradientDuoTone="purpleToBlue" outline>
-        Sign In
+        登录
       </Button>
     </Link>
   );
