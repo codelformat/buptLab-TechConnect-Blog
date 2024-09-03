@@ -2,9 +2,10 @@ import { errorHandler } from "../utils/error.js";
 import Comment from "../models/comment.model.js";
 
 export const createComment = async (req, res) => {
+    //console.log('createComment');
     try {
         const {content ,postId, userId } = req.body;
-
+        //console.log(req);
         if (userId !== req.user.id) {
             return res.status(403).json({ message: 'You are not allowed to create comment for this user' });
         }
@@ -84,10 +85,13 @@ export const getPostComments = async (req, res, next) => {
 export const likeComment = async (req, res, next) => {
     try {
         const comment = await Comment.findById(req.params.commentId);
+        //console.log('req commentId', req.params.commentId);
         if (!comment) {
             return next(errorHandler(404, 'Comment not found'));
         }
+        //console.log(req.user);
         const userIndex = comment.likes.indexOf(req.user.id);
+        //console.log(req.user.id);
         if (userIndex == -1) {
             comment.numberOfLikes += 1;
             comment.likes.push(req.user.id);
