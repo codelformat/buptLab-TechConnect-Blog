@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { TextInput, Button, Alert } from "flowbite-react";
 import { useDispatch } from "react-redux";
+import { HiUser, HiMail, HiLockClosed } from "react-icons/hi";
 import {
   updateStart,
   updateFailure,
@@ -12,9 +13,10 @@ export default function ProfileForm({
   imageFileUploading,
   formData,
   setFormData,
+  setUpdateUserError,
+  updateUserError
 }) {
   const [updateUserSuccess, setUpdateUserSuccess] = useState(null);
-  const [updateUserError, setUpdateUserError] = useState(null);
   const dispatch = useDispatch();
 
   const handleChange = (e) => {
@@ -27,29 +29,24 @@ export default function ProfileForm({
     setUpdateUserSuccess(null);
 
     if (Object.keys(formData).length === 0) {
-      setUpdateUserError("No changes made");
+      setUpdateUserError("未做任何更改!");
       return;
     }
 
     if (imageFileUploading) {
-      setUpdateUserError("Please wait for image to upload");
+      setUpdateUserError("请稍等，图片正在上传");
       return;
     }
 
     try {
       dispatch(updateStart());
-      const res = await fetch(
-        `api/user/update/${
-          currentUser._id
-        }`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(formData),
-        }
-      );
+      const res = await fetch(`api/user/update/${currentUser._id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
       const data = await res.json();
 
       if (!res.ok) {
@@ -57,7 +54,7 @@ export default function ProfileForm({
         setUpdateUserError(data.message);
       } else {
         dispatch(updateSuccess(data));
-        setUpdateUserSuccess("User updated successfully");
+        setUpdateUserSuccess("用户更新成功");
       }
     } catch (error) {
       dispatch(updateFailure(error.message));
@@ -72,19 +69,17 @@ export default function ProfileForm({
           type="text"
           id="username"
           placeholder="username"
-          defaultValue={
-            currentUser.username
-          }
+          defaultValue={currentUser.username}
           onChange={handleChange}
+          icon={HiUser}
         />
         <TextInput
           type="email"
           id="email"
           placeholder="email"
-          defaultValue={
-            currentUser.email
-          }
+          defaultValue={currentUser.email}
           onChange={handleChange}
+          icon={HiMail}
         />
         <TextInput
           type="password"
@@ -92,16 +87,21 @@ export default function ProfileForm({
           placeholder="password"
           defaultValue="*********"
           onChange={handleChange}
+          icon={HiLockClosed}
         />
-        <Button type="submit" gradientDuoTone="purpleToBlue" outline className="mb-2">
-          Update
+        <Button
+          type="submit"
+          gradientDuoTone="purpleToBlue"
+          outline
+          className="mb-2"
+        >
+          更新
         </Button>
         {updateUserSuccess && (
           <Alert color="success">{updateUserSuccess}</Alert>
         )}
-        {updateUserError && <Alert color="failure">{updateUserError}</Alert>}
+        
       </form>
-
     </div>
   );
 }

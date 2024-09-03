@@ -14,10 +14,11 @@ export default function DashProfile() {
   console.log(currentUser);
   const [formData, setFormData] = useState({});
   const [imageFileUploading, setImageFileUploading] = useState(false);
+  const [updateUserError, setUpdateUserError] = useState(null);
 
   return (
     <div className="max-w-lg mx-auto p-3 w-full">
-      <h1 className="my-7 text-center font-semibold text-lg">Profile</h1>
+      <h1 className="my-7 text-center font-semibold text-lg">用户资料</h1>
 
       <ProfileImageUploader
         currentUser={currentUser}
@@ -30,6 +31,8 @@ export default function DashProfile() {
         imageFileUploading={imageFileUploading}
         formData={formData}
         setFormData={setFormData}
+        updateUserError={updateUserError}
+        setUpdateUserError={setUpdateUserError}
       />
       {currentUser.isAdmin && (
           <Link to={'/create-post'}>
@@ -38,11 +41,12 @@ export default function DashProfile() {
               gradientDuoTone='purpleToPink'
               className='w-full'
             >
-              Create a post
+              创建帖子
             </Button>
           </Link>
         )}
       <AccountActions currentUser={currentUser} />
+      {updateUserError && <span className="text-red-700">{updateUserError}</span>}
       {error && <Alert color="failure">{error}</Alert>}
     </div>
   );
