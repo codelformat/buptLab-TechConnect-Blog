@@ -13,10 +13,19 @@ export default function DashPosts() {
   const [showMore, setShowMore] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [postIdToDelete, setPostIdToDelete] = useState('');
+  console.log(currentUser);
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const res = await fetch(`/api/post/getposts?userId=${currentUser._id}`);
+        console.log(currentUser);
+        //const res = await fetch(`/api/post/getposts?userId=${currentUser.rest._id}`);
+        const res = await fetch("/api/post/getposts", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        console.log(res)
         const data = await res.json();
         if (res.ok) {
           setUserPosts(data.posts);
@@ -28,10 +37,10 @@ export default function DashPosts() {
         console.log(error.message);
       }
     };
-    if (currentUser.isAdmin) {
+    if (currentUser && currentUser.isAdmin) {
       fetchPosts();
     }
-  }, [currentUser._id]);
+  }, [currentUser]);
 
   const handleShowMore = async () => {
     const startIndex = userPosts.length;
@@ -54,12 +63,19 @@ export default function DashPosts() {
   const handleDeletePost = async () => {
     setShowModal(false);
     try {
-      const res = await fetch(
-        `/api/post/deletepost/${postIdToDelete}/${currentUser._id}`,
-        {
-          method: 'DELETE',
-        }
-      );
+      // const res = await fetch(
+      //   `/api/post/deletepost/${postIdToDelete}/${currentUser._id}`,
+      //   {
+      //     method: 'DELETE',
+      //   }
+      // );
+      const res = await fetch('/api/post/deletepost', {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ user:currentUser, postId: postIdToDelete }),
+      })
       const data = await res.json();
       if (!res.ok) {
         console.log(data.message);
@@ -75,7 +91,7 @@ export default function DashPosts() {
 
   return (
     <div className='table-auto overflow-x-scroll md:mx-auto p-3 scrollbar scrollbar-track-slate-100 scrollbar-thumb-slate-300 dark:scrollbar-track-slate-700 dark:scrollbar-thumb-slate-500'>
-      {currentUser.isAdmin && userPosts.length > 0 ? (
+      {currentUser && currentUser.isAdmin && userPosts.length > 0 ? (
         <>
           <Table hoverable className='shadow-md'>
             <Table.Head>
@@ -147,6 +163,7 @@ export default function DashPosts() {
       ) : (
         <p>You have no posts yet!</p>
       )}
+      {/* 删除提示框 */}
       <Modal
         show={showModal}
         onClose={() => setShowModal(false)}

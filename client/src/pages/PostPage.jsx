@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import CommentSection from '../components/CommentSection';
 import PostCard from '../components/PostCard';
 export default function PostPage() {
+  console.log('PostPage!')
   const { postslug } = useParams();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
@@ -14,7 +15,14 @@ export default function PostPage() {
   const fetchPost = async () => {
     try {
       setLoading(true);
-      const res = await fetch(`/api/post/getposts/?slug=${postslug}`);
+
+      const res = await fetch('/api/post/getpostBySlug', {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ slug: postslug }),
+      });
       const data = await res.json();
       if (!res.ok) {
         setUserProperties(true);
@@ -22,7 +30,8 @@ export default function PostPage() {
         return;
       }
       else {
-        setPost(data.posts[0]);
+        setPost(data);
+        console.log("post:",post);
         setLoading(false);
         setError(false);
       }
@@ -54,6 +63,7 @@ export default function PostPage() {
     <Spinner size='xl'/>
   </div>);
   if(!post) return <h1 className='text-3xl text-center p-10 font-serif m-5  '>Post Not Found.</h1>
+  
   return (
     <main className='p-3 flex flex-col max-w-6xl mx-auto min-h-screen'>
       
