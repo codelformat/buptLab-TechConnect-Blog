@@ -15,7 +15,8 @@ export default function Comment({ comment, onLike ,onEdit,onDelete}) {
     //const { currentUser:{rest:currentUser} } = useSelector((state) => state.user);
     const [isEditing, setIsEditing] = useState(false);
     const [editedContent, setEditedContent] = useState(comment.content);
-    console.log('currentUser',currentUser);
+    console.log('Comment!');
+    console.log('currentUser', currentUser);
     console.log('comment',comment);
     console.log('user',user);
     const getUser = async () => {
