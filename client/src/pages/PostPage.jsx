@@ -5,8 +5,10 @@ import { Spinner,Button } from 'flowbite-react';
 import { Link } from 'react-router-dom';
 import CommentSection from '../components/CommentSection';
 import PostCard from '../components/PostCard';
-export default function PostPage() {
-  console.log('PostPage!')
+
+
+export default function PostPage()
+{
   const { postslug } = useParams();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
@@ -31,7 +33,7 @@ export default function PostPage() {
       }
       else {
         setPost(data);
-        console.log("post:",post);
+        //console.log("post:",post);
         setLoading(false);
         setError(false);
       }
@@ -44,7 +46,7 @@ export default function PostPage() {
     fetchPost();
   }, [postslug]);
 
-  console.log("Post slug is", postslug);
+  //console.log("Post slug is", postslug);
   useEffect(() => {
     console.log('Post Page useEffect');
     try {
@@ -60,7 +62,12 @@ export default function PostPage() {
         const data = await res.json();
         console.log('recent posts', data.posts);
         if (res.ok) {
+          console.log('data:')
+          console.log(data)
           setRecentPosts(data.posts);
+        }
+        else{
+          console.log('res is not ok! ',data.message);
         }
       }
       
