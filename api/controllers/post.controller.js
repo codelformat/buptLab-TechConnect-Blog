@@ -162,6 +162,7 @@ export const get_required_post = async (req, res, next) => {
   }
 };
 
+
 export const getpostBySlug = async (req, res, next) => {
   const { slug } = req.body;
   console.log('getpostBySlug内部方法:',slug)
