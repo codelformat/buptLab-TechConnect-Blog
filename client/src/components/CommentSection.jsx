@@ -68,7 +68,7 @@ export default function CommentSection({postId}) {
       }
     };
     getComments();
-  }, [postId,comments])
+  }, [postId])
   const handleLike = async (commentId) => {
     //console.log(commentId);
     try {
