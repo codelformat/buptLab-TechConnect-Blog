@@ -1,6 +1,6 @@
 import Post from '../models/post.model.js';
 import { errorHandler } from '../utils/error.js';
-import pinyin from 'pinyin';
+import pinyin from 'pinyin'; 
 
 export const create = async (req, res, next) => {
   if (!req.user.isAdmin) {
@@ -9,6 +9,7 @@ export const create = async (req, res, next) => {
   if (!req.body.title || !req.body.content) {
     return next(errorHandler(400, 'Please provide all required fields'));
   }
+
   const slug = pinyin.pinyin(req.body.title, {
     style: pinyin.STYLE_NORMAL, // 普通拼音风格，不包含声调
     heteronym: false            // 禁用多音字功能
@@ -17,6 +18,11 @@ export const create = async (req, res, next) => {
     .join('-')                  // 使用 '-' 连接所有拼音
     .replace(/[^a-zA-Z0-9-]/g, '-') // 替换任何非字母数字字符为 '-'
     .toLowerCase();             // 转换为小写
+  // const slug = req.body.title
+  //   .split(' ')
+  //   .join('-')
+  //   .toLowerCase()
+  //   .replace(/[^a-zA-Z0-9-]/g, '');
   const newPost = new Post({
     ...req.body,
     slug,
@@ -35,6 +41,7 @@ export const getposts = async (req, res, next) => {
     const startIndex = parseInt(req.query.startIndex) || 0;
     const limit = parseInt(req.query.limit) || 9;
     const sortDirection = req.query.order === 'asc' ? 1 : -1;
+
     const posts = await Post.find({
       ...(req.query.userId && { userId: req.query.userId }),
       ...(req.query.category && { category: req.query.category }),
@@ -76,11 +83,17 @@ export const getposts = async (req, res, next) => {
 };
 
 export const deletepost = async (req, res, next) => {
-  if (!req.user.isAdmin || req.user.id !== req.params.userId) {
-    return next(errorHandler(403, 'You are not allowed to delete this post'));
+  const {user, postId} = req.body
+  console.log('user')
+  console.log(user)
+  // if (!req.user.isAdmin || req.user.id !== req.params.userId) {
+  //   return next(errorHandler(403, 'You are not allowed to delete this post'));
+  // }
+  if(!user.isAdmin) {
+    return next(errorHandler(403, 'You are not allowed to delete this post!!'));
   }
   try {
-    await Post.findByIdAndDelete(req.params.postId);
+    await Post.findByIdAndDelete(postId);
     res.status(200).json('The post has been deleted');
   } catch (error) {
     next(error);
@@ -88,18 +101,16 @@ export const deletepost = async (req, res, next) => {
 };
 
 export const updatepost = async (req, res, next) => {
-  if (!req.user.isAdmin || req.user.id !== req.params.userId) {
-    return next(errorHandler(403, 'You are not allowed to update this post'));
-  }
   try {
+    const { title,content,category,image } = req.body;
     const updatedPost = await Post.findByIdAndUpdate(
       req.params.postId,
       {
         $set: {
-          title: req.body.title,
-          content: req.body.content,
-          category: req.body.category,
-          image: req.body.image,
+          title: title,
+          content: content,
+          category: category,
+          image: image,
         },
       },
       { new: true }
@@ -109,3 +120,55 @@ export const updatepost = async (req, res, next) => {
     next(error);
   }
 };
+// export const updatepost = async (req, res, next) => {
+//   // if (!req.user.isAdmin || req.user.id !== req.params.userId) {
+//   //   return next(errorHandler(403, 'You are not allowed to update this post'));
+//   // }
+
+//   try {
+//     ////const { title,content,category,image } = req.body;
+//     const updatedPost = await Post.findByIdAndUpdate(
+//       req.params.postId,
+//       {
+//         $set: {
+//           title: req.body.title,
+//           content: req.body.content,
+//           category: req.body.category,
+//           image: req.body.image,
+//         },
+//       },
+//       { new: true }
+//     );
+//     res.status(200).json(updatedPost);
+//   } catch (error) {
+//     next(error);
+//   }
+// };
+
+export const get_required_post = async (req, res, next) => {
+  const { postId } = req.body;
+  console.log('get_required_post 方法内部:')
+  console.log(postId);
+
+  // if (!user.isAdmin || user.id !== req.params.userId) {
+  //   return next(errorHandler(403, 'You are not allowed to update this post'));
+  // }
+  try {
+    const post =await Post.find({ _id: postId });
+    console.log('find之后一行')
+    res.status(200).json(post);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getpostBySlug = async (req, res, next) => {
+  const { slug } = req.body;
+  console.log('getpostBySlug内部方法:',slug)
+  try {
+    const post = await Post.findOne({ slug: slug });
+    res.status(200).json(post);
+  } catch (error) {
+    next(error);
+  }
+}
