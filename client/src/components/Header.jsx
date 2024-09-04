@@ -15,13 +15,15 @@ export default function Header() {
   const location = useLocation();
   const isSignInPage = location.pathname === "/sign-in";
   const isSignUpPage = location.pathname === "/sign-up";
+  const isForgotPage = location.pathname === "/forgot-password"
+  const isResetPage = location.pathname === "/reset-password"
 
   const currentUser = userData?.rest || userData;
 
   return (
     <Navbar
       className={` ${
-        isSignInPage || isSignUpPage ? " dynamic-bg" : ".default-bg"
+        isSignInPage || isSignUpPage || isForgotPage || isResetPage ? " dynamic-bg" : ".default-bg"
       }`}
     >
       <Logo />
