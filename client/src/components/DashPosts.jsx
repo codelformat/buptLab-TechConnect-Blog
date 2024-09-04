@@ -95,13 +95,13 @@ export default function DashPosts() {
         <>
           <Table hoverable className='shadow-md'>
             <Table.Head>
-              <Table.HeadCell>Date updated</Table.HeadCell>
-              <Table.HeadCell>Post image</Table.HeadCell>
-              <Table.HeadCell>Post title</Table.HeadCell>
-              <Table.HeadCell>Category</Table.HeadCell>
-              <Table.HeadCell>Delete</Table.HeadCell>
+              <Table.HeadCell>更新日期</Table.HeadCell>
+              <Table.HeadCell>帖子图片</Table.HeadCell>
+              <Table.HeadCell>帖子标题</Table.HeadCell>
+              <Table.HeadCell>类别</Table.HeadCell>
+              <Table.HeadCell>删除帖子</Table.HeadCell>
               <Table.HeadCell>
-                <span>Edit</span>
+                <span>编辑</span>
               </Table.HeadCell>
             </Table.Head>
             {userPosts.map((post) => (
@@ -136,7 +136,7 @@ export default function DashPosts() {
                       }}
                       className='font-medium text-red-500 hover:underline cursor-pointer'
                     >
-                      Delete
+                      删除
                     </span>
                   </Table.Cell>
                   <Table.Cell>
@@ -144,7 +144,7 @@ export default function DashPosts() {
                       className='text-teal-500 hover:underline'
                       to={`/update-post/${post._id}`}
                     >
-                      <span>Edit</span>
+                      <span>编辑</span>
                     </Link>
                   </Table.Cell>
                 </Table.Row>
