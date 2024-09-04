@@ -42,7 +42,8 @@ export const getposts = async (req, res, next) => {
     //console.log(req);
     const startIndex = parseInt(req.query.startIndex) || 0;
     //const limit = parseInt(req.query.limit) || 9;
-    const limit = parseInt(limit0) || 9;
+    const limit = parseInt(limit0);
+    console.log('limit',limit);
 
     const sortDirection = req.query.order === 'asc' ? 1 : -1;
 
@@ -185,6 +186,17 @@ export const getPostsCount = async (req, res, next) => {
     //console.log(res);
   }
   catch (error) {
+    next(error);
+  }
+}
+
+
+export const getpostsByCategory = async (req, res, next) => {
+  const { category } = req.body;
+  try {
+    const posts = await Post.find({ category: category });
+    res.status(200).json(posts);
+  } catch (error) {
     next(error);
   }
 }
