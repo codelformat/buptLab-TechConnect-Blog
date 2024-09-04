@@ -5,8 +5,7 @@ import { useSelector } from "react-redux";
 
 import  DashSidebarChange  from "./widgets/DashSiderbarChange"
 export default function DashSidebar() {
-  const location = useLocation();
-  const dispatch = useDispatch();
+
   const tempUser = useSelector((state) => state.user.currentUser);
   console.log(tempUser);
   const currentUser = tempUser.rest ? tempUser.rest : tempUser;
