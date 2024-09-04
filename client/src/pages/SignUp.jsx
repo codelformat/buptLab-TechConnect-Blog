@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import OAuth from "../components/OAuth";
 import * as THREE from "three"; // Import three.js explicitly
-import Waves from "../components/Waves";
+import Waves from "../components/Globe";
 import Clouds from "../components/Clouds";
 
 export default function SignUp() {
