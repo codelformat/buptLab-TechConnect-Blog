@@ -18,7 +18,7 @@ export default function SignUp() {
   const handleSubmit = async (e) => {
     e.preventDefault(); // Prevent the page from refreshing
     if (!formData.username || !formData.email || !formData.password) {
-      return setErrorMessage("Please fill in all fields");
+      return setErrorMessage("请填写所有字段.");
     }
     try {
       // Set loading to true to display the loading spinner
