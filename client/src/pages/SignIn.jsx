@@ -119,7 +119,7 @@ export default function SignIn() {
               Reset Password
             </Link>
           </div>
-          {errorMessage && console.log(errorMessage) && (
+          {errorMessage  && (
             <Alert className="mt-5" color="failure">
               {errorMessage}
             </Alert>

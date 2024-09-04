@@ -36,10 +36,10 @@ export default function UserDropdown({ currentUser }) {
         </span>
       </Dropdown.Header>
       <Link to={"/dashboard?tab=profile"}>
-        <Dropdown.Item>Profile</Dropdown.Item>
+        <Dropdown.Item>用户资料</Dropdown.Item>
       </Link>
       <Dropdown.Divider />
-      <Dropdown.Item onClick={handleSignout}>Sign Out</Dropdown.Item>
+      <Dropdown.Item onClick={handleSignout}>登出</Dropdown.Item>
     </Dropdown>
   );
 }
