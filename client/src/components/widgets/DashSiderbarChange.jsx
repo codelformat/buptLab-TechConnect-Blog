@@ -12,6 +12,10 @@ import { signoutSuccess } from "../../redux/user/userSlice";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 
+//用户点击触发link 地址变换 更新tab tab用于后续判断显示哪个组件
+//http://localhost:5173/dashboard?tab=users
+//loaction.search = ?tab=users
+//获取tab
 export default function DashSidebarChange({ currentUser, tab, setTab }) {
   const location = useLocation();
   const dispatch = useDispatch();
@@ -38,10 +42,12 @@ export default function DashSidebarChange({ currentUser, tab, setTab }) {
       console.log(error.message);
     }
   };
+  //使用sidebar组件
   return (
     <Sidebar className="w-full md:w-56">
       <Sidebar.Items>
         <Sidebar.ItemGroup className="flex flex-col gap-1">
+          {/* 只有管理员有权限 */}
           {currentUser && currentUser.isAdmin && (
             <Link to="/dashboard?tab=dash">
               <Sidebar.Item
@@ -49,7 +55,7 @@ export default function DashSidebarChange({ currentUser, tab, setTab }) {
                 icon={HiChartPie}
                 as="div"
               >
-                Dashboard
+                控制面板
               </Sidebar.Item>
             </Link>
           )}
@@ -57,11 +63,11 @@ export default function DashSidebarChange({ currentUser, tab, setTab }) {
             <Sidebar.Item
               active={tab === "profile"}
               icon={HiUser}
-              label={currentUser.isAdmin ? "Admin" : "User"}
+              label={currentUser.isAdmin ? "管理员" : "普通用户"}
               labelColor="dark"
               as="div"
             >
-              Profile
+              个人简介
             </Sidebar.Item>
           </Link>
           {/* 非管理员账号测试使用，最后需删除 */}
@@ -72,7 +78,7 @@ export default function DashSidebarChange({ currentUser, tab, setTab }) {
                 icon={HiDocumentText}
                 as="div"
               >
-                Posts
+                帖子
               </Sidebar.Item>
             </Link>
           )}
@@ -84,7 +90,7 @@ export default function DashSidebarChange({ currentUser, tab, setTab }) {
                   icon={HiOutlineUserGroup}
                   as="div"
                 >
-                  Users
+                  用户
                 </Sidebar.Item>
               </Link>
               <Link to="/dashboard?tab=comments">
@@ -93,7 +99,7 @@ export default function DashSidebarChange({ currentUser, tab, setTab }) {
                   icon={HiAnnotation}
                   as="div"
                 >
-                  Comments
+                  评论
                 </Sidebar.Item>
               </Link>
             </>
@@ -103,7 +109,7 @@ export default function DashSidebarChange({ currentUser, tab, setTab }) {
             className="cursor-pointer"
             onClick={handleSignout}
           >
-            Sign Out
+            登出
           </Sidebar.Item>
         </Sidebar.ItemGroup>
       </Sidebar.Items>
