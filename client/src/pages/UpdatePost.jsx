@@ -132,7 +132,7 @@ export default function UpdatePost() {
   };
   return (
     <div className='p-3 max-w-3xl mx-auto min-h-screen'>
-      <h1 className='text-center text-3xl my-7 font-semibold'>Update post</h1>
+      <h1 className='text-center text-3xl my-7 font-semibold'>更新帖子</h1>
       <form className='flex flex-col gap-4' onSubmit={handleSubmit}>
         <div className='flex flex-col gap-4 sm:flex-row justify-between'>
           <TextInput
@@ -152,7 +152,7 @@ export default function UpdatePost() {
             }
             value={formData.category}
           >
-            <option value='uncategorized'>Select a category</option>
+            <option value='uncategorized'>选择一个类别</option>
             <option value='javascript'>JavaScript</option>
             <option value='reactjs'>React.js</option>
             <option value='nextjs'>Next.js</option>
@@ -180,7 +180,7 @@ export default function UpdatePost() {
                 />
               </div>
             ) : (
-              'Upload Image'
+              '上传图片'
             )}
           </Button>
         </div>
@@ -203,7 +203,7 @@ export default function UpdatePost() {
           }}
         />
         <Button type='submit' gradientDuoTone='purpleToPink'>
-          Update post
+          更新帖子
         </Button>
         {publishError && (
           <Alert className='mt-5' color='failure'>
