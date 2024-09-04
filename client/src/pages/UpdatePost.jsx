@@ -21,6 +21,7 @@ export default function UpdatePost() {
   const [formData, setFormData] = useState({});
   const [publishError, setPublishError] = useState(null);
   const { postId } = useParams();
+  const [_id,set_id] = useState(null);
   console.log('postId:')
   console.log(postId);
 
@@ -45,14 +46,14 @@ export default function UpdatePost() {
           setPublishError(data.message);
           return;
         }
-        if (res.ok) {
+        if (res.ok) 
+        {
           setPublishError(null);
           console.log('data:');
           console.log(data[0])
           setFormData(data[0]);
+          set_id(data[0]._id)
           //setFormData(data.post);
-          console.log('formData:');
-          console.log(formData)
         }
       };
 
@@ -101,7 +102,8 @@ export default function UpdatePost() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch(`/api/post/update-post/${formData._id}`, {
+      console.log('formData,_id',formData._id)
+      const res = await fetch(`/api/post/update-post/${_id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -116,6 +118,7 @@ export default function UpdatePost() {
       const data = await res.json();
       if (!res.ok) {
         setPublishError(data.message);
+        console.log('是你出问题了吗?')
         return;
       }
 
