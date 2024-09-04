@@ -1,4 +1,11 @@
-import { Alert, Button, Label, Spinner, TextInput } from "flowbite-react";
+import {
+  Alert,
+  Button,
+  Label,
+  Spinner,
+  TextInput,
+  Checkbox,
+} from "flowbite-react";
 import { set } from "mongoose";
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -9,25 +16,29 @@ import {
   signInSuccess,
 } from "../redux/user/userSlice";
 import OAuth from "../components/OAuth";
+import { HiMail, HiLockClosed } from "react-icons/hi";
+import "./SignIn.css"; // 引入CSS文件
 
 export default function SignIn() {
   const [formData, setFormData] = useState({});
+  const [emailFocused, setEmailFocused] = useState(false);
+  const [passwordFocused, setPasswordFocused] = useState(false);
 
   const { loading, error: errorMessage } = useSelector((state) => state.user);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value.trim() });
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault(); // Prevent the page from refreshing
     if (!formData.email || !formData.password) {
       return dispatch(signInFailure("Please fill in all the fields."));
     }
     try {
-      // Set loading to true to display the loading spinner
-      //dispatch(action)
       dispatch(signInStart());
       const res = await fetch("/api/auth/signin", {
         method: "POST",
@@ -37,14 +48,10 @@ export default function SignIn() {
         body: JSON.stringify(formData),
       });
       const data = await res.json();
-      // If the request is unsuccessful, display the error message
-      // Example: Duplicate username or email
       if (data.success === false) {
-        dispatch(signInFailure(data.message)); // message is actually action.payload
+        dispatch(signInFailure(data.message));
       }
-      // setLoading(false);
       if (res.ok) {
-        // Redirect the user to the sign in page if the request is successful
         dispatch(signInSuccess(data));
         navigate("/");
       }
@@ -52,79 +59,102 @@ export default function SignIn() {
       dispatch(signInFailure(error.message));
     }
   };
+
   return (
-    <div className="min-h-screen mt-20">
-      <div className="flex p-3 max-w-3xl mx-auto flex-col md:flex-row md:items-center gap-5">
-        {/* Left side */}
-        <div className="flex-1">
-          <Link to="/" className="font-bold dark:text-white text-4xl">
-            <span
-              className="px-2 py-1 bg-gradient-to-r from-indigo-500
-            via-purple-500 to-pink-500 rounded-lg text-white"
-            >
-              Codelformat's
-            </span>
-            Blog
+    <div className="min-h-screen flex items-center justify-center dynamic-bg relative">
+      <div className="relative z-10 bg-white bg-opacity-40 backdrop-blur-lg p-8 rounded-lg w-full max-w-md shadow-lg">
+        <h1 className="text-3xl font-bold text-center mb-6">登录</h1>
+        <form
+          className="flex flex-col gap-6 items-center"
+          onSubmit={handleSubmit}
+        >
+          <div className="relative input-container w-full">
+            <HiMail className={`icon ${emailFocused ? "icon-focused" : ""}`} />
+            {!emailFocused && !formData.email && (
+              <label
+                htmlFor="email"
+                className={`floating-label ${
+                  emailFocused || formData.email ? "label-focused" : ""
+                }`}
+              >
+                邮箱
+              </label>
+            )}
+
+            <input
+              type="email"
+              id="email"
+              onChange={handleChange}
+              required
+              className="input-field"
+              onFocus={() => setEmailFocused(true)}
+              onBlur={() => setEmailFocused(false)}
+            />
+          </div>
+          <div className="relative input-container w-full">
+            <HiLockClosed
+              className={`icon ${passwordFocused ? "icon-focused" : ""}`}
+            />
+            {!passwordFocused && !formData.password && (
+              <label
+                htmlFor="password"
+                className={`floating-label ${
+                  passwordFocused || !formData.password ? "label-focused" : ""
+                }`}
+              >
+                密码
+              </label>
+            )}
+
+            <input
+              type="password"
+              id="password"
+              onChange={handleChange}
+              className="input-field"
+              required
+              onFocus={() => setPasswordFocused(true)}
+              onBlur={() => setPasswordFocused(false)}
+            />
+          </div>
+          <div className="flex items-center justify-between w-full">
+            <div>
+              <Checkbox id="remember" />
+              <Label htmlFor="remember" className="ml-2">
+                Remember me
+              </Label>
+            </div>
+            <Link to="/forgot-password" className="text-blue-500 text-sm">
+              Forgot your password?
+            </Link>
+          </div>
+          <Button
+            gradientDuoTone="purpleToPink"
+            type="submit"
+            disabled={loading}
+            className="w-full"
+          >
+            {loading ? (
+              <>
+                <Spinner size="sm" />
+                <span className="pl-3">Loading...</span>
+              </>
+            ) : (
+              "Sign In"
+            )}
+          </Button>
+          <OAuth />
+        </form>
+        <div className="flex gap-2 text-sm mt-5 justify-center">
+          <span>Don't have an account?</span>
+          <Link to="/sign-up" className="text-blue-500">
+            Sign Up
           </Link>
-          <p className="text-sm mt-5">
-            You can sign in with your email and password or with Google.
-          </p>
         </div>
-        {/* Right side */}
-        <div className="flex-1">
-          <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
-            <div>
-              <Label value="Your Email" />
-              <TextInput
-                type="email"
-                placeholder="name@company.com"
-                id="email"
-                onChange={handleChange}
-              />
-            </div>
-            <div>
-              <Label value="Your Password" />
-              <TextInput
-                type="password"
-                placeholder="********"
-                id="password"
-                onChange={handleChange}
-              />
-            </div>
-            <Button
-              gradientDuoTone="purpleToPink"
-              type="submit"
-              disabled={loading}
-            >
-              {loading ? (
-                <>
-                  <Spinner size="sm" />
-                  <span className="pl-3">Loading...</span>
-                </>
-              ) : (
-                "Sign In"
-              )}
-            </Button>
-            <OAuth />
-          </form>
-          <div className="flex gap-2 text-sm mt-5">
-            <span>Don't have an account?</span>
-            <Link to="/sign-up" className="text-blue-500">
-              Sign Up
-            </Link>
-          </div>
-          <div className="flex gap-2 text-sm mt-5">
-            <span>Forgot your password?</span>
-            <Link to="/forgot-password" className="text-blue-500">
-              Reset Password
-            </Link>
-          </div>
-          {errorMessage && console.log(errorMessage) && (
-            <Alert className="mt-5" color="failure">
-              {errorMessage}
-            </Alert>
-          )}
-        </div>
+        {errorMessage && (
+          <Alert className="mt-5" color="failure">
+            {errorMessage}
+          </Alert>
+        )}
       </div>
     </div>
   );

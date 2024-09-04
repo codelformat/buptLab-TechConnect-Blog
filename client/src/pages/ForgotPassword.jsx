@@ -1,4 +1,4 @@
-// /client/pages/ForgotPassword.jsx
+// /client/src/pages/ForgotPassword.jsx
 import {useState} from 'react'
 
 import { Alert, Button, Label, TextInput } from "flowbite-react";
@@ -19,7 +19,7 @@ export default function ForgotPassword() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.email) {
-      return setErrorMessage("Please enter your email.");
+      return setErrorMessage("请输入邮件.");
     }
     try {
       setLoading(true);

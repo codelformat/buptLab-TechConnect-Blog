@@ -31,8 +31,8 @@ export const updateUser = async (req, res, next) => {
         if (req.body.username !== req.body.username.toLowerCase()) {
             return next(errorHandler(400, 'Username must be lowercase'));
         }
-        if (!req.body.username.match(/^[a-zA-Z0-9]+$/)) {
-            return next(errorHandler(400, 'Username must contain only letters and numbers'));
+        if (!req.body.username.match(/^[a-zA-Z0-9]+$/) && !req.body.username.match(/^[\u4e00-\u9fa5]+$/)) {
+            return next(errorHandler(400, 'Username must contain only (Chinese) letters and numbers'));
         }
     }
     try {
