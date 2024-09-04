@@ -70,7 +70,7 @@ export default function SignIn() {
         >
           <div className="relative input-container w-full">
             <HiMail className={`icon ${emailFocused ? "icon-focused" : ""}`} />
-            {!emailFocused && (
+            {!emailFocused && !formData.email && (
               <label
                 htmlFor="email"
                 className={`floating-label ${
@@ -95,11 +95,11 @@ export default function SignIn() {
             <HiLockClosed
               className={`icon ${passwordFocused ? "icon-focused" : ""}`}
             />
-            {!passwordFocused && (
+            {!passwordFocused && !formData.password && (
               <label
                 htmlFor="password"
                 className={`floating-label ${
-                  passwordFocused || formData.password ? "label-focused" : ""
+                  passwordFocused || !formData.password ? "label-focused" : ""
                 }`}
               >
                 密码
