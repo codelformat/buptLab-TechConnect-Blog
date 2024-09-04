@@ -1,3 +1,4 @@
+// ./App.jsx
 import {BrowserRouter, Routes, Route} from 'react-router-dom';
 import About from './pages/About';
 import Dashboard from './pages/Dashboard';
@@ -14,9 +15,11 @@ import PrivateRoute from './components/PrivateRoute';
 import OnlyAdminPrivateRoute from './components/OnlyAdminPrivateRoute';
 import ForgotPassword from './pages/ForgotPassword';
 import ResetPassword from './pages/ResetPassword';
+import Search from './pages/Search'
 
 import PostPage from './pages/PostPage';
 import ScrollToTop from './components/ScrollToTop';
+import PostIndex from './pages/PostIndex';
 export default function App() {
   return (
     <BrowserRouter>
@@ -32,6 +35,7 @@ export default function App() {
         </Route>
         <Route path="/sign-in" element={<SignIn />} />
         <Route path="/sign-up" element={<SignUp />} />
+        <Route path='/search' element={<Search />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/projects" element={<Projects />} />
@@ -40,7 +44,8 @@ export default function App() {
           <Route path='/create-post' element={<CreatePost />} />
           <Route path='/update-post/:postId' element={<UpdatePost />} />
         </Route>
-        <Route path="/post/:postslug" element={<PostPage/>}/>
+        <Route path="/post/:postslug" element={<PostPage />} />
+        <Route path="/post/" element={<PostIndex />} />
       </Routes>
       <Footer />
     </BrowserRouter> 
