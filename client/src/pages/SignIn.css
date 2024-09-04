@@ -40,8 +40,8 @@
   padding-left: 2.5rem; /* 为了给图标留出空间 */
   width: 100%; /* 确保输入框的宽度适应父容器 */
   padding: 0.75rem;
-  border-radius: 0.375rem;
-  border: 1px solid #cbd5e0;
+  border-radius: 0.375rem !important;
+  border: px solid #cbd5e0!important;
   transition: padding-left 0.3s ease;
 }
 
