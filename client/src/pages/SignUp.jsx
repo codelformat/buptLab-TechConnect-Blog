@@ -57,6 +57,7 @@ export default function SignUp() {
         <form className="flex flex-col gap-6 items-center" onSubmit={handleSubmit}>
           <div className="relative input-container w-full">
             <HiUser className={`icon ${usernameFocused ? 'icon-focused' : ''}`} />
+
             <input
               type="text"
               placeholder="Username..."
@@ -70,6 +71,7 @@ export default function SignUp() {
           </div>
           <div className="relative input-container w-full">
             <HiMail className={`icon ${emailFocused ? 'icon-focused' : ''}`} />
+
             <input
               type="email"
               placeholder="name@company.com"
@@ -79,6 +81,7 @@ export default function SignUp() {
               required
               onFocus={() => setEmailFocused(true)}
               onBlur={() => setEmailFocused(false)}
+              
             />
           </div>
           <div className="relative input-container w-full">
