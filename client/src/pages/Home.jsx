@@ -8,7 +8,13 @@ export default function Home() {
 
   useEffect(() => {
     const fetchPosts = async () => {
-      const res = await fetch("/api/post/getposts");
+      const res = await fetch("/api/post/getposts", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ limit: 5 }),
+      });
       const data = await res.json();
       setPosts(data.posts);
     };
@@ -54,7 +60,7 @@ gap-8 py-7"
             <h2 className="text-2xl font-semibold text-center">Recent Posts</h2>
             <div className="flex flex-wrap gap-4 justify-center items-center">
               {posts.map((post) => (
-                <PostCard key={post.id} post={post} />
+                <PostCard key={post._id} post={post} />
               ))}
             </div>
             <div className="text-center">
