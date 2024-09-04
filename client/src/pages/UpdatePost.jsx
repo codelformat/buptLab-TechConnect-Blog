@@ -1,3 +1,4 @@
+// /client/src/pages/UpdatePost.jsx
 import { Alert, Button, FileInput, Select, TextInput } from 'flowbite-react';
 import ReactQuill from 'react-quill';
 import '../../node_modules/react-quill/dist/quill.snow.css';

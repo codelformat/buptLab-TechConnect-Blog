@@ -1,3 +1,4 @@
+// /client/src/pages/Posts.jsx
 import React from 'react'
 import { Modal, Table, Button } from 'flowbite-react';
 import { useEffect, useState } from 'react';

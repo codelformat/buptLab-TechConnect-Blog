@@ -1,3 +1,4 @@
+// /client/src/components/OnlyAdminPrivateRoute.jsx
 import { useSelector } from 'react-redux';
 import { Outlet, Navigate } from 'react-router-dom';
 

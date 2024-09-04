@@ -1,4 +1,4 @@
-// ./App.jsx
+// /client/src/App.jsx
 import {BrowserRouter, Routes, Route} from 'react-router-dom';
 import About from './pages/About';
 import Dashboard from './pages/Dashboard';

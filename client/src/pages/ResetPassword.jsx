@@ -1,4 +1,4 @@
-// src/pages/ResetPassword.jsx
+// /client/src/pages/ResetPassword.jsx
 import { useState } from "react";
 import { Alert, Button, Label, TextInput } from "flowbite-react";
 import { useNavigate } from "react-router-dom";
