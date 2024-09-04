@@ -15,11 +15,21 @@ export default function DashComments() {
   const [showModal, setShowModal] = useState(false);
   const [commentIdToDelete, setCommentIdToDelete] = useState('');
   useEffect(() => {
-    const fetchComments = async () => {
+    const fetchComments = async (isAdmin) => {
       try {
-        const res = await fetch(`/api/comment/getcomments`);
+        let url = null;
+        if (isAdmin){
+          url = `/api/comment/getcomments`
+        } else {
+          url = `/api/comment/getcomments?userId=${currentUser._id}`
+        }
+        console.log(url)
+        const res = await fetch(url ,{
+          method: "GET",
+        });
         const data = await res.json();
         if (res.ok) {
+          console.log(data.comments)
           setComments(data.comments);
           if (data.comments.length < 9) {
             setShowMore(false);
@@ -29,8 +39,8 @@ export default function DashComments() {
         console.log(error.message);
       }
     };
-    if (currentUser.isAdmin) {
-      fetchComments();
+    if (currentUser) {
+      fetchComments(currentUser.isAdmin);
     }
   }, [currentUser._id]);
 
@@ -77,7 +87,7 @@ export default function DashComments() {
 
   return (
     <div className='table-auto overflow-x-scroll md:mx-auto p-3 scrollbar scrollbar-track-slate-100 scrollbar-thumb-slate-300 dark:scrollbar-track-slate-700 dark:scrollbar-thumb-slate-500'>
-      {currentUser.isAdmin && comments.length > 0 ? (
+      {comments.length > 0 ? (
         <>
           <Table hoverable className='shadow-md'>
             <Table.Head>
