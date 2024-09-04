@@ -1,4 +1,4 @@
-/* Tailwind CSS 基础样式 */
+/* /client/src/index.css */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -218,4 +218,52 @@ section img#mountains_front {
   100% {
     background-position: 0% 50%;
   }
+.post-content p {
+    margin-bottom: 0.5rem;
+}
+.post-content h1 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    font-family: sans-serif;
+    margin: 1.5rem 0;
+}
+.post-content h2 {
+    font-size: 1.4rem;
+    /*font-weight:600;*/
+    font-family: sans-serif;
+    margin: 1.5rem 0;
+}
+.post-content a {
+    color: aqua;
+    text-decoration: none;
+}
+.post-content a:hover {
+    text-decoration: underline;
+}
+.dark .post-content a {
+    color: blueviolet;
+}
+
+/* ./styles.css */
+.icon-animation {
+    position: relative;
+}
+
+.icon-animation:focus::placeholder {
+    opacity: 0;
+}
+
+.icon-animation:focus::before {
+    content: attr(data-icon);
+    position: absolute;
+    left: 0.5rem;
+    top: -1.5rem;
+    font-size: 0.75rem;
+    color: #4b5563;
+    transition: all 0.3s ease;
+}
+
+.icon-animation:focus .icon {
+    transform: translate(-1.5rem, -1.5rem) scale(0.75);
+    transition: transform 0.3s ease;
 }

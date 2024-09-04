@@ -1,3 +1,4 @@
+// /client/src/PostCard.jsx
 import React from 'react'
 import { Link } from 'react-router-dom'
 export default function PostCard({post}) {
@@ -18,5 +19,5 @@ export default function PostCard({post}) {
                 </Link>
             </div>
         </div>
-  )
+    )
 }

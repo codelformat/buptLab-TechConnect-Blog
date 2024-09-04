@@ -35,7 +35,7 @@ export default function DashProfile() {
         updateUserError={updateUserError}
         setUpdateUserError={setUpdateUserError}
       />
-      {currentUser.isAdmin && (
+      {(
           <Link to={'/create-post'}>
             <Button
               type='button'
