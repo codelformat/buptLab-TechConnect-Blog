@@ -13,7 +13,7 @@ import OAuth from "../components/OAuth";
 export default function SignIn() {
   const [formData, setFormData] = useState({});
 
-  const {loading, error: errorMessage} = useSelector((state) => state.user);
+  const { loading, error: errorMessage } = useSelector((state) => state.user);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -113,7 +113,13 @@ export default function SignIn() {
               Sign Up
             </Link>
           </div>
-          {errorMessage && console.log(errorMessage)&&(
+          <div className="flex gap-2 text-sm mt-5">
+            <span>Forgot your password?</span>
+            <Link to="/forgot-password" className="text-blue-500">
+              Reset Password
+            </Link>
+          </div>
+          {errorMessage && console.log(errorMessage) && (
             <Alert className="mt-5" color="failure">
               {errorMessage}
             </Alert>

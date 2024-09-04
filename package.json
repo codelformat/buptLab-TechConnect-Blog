@@ -12,14 +12,17 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "axios": "^1.7.7",
     "bcryptjs": "^2.4.3",
     "buptlab-mern-blog": "file:",
     "cookie-parser": "^1.4.6",
+    "crypto": "^1.0.1",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "fnm": "^0.0.0",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.5.4",
+    "nodemailer": "^6.9.14",
     "nodemon": "^3.1.4",
     "pinyin": "^4.0.0-alpha.2"
   }

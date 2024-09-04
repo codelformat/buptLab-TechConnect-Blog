@@ -38,8 +38,11 @@ export const create = async (req, res, next) => {
 
 export const getposts = async (req, res, next) => {
   try {
+    const limit0 = req.body.limit;
     const startIndex = parseInt(req.query.startIndex) || 0;
-    const limit = parseInt(req.query.limit) || 9;
+    //const limit = parseInt(req.query.limit) || 9;
+    const limit = parseInt(limit0) || 9;
+
     const sortDirection = req.query.order === 'asc' ? 1 : -1;
 
     const posts = await Post.find({
@@ -165,7 +168,7 @@ export const get_required_post = async (req, res, next) => {
 
 export const getpostBySlug = async (req, res, next) => {
   const { slug } = req.body;
-  console.log('getpostBySlug内部方法:',slug)
+  //console.log('getpostBySlug内部方法:',slug)
   try {
     const post = await Post.findOne({ slug: slug });
     res.status(200).json(post);

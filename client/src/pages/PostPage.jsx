@@ -5,8 +5,10 @@ import { Spinner,Button } from 'flowbite-react';
 import { Link } from 'react-router-dom';
 import CommentSection from '../components/CommentSection';
 import PostCard from '../components/PostCard';
-export default function PostPage() {
-  console.log('PostPage!')
+
+
+export default function PostPage()
+{
   const { postslug } = useParams();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
@@ -31,7 +33,7 @@ export default function PostPage() {
       }
       else {
         setPost(data);
-        console.log("post:",post);
+        //console.log("post:",post);
         setLoading(false);
         setError(false);
       }
@@ -44,16 +46,32 @@ export default function PostPage() {
     fetchPost();
   }, [postslug]);
 
-  console.log("Post slug is", postslug);
+  //console.log("Post slug is", postslug);
   useEffect(() => {
+    console.log('Post Page useEffect');
     try {
       const fetchRecentPosts = async () => {
-        const res = await fetch(`/api/post/getposts?limit=3`);
+        const res = await fetch('/api/post/getposts',{
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },  
+          body: JSON.stringify({ limit: 3 }),
+        });
+        //const res = await fetch(`/api/post/getposts?limit=3`);
         const data = await res.json();
+        console.log('recent posts', data.posts);
         if (res.ok) {
+          console.log('data:')
+          console.log(data)
           setRecentPosts(data.posts);
         }
+        else{
+          console.log('res is not ok! ',data.message);
+        }
       }
+      
+      fetchRecentPosts();
     }
     catch (error) {
       console.log(error.message);
@@ -87,11 +105,11 @@ export default function PostPage() {
       <CommentSection postId={post._id} />
       <div className='flex flex-col justify-center items-center mb-5'>
         <h1 className='text-xl mt-5'>Recent articles</h1>
-        <div className='flex flex-wrap gap-5 mt-5 justify-center'>
+        <div className='flex flex-wrap gap-5 mt-5 justify-center w-auto'>
           {
-            recentPosts && recentPosts.map((post) => {
+            recentPosts && recentPosts.map((post) => 
               <PostCard key={post._id} post={post}/> 
-            })
+            )
           }
         </div>
       </div>

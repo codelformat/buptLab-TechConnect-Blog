@@ -1,3 +1,4 @@
+// /api/routes/user.route.js
 import express from 'express';
 import { test } from '../controllers/user.controller.js';
 import { updateUser, deleteUser, signout, getUsers } from '../controllers/user.controller.js';

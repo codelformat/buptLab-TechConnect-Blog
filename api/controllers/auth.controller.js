@@ -1,7 +1,10 @@
+// /api/controllers/auth.controller.js
 import User from '../models/user.model.js';
 import bcryptjs from 'bcryptjs';
 import { errorHandler } from '../utils/error.js';
 import jwt from 'jsonwebtoken';
+import nodemailer from 'nodemailer';
+import crypto from 'crypto';
 
 export const signup = async (req, res, next) => {
     const { username, email, password } = req.body;
@@ -116,3 +119,93 @@ export const google = async (req, res, next) => {
         next(error);
     }
 }
+
+// 忘记密码 - 发送验证码
+export const forgotPassword = async (req, res, next) => {
+    const { email } = req.body;
+    console.log(email);
+
+    if (!email || email === '') {
+        return next(errorHandler(400, 'Email is required'));
+    }
+
+    try {
+        const user = await User.findOne({ email });
+        if (!user) {
+            return next(errorHandler(404, 'User not found'));
+        }
+
+        // 生成验证码
+        const resetCode = crypto.randomBytes(3).toString('hex').toUpperCase();
+
+        // 将验证码保存到用户数据中，设置其有效期，比如15分钟
+        user.resetPasswordCode = resetCode;
+        user.resetPasswordExpire = Date.now() + 15 * 60 * 1000; // 15分钟
+
+        await user.save();
+
+        console.log("initiating email sending");
+        // 使用nodemailer发送邮件
+        const transporter = nodemailer.createTransport({
+            // service: 'Gmail',
+            host: "smtp.gmail.com",
+            port: 465,
+            secure: true,
+            auth: {
+                type: "OAuth2",
+                user: process.env.EMAIL_USER, // 你的邮箱
+                // pass: process.env.EMAIL_PASS, // 你的邮箱密码
+                clientId: process.env.CLIENT_ID,
+                clientSecret: process.env.CLIENT_SECRET,
+                refreshToken: process.env.REFRESH_TOKEN,
+                accessToken: process.env.ACCESS_TOKEN,
+            },
+        });
+
+        const mailOptions = {
+            from: process.env.EMAIL_USER,
+            to: user.email,
+            subject: 'Password Reset Code',
+            text: `Your password reset code is ${resetCode}`,
+        };
+
+        console.log("sending email...");
+        await transporter.sendMail(mailOptions);
+
+        res.status(200).json({ success: true, message: 'Verification code sent to your email.' });
+    } catch (error) {
+        next(error);
+    }
+};
+
+// 重置密码
+export const resetPassword = async (req, res, next) => {
+    const { code, newPassword } = req.body;
+
+    if (!code || !newPassword || newPassword.length < 6) {
+        return next(errorHandler(400, 'Invalid code or password.'));
+    }
+
+    try {
+        // 查找用户
+        const user = await User.findOne({
+            resetPasswordCode: code.toUpperCase(),
+            resetPasswordExpire: { $gt: Date.now() }, // 检查是否过期
+        });
+
+        if (!user) {
+            return next(errorHandler(400, 'Invalid or expired code.'));
+        }
+
+        // 更新密码
+        user.password = bcryptjs.hashSync(newPassword, 10);
+        user.resetPasswordCode = undefined;
+        user.resetPasswordExpire = undefined;
+
+        await user.save();
+
+        res.status(200).json({ success: true, message: 'Password reset successful' });
+    } catch (error) {
+        next(error);
+    }
+};
