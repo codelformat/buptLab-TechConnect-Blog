@@ -45,23 +45,23 @@ export default function AccountActions({ currentUser }) {
   return (
     <div className="text-red-500 flex justify-between mt-5">
       <span className="cursor-pointer" onClick={() => setShowModal(true)}>
-        Delete Account
+        删除账户
       </span>
-      <span onClick={handleSignout} className="cursor-pointer">Sign Out</span>
+      <span onClick={handleSignout} className="cursor-pointer">登出</span>
       <Modal show={showModal} onClose={() => setShowModal(false)} popup size="md">
         <Modal.Header />
         <Modal.Body>
           <div className="text-center">
             <HiOutlineExclamationCircle className="h-14 w-14 text-5xl text-gray-400 dark:text-gray-200 mb-4 mx-auto" />
             <h3 className="mb-5 text-lg text-gray-500 dark:text-gray-400">
-              Are you sure to delete your account?
+            您确定要删除您的账户吗？
             </h3>
-            <div className="flex justify-center gap-4">
+            <div className="flex justify-center gap-8">
               <Button color="failure" onClick={handleDeleteUser}>
-                Yes, I'm sure
+              是，确定
               </Button>
               <Button color="gray" onClick={() => setShowModal(false)}>
-                No, cancel
+              不，取消
               </Button>
             </div>
           </div>

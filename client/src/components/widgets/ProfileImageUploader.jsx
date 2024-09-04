@@ -10,17 +10,22 @@ import { app } from "../../firebase";
 import "react-circular-progressbar/dist/styles.css";
 import { Alert } from "flowbite-react";
 
+//
 export default function ProfileImageUploader({ currentUser, setFormData }) {
   const [imageFile, setImageFile] = useState(null);
   const [imageFileURL, setImageURL] = useState(null);
+
+
   const [imageFileUploadingProgress, setImageFileUploadingProgress] =
     useState(0);
   const [imageFileUploadError, setImageFileUploadError] = useState(null);
   const [imageFileUploading, setImageFileUploading] = useState(false);
+  //创建引用 在别处调用
   const filePickerRef = useRef(null);
 
   console.log(currentUser);
 
+  //filechange 就上传
   useEffect(() => {
     if (imageFile) {
       uploadImage();
@@ -36,14 +41,18 @@ export default function ProfileImageUploader({ currentUser, setFormData }) {
   };
 
   const uploadImage = async () => {
+   //开始上传
     setImageFileUploading(true);
     setImageFileUploadError(null);
     const storage = getStorage(app);
     const fileName = new Date().getTime() + "-" + imageFile.name;
+    //生成ref
     const storageRef = ref(storage, fileName);
+    //创建上传任务
     const uploadTask = uploadBytesResumable(storageRef, imageFile);
     uploadTask.on(
       "state_changed",
+      //通过快照获取上传进度
       (snapshot) => {
         const progress =
           (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
@@ -58,6 +67,7 @@ export default function ProfileImageUploader({ currentUser, setFormData }) {
         setImageURL(null);
         setImageFileUploading(false);
       },
+      //上传到firebase后获取下载链接
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
           setImageURL(downloadURL);
@@ -78,6 +88,7 @@ export default function ProfileImageUploader({ currentUser, setFormData }) {
         className="relative w-32 h-32 self-center cursor-pointer shadow-md overflow-hidden rounded-full"
         onClick={() => filePickerRef.current.click()}
       >
+        {/* 文件上传 通过引用转移到对该div的点击 */}
         <input
           type="file"
           accept="image/*"

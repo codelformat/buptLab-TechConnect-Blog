@@ -8,6 +8,7 @@ import DashComments from '../components/DashComments';
 import DashboardComp from '../components/DashboardComp';
 
 export default function Dashboard() {
+  //通过tab判断显示哪个组件
   const location = useLocation();
   const [tab, setTab] = useState('');
   console.log(tab);
