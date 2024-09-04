@@ -1,14 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react'
 import * as THREE from 'three';
-import WAVES from 'vanta/dist/vanta.waves.min.js';
+import NET from '../../node_modules/vanta/dist/vanta.net.js'
 
-const Waves = (props) => {
+const Net = (props) => {
   const [vantaEffect, setVantaEffect] = useState(null)
   const myRef = useRef(null)
 
   useEffect(() => {
     if (!vantaEffect) {
-      setVantaEffect(WAVES({
+      setVantaEffect(NET({
         el: myRef.current,
         THREE:THREE,
         mouseControls: true,
@@ -18,19 +18,22 @@ const Waves = (props) => {
         minWidth: 200.00,
         scale: 1.00,
         scaleMobile: 1.00,
-        color: 0xbc85e1,
+        color: 0x823fff,
+        spacing: 15.00
       }))
     }
     return () => {
       if (vantaEffect) vantaEffect.destroy()
     }
   }, [vantaEffect])
-  return <div className="flex-1 h-full rounded-3xl flex flex-col items-center justify-center" ref={myRef} >
+  return (
+    <div className="min-h-screen" ref={myRef} >
       {/* <div className="text-3xl font-bold">
         Welcome To Our Blog!
       </div> */}
-  </div>
+    </div>
+  )
 }
 
 // Exporting MyComponent so it can be used in other files
-export default Waves
+export default Net
