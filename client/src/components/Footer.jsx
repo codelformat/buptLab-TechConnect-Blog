@@ -45,9 +45,9 @@ export default function FooterComponent() {
           <FooterLogo />
 
           <div className="grid grid-cols-2 gap-8 mt-4 sm:grid-cols-3 sm:gap-6">
-            <FooterLinksGroup title="About" links={aboutLinks} />
-            <FooterLinksGroup title="Follow Us" links={followUsLinks} />
-            <FooterLinksGroup title="Legal" links={legalLinks} />
+            <FooterLinksGroup title="关于" links={aboutLinks} />
+            <FooterLinksGroup title="关注我们" links={followUsLinks} />
+            <FooterLinksGroup title="法律条款" links={legalLinks} />
           </div>
         </div>
         <Footer.Divider />

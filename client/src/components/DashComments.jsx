@@ -81,12 +81,12 @@ export default function DashComments() {
         <>
           <Table hoverable className='shadow-md'>
             <Table.Head>
-              <Table.HeadCell>Date updated</Table.HeadCell>
-              <Table.HeadCell>Comment content</Table.HeadCell>
-              <Table.HeadCell>Number of likes</Table.HeadCell>
-              <Table.HeadCell>PostId</Table.HeadCell>
-              <Table.HeadCell>UserId</Table.HeadCell>
-              <Table.HeadCell>Delete</Table.HeadCell>
+              <Table.HeadCell>更新日期</Table.HeadCell>
+              <Table.HeadCell>评论内容</Table.HeadCell>
+              <Table.HeadCell>点赞数</Table.HeadCell>
+              <Table.HeadCell>帖子Id</Table.HeadCell>
+              <Table.HeadCell>用户Id</Table.HeadCell>
+              <Table.HeadCell>删除评论</Table.HeadCell>
             </Table.Head>
             {comments.map((comment) => (
               <Table.Body className='divide-y' key={comment._id}>
@@ -106,7 +106,7 @@ export default function DashComments() {
                       }}
                       className='font-medium text-red-500 hover:underline cursor-pointer'
                     >
-                      Delete
+                      删除
                     </span>
                   </Table.Cell>
                 </Table.Row>
@@ -118,12 +118,12 @@ export default function DashComments() {
               onClick={handleShowMore}
               className='w-full text-teal-500 self-center text-sm py-7'
             >
-              Show more
+              展示更多
             </button>
           )}
         </>
       ) : (
-        <p>You have no comments yet!</p>
+        <p>还没有评论!</p>
       )}
       <Modal
         show={showModal}
@@ -136,14 +136,14 @@ export default function DashComments() {
           <div className='text-center'>
             <HiOutlineExclamationCircle className='h-14 w-14 text-gray-400 dark:text-gray-200 mb-4 mx-auto' />
             <h3 className='mb-5 text-lg text-gray-500 dark:text-gray-400'>
-              Are you sure you want to delete this comment?
+              你确定删除这条评论吗?
             </h3>
             <div className='flex justify-center gap-4'>
               <Button color='failure' onClick={handleDeleteComment}>
-                Yes, I'm sure
+                是，确定
               </Button>
               <Button color='gray' onClick={() => setShowModal(false)}>
-                No, cancel
+                不，取消
               </Button>
             </div>
           </div>
