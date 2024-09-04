@@ -40,10 +40,10 @@ export default function App() {
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/projects" element={<Projects />} />
         {/* 只有admin才能访问的私有路由 */}
-        <Route element={<OnlyAdminPrivateRoute />}>
+        {/* <Route element={<OnlyAdminPrivateRoute />}> */}
           <Route path='/create-post' element={<CreatePost />} />
           <Route path='/update-post/:postId' element={<UpdatePost />} />
-        </Route>
+        {/* </Route> */}
         <Route path="/post/:postslug" element={<PostPage />} />
         <Route path="/post/" element={<PostIndex />} />
       </Routes>

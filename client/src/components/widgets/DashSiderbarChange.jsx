@@ -71,7 +71,7 @@ export default function DashSidebarChange({ currentUser, tab, setTab }) {
             </Sidebar.Item>
           </Link>
           {/* 非管理员账号测试使用，最后需删除 */}
-          {currentUser.isAdmin && (
+          {(
             <Link to="/dashboard?tab=posts">
               <Sidebar.Item
                 active={tab === "posts"}
