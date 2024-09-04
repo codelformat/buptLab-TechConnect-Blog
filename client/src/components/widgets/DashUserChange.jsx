@@ -53,14 +53,14 @@ export default function DashUserChange({
 
   return currentUser.isAdmin && users.length > 0 ? (
     <>
-      <Table hoverable className="shadow-md mt-1" >
+      <Table hoverable className="shadow-md mt-1">
         <Table.Head>
-          <Table.HeadCell>Date created</Table.HeadCell>
-          <Table.HeadCell>User image</Table.HeadCell>
-          <Table.HeadCell>Username</Table.HeadCell>
-          <Table.HeadCell>Email</Table.HeadCell>
-          <Table.HeadCell>Admin</Table.HeadCell>
-          <Table.HeadCell>Delete</Table.HeadCell>
+          <Table.HeadCell>创建日期</Table.HeadCell>
+          <Table.HeadCell>用户头像</Table.HeadCell>
+          <Table.HeadCell>用户名</Table.HeadCell>
+          <Table.HeadCell>邮箱地址</Table.HeadCell>
+          <Table.HeadCell>用户权限</Table.HeadCell>
+          <Table.HeadCell>删除账户</Table.HeadCell>
         </Table.Head>
         {users.map((user) => (
           <Table.Body className="divide-y" key={user._id}>
@@ -79,9 +79,9 @@ export default function DashUserChange({
               <Table.Cell>{user.email}</Table.Cell>
               <Table.Cell>
                 {user.isAdmin ? (
-                  <FaCheck className="text-green-500" />
+                  <span className="text-red-500">管理员</span>
                 ) : (
-                  <FaTimes className="text-red-500" />
+                  <span className="text-green-500">普通用户</span>
                 )}
               </Table.Cell>
               <Table.Cell>
@@ -92,7 +92,7 @@ export default function DashUserChange({
                   }}
                   className="font-medium text-red-500 hover:underline cursor-pointer"
                 >
-                  Delete
+                  删除账户
                 </span>
               </Table.Cell>
             </Table.Row>
@@ -104,7 +104,7 @@ export default function DashUserChange({
           onClick={handleShowMore}
           className="w-full text-teal-500 self-center text-sm py-7"
         >
-          Show more
+          显示更多
         </button>
       )}
       <ModalChange
@@ -115,7 +115,6 @@ export default function DashUserChange({
         setShowModal={setShowModal}
         showModal={showModal}
       ></ModalChange>
-
     </>
   ) : (
     <p>You have no users yet!</p>
