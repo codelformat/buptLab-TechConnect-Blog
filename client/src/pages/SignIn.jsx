@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from "react"; // 引入useEffect
 import {
   Alert,
   Button,
@@ -6,8 +7,6 @@ import {
   TextInput,
   Checkbox,
 } from "flowbite-react";
-import { set } from "mongoose";
-import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -20,7 +19,11 @@ import { HiMail, HiLockClosed } from "react-icons/hi";
 import "./SignIn.css"; // 引入CSS文件
 
 export default function SignIn() {
-  const [formData, setFormData] = useState({});
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+    rememberMe: false, // 添加rememberMe状态
+  });
   const [emailFocused, setEmailFocused] = useState(false);
   const [passwordFocused, setPasswordFocused] = useState(false);
 
@@ -29,8 +32,28 @@ export default function SignIn() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  // 使用useEffect在组件加载时检查localStorage中的信息
+  useEffect(() => {
+    const savedEmail = localStorage.getItem("email");
+    const savedPassword = localStorage.getItem("password");
+    const rememberMe = localStorage.getItem("rememberMe") === "true";
+
+    // 如果localStorage中存在之前保存的登录信息并且rememberMe为true，则自动填充
+    if (rememberMe) {
+      setFormData({
+        email: savedEmail || "",
+        password: savedPassword || "",
+        rememberMe,
+      });
+    }
+  }, []);
+
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.id]: e.target.value.trim() });
+    const { id, value, type, checked } = e.target; // 获取input的ID和对应的值
+    setFormData({
+      ...formData,
+      [id]: type === "checkbox" ? checked : value.trim(), // 处理checkbox的状态
+    });
   };
 
   const handleSubmit = async (e) => {
@@ -52,6 +75,17 @@ export default function SignIn() {
         dispatch(signInFailure(data.message));
       }
       if (res.ok) {
+        // 如果用户选择了记住密码，将信息保存到localStorage中
+        if (formData.rememberMe) {
+          localStorage.setItem("email", formData.email);
+          localStorage.setItem("password", formData.password);
+          localStorage.setItem("rememberMe", formData.rememberMe);
+        } else {
+          // 用户未选择记住密码，清空localStorage中的信息
+          localStorage.removeItem("email");
+          localStorage.removeItem("password");
+          localStorage.removeItem("rememberMe");
+        }
         dispatch(signInSuccess(data));
         navigate("/");
       }
@@ -84,6 +118,7 @@ export default function SignIn() {
             <input
               type="email"
               id="email"
+              value={formData.email} // 将输入框的值绑定到formData
               onChange={handleChange}
               required
               className="input-field"
@@ -109,6 +144,7 @@ export default function SignIn() {
             <input
               type="password"
               id="password"
+              value={formData.password} // 将输入框的值绑定到formData
               onChange={handleChange}
               className="input-field"
               required
@@ -118,13 +154,17 @@ export default function SignIn() {
           </div>
           <div className="flex items-center justify-between w-full">
             <div>
-              <Checkbox id="remember" />
-              <Label htmlFor="remember" className="ml-2">
-                Remember me
+              <Checkbox
+                id="rememberMe"
+                checked={formData.rememberMe} // 将checkbox的状态绑定到formData
+                onChange={handleChange}
+              />
+              <Label htmlFor="rememberMe" className="ml-2">
+                记住我
               </Label>
             </div>
             <Link to="/forgot-password" className="text-blue-500 text-sm">
-              Forgot your password?
+              忘记密码？
             </Link>
           </div>
           <Button
@@ -136,18 +176,18 @@ export default function SignIn() {
             {loading ? (
               <>
                 <Spinner size="sm" />
-                <span className="pl-3">Loading...</span>
+                <span className="pl-3">加载中...</span>
               </>
             ) : (
-              "Sign In"
+              "登录"
             )}
           </Button>
           <OAuth />
         </form>
         <div className="flex gap-2 text-sm mt-5 justify-center">
-          <span>Don't have an account?</span>
+          <span>没有账号？</span>
           <Link to="/sign-up" className="text-blue-500">
-            Sign Up
+            注册
           </Link>
         </div>
         {errorMessage && (

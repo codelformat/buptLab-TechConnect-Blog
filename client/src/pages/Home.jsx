@@ -19,7 +19,7 @@ const Home = () => {
         if (res.ok) {
           const data = await res.json();
           setRecentPosts(data.posts.slice(0, 4)); // 最近的4篇文章
-          setAllPosts(data.posts.slice(4)); // 剩下的文章
+          setAllPosts(data.posts); // 所有的文章
         }
       } catch (error) {
         console.log(error.message);
