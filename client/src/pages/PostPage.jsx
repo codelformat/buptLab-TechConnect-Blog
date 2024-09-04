@@ -14,6 +14,7 @@ export default function PostPage()
   const [error, setError] = useState(false);
   const [post, setPost] = useState(null);
   const [recentPosts, setRecentPosts] = useState(null);
+  const recentPostsCount = 3;
   const fetchPost = async () => {
     try {
       setLoading(true);
@@ -56,7 +57,7 @@ export default function PostPage()
           headers: {
             'Content-Type': 'application/json',
           },  
-          body: JSON.stringify({ limit: 3 }),
+          body: JSON.stringify({ limit: recentPostsCount+1 }),
         });
         //const res = await fetch(`/api/post/getposts?limit=3`);
         const data = await res.json();
@@ -64,7 +65,15 @@ export default function PostPage()
         if (res.ok) {
           console.log('data:')
           console.log(data)
-          setRecentPosts(data.posts);
+          let samePost = data.posts.find(post => post.slug === postslug);
+          if (samePost) {
+            //如果有相同的文章，则去除此文章
+            setRecentPosts(data.posts.filter(post => post.slug !== postslug));
+          }
+          else {
+            setRecentPosts(data.posts.slice(0,recentPostsCount));
+          }
+          
         }
         else{
           console.log('res is not ok! ',data.message);
