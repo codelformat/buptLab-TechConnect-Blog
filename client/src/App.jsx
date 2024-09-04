@@ -17,6 +17,7 @@ import Search from './pages/Search'
 
 import PostPage from './pages/PostPage';
 import ScrollToTop from './components/ScrollToTop';
+import PostIndex from './pages/PostIndex';
 export default function App() {
   return (
     <BrowserRouter>
@@ -40,7 +41,8 @@ export default function App() {
           <Route path='/create-post' element={<CreatePost />} />
           <Route path='/update-post/:postId' element={<UpdatePost />} />
         </Route>
-        <Route path="/post/:postslug" element={<PostPage/>}/>
+        <Route path="/post/:postslug" element={<PostPage />} />
+        <Route path="/post/" element={<PostIndex />} />
       </Routes>
       <Footer />
     </BrowserRouter> 
