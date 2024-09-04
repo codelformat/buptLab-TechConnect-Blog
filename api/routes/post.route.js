@@ -13,5 +13,7 @@ router.delete('/deletepost',deletepost)
 router.put('/update-post/:postId',updatepost)
 router.post('/get_required_post',get_required_post)
 router.post('/getpostBySlug',getpostBySlug)
+router.get('/getPostsCount',getPostsCount)
+router.post('/getpostsByCategory',getpostsByCategory)
 
 export default router;
