@@ -1,4 +1,12 @@
-// /client/src/pages/SignIn.jsx
+import {
+  Alert,
+  Button,
+  Label,
+  Spinner,
+  TextInput,
+  Checkbox,
+} from "flowbite-react";
+import { set } from "mongoose";
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -10,7 +18,6 @@ import {
 import OAuth from "../components/OAuth";
 import { HiMail, HiLockClosed } from "react-icons/hi";
 import "./SignIn.css"; // 引入CSS文件
-import { Alert, Button, Label, Spinner, Checkbox } from "flowbite-react";
 
 export default function SignIn() {
   const [formData, setFormData] = useState({});
@@ -63,19 +70,23 @@ export default function SignIn() {
         >
           <div className="relative input-container w-full">
             <HiMail className={`icon ${emailFocused ? "icon-focused" : ""}`} />
-            <label
-              htmlFor="email"
-              className={`floating-label ${emailFocused || formData.email ? "label-focused" : ""
+            {!emailFocused && !formData.email && (
+              <label
+                htmlFor="email"
+                className={`floating-label ${
+                  emailFocused || formData.email ? "label-focused" : ""
                 }`}
-            >
-              邮箱
-            </label>
+              >
+                邮箱
+              </label>
+            )}
+
             <input
               type="email"
               id="email"
               onChange={handleChange}
-              className="input-field"
               required
+              className="input-field"
               onFocus={() => setEmailFocused(true)}
               onBlur={() => setEmailFocused(false)}
             />
@@ -84,13 +95,17 @@ export default function SignIn() {
             <HiLockClosed
               className={`icon ${passwordFocused ? "icon-focused" : ""}`}
             />
-            <label
-              htmlFor="password"
-              className={`floating-label ${passwordFocused || formData.password ? "label-focused" : ""
+            {!passwordFocused && !formData.password && (
+              <label
+                htmlFor="password"
+                className={`floating-label ${
+                  passwordFocused || !formData.password ? "label-focused" : ""
                 }`}
-            >
-              密码
-            </label>
+              >
+                密码
+              </label>
+            )}
+
             <input
               type="password"
               id="password"

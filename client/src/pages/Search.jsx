@@ -100,7 +100,7 @@ export default function Search() {
         <form className="flex flex-col gap-8" onSubmit={handleSubmit}>
           <div className="flex items-center gap-2">
             <label className="whitespace-nowrap font-semibold">
-              Search Term:
+              搜索项:
             </label>
             <TextInput
               placeholder="Search..."
@@ -111,31 +111,31 @@ export default function Search() {
             />
           </div>
           <div className="flex items-center gap-2">
-            <label className="font-semibold">Sort:</label>
+            <label className="font-semibold">分类:</label>
             <Select
               onChange={handleChange}
               value={sidebarData.sort}
               id="sort"
             >
-              <option value="desc">Latest</option>
-              <option value="asc">Oldest</option>
+              <option value="desc">最新</option>
+              <option value="asc">最远</option>
             </Select>
           </div>
           <div className="flex items-center gap-2">
-            <label className="font-semibold">Category:</label>
+            <label className="font-semibold">分类:</label>
             <Select
               onChange={handleChange}
               value={sidebarData.category}
               id="category"
             >
-              <option value="uncategorized">Uncategorized</option>
+              <option value="uncategorized">其他</option>
               <option value="reactjs">React.js</option>
               <option value="nextjs">Next.js</option>
               <option value="javascript">JavaScript</option>
             </Select>
           </div>
           <Button type="submit" outline gradientDuoTone="purpleToPink">
-            Apply Filters
+           筛选
           </Button>
         </form>
         {/* Toggle Arrow inside Sidebar */}
