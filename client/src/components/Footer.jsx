@@ -1,3 +1,4 @@
+// /client/src/components/Footer.jsx
 import { Footer } from "flowbite-react";
 import FooterLogo from "./widgets/Logo";
 import FooterLinksGroup from "./widgets/FooterLinksGroup";

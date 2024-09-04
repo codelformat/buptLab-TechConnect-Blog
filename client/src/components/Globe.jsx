@@ -1,3 +1,4 @@
+// /client/src/components/Globe.jsx
 import React, { useState, useEffect, useRef } from 'react'
 import * as THREE from 'three';
 import Globe from '../../node_modules/vanta/dist/vanta.globe.js'

@@ -1,3 +1,4 @@
+// /client/src/components/Net.jsx
 import React, { useState, useEffect, useRef } from 'react'
 import * as THREE from 'three';
 import NET from '../../node_modules/vanta/dist/vanta.net.js'

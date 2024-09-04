@@ -18,7 +18,7 @@ export default function SearchBar() {
 
   return (
     <div
-      className="relative"
+      className="relative mb-1"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >

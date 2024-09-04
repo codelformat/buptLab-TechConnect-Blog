@@ -1,4 +1,4 @@
-// /client/pages/ForgotPassword.jsx
+// /client/src/pages/ForgotPassword.jsx
 import {useState} from 'react'
 
 import { Alert, Button, Label, TextInput } from "flowbite-react";
