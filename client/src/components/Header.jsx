@@ -1,3 +1,4 @@
+// ./components/Header.jsx
 import { Navbar } from "flowbite-react";
 import { useSelector } from "react-redux";
 import Logo from "./widgets/Logo";
