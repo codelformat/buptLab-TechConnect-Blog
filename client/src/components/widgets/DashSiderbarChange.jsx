@@ -71,7 +71,7 @@ export default function DashSidebarChange({ currentUser, tab, setTab }) {
             </Sidebar.Item>
           </Link>
           {/* 非管理员账号测试使用，最后需删除 */}
-          {(
+          {
             <Link to="/dashboard?tab=posts">
               <Sidebar.Item
                 active={tab === "posts"}
@@ -81,29 +81,29 @@ export default function DashSidebarChange({ currentUser, tab, setTab }) {
                 帖子
               </Sidebar.Item>
             </Link>
-          )}
+          }
           {currentUser.isAdmin && (
-            <>
-              <Link to="/dashboard?tab=users">
-                <Sidebar.Item
-                  active={tab === "users"}
-                  icon={HiOutlineUserGroup}
-                  as="div"
-                >
-                  用户
-                </Sidebar.Item>
-              </Link>
-              <Link to="/dashboard?tab=comments">
-                <Sidebar.Item
-                  active={tab === "comments"}
-                  icon={HiAnnotation}
-                  as="div"
-                >
-                  评论
-                </Sidebar.Item>
-              </Link>
-            </>
+            <Link to="/dashboard?tab=users">
+              <Sidebar.Item
+                active={tab === "users"}
+                icon={HiOutlineUserGroup}
+                as="div"
+              >
+                用户
+              </Sidebar.Item>
+            </Link>
           )}
+          {
+            <Link to="/dashboard?tab=comments">
+              <Sidebar.Item
+                active={tab === "comments"}
+                icon={HiAnnotation}
+                as="div"
+              >
+                评论
+              </Sidebar.Item>
+            </Link>
+          }
           <Sidebar.Item
             icon={HiArrowSmRight}
             className="cursor-pointer"
