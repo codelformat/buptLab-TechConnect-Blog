@@ -39,7 +39,7 @@
 }
 
 .icon-focused {
-    transform: translateY(-150%);
+    transform: translateY(-150%) scale(0.75);
     top: 0.25rem;
     font-size: 1rem;
     color: #3b82f6;
@@ -52,6 +52,7 @@
     border-radius: 0.375rem;
     border: 1px solid #cbd5e0;
     transition: border-color 0.3s ease;
+    text-indent: 1.2rem;
 }
 
 .input-field:focus {
@@ -59,7 +60,18 @@
     border-color: #3b82f6;
 }
 
-.input-field::placeholder {
-    color: #cbd5e0;
-    transition: none;
+.floating-label {
+    position: absolute;
+    left: 2.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1rem;
+    color: #9ca3af;
+    pointer-events: none;
+    transition: all 0.3s ease;
+  }
+.default-bg {
+    background: #ffffff; 
+    background-size: auto; 
+    animation: none; 
 }
