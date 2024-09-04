@@ -1,3 +1,4 @@
+// /api/controllers/post.controller.js
 import Post from '../models/post.model.js';
 import { errorHandler } from '../utils/error.js';
 import pinyin from 'pinyin'; 
