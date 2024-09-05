@@ -7,7 +7,7 @@ import Comment from './Comment';
 import { HiOutlineExclamationCircle } from 'react-icons/hi';
 import { Alert } from 'flowbite-react';
 export default function CommentSection({ postId }) {
-  console.log('Comment Section!');
+  //console.log('Comment Section!');
   const maxCommentLength = 500;
   const tempUser = useSelector((state) => state.user);
   //console.log(tempUser);

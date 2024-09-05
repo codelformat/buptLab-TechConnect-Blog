@@ -50,7 +50,6 @@ export const getposts = async (req, res, next) => {
     console.log('limit',limit);
 
     const sortDirection = req.query.order === 'asc' ? 1 : -1;
-
     const posts = await Post.find({
       ...(req.query.userId && { userId: req.query.userId }),
       ...(req.query.category && { category: req.query.category }),
@@ -250,6 +249,22 @@ export const incPostClick = async (req, res, next) => {
     await post.save();
     res.status(200).json(post);
   } catch (error) {
+    next(error);
+  }
+}
+
+export const getRecentPosts = async (req, res, next) => {
+  const sortDirection = req.query.order === 'asc' ? 1 : -1;
+  const limit = req.query.limit || 3;
+  const startIndex = req.query.startIndex || 0;
+  try {
+    const posts=await Post.find()
+      .sort({ createdAt: sortDirection })
+      .skip(startIndex)
+      .limit(limit);
+    res.status(200).json(posts);
+  }
+  catch (error) {
     next(error);
   }
 }

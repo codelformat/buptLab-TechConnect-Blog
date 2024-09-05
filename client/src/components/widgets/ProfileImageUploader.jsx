@@ -34,6 +34,7 @@ export default function ProfileImageUploader({ currentUser, setFormData }) {
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
+    console.log("file", file);
     if (file) {
       setImageFile(file);
       setImageURL(URL.createObjectURL(file));

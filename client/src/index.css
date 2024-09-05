@@ -234,8 +234,8 @@ section img#mountains_front {
     font-family: sans-serif;
     margin: 1.5rem 0;
 }
-.post-content a {
-    color: aqua;
+.post-content a{
+    color:rgb(14, 148, 148);
     text-decoration: none;
 }
 .post-content a:hover {
