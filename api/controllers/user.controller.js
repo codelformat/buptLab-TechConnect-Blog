@@ -55,8 +55,8 @@ export const updateUser = async (req, res, next) => {
 };
 
 export const deleteUser = async (req, res, next) => {
-    console.log(req.user.id.trim());
-    console.log(req.params.userId.trim());
+    // console.log(req.user.id.trim());
+    // console.log(req.params.userId.trim());
 
     if (!req.user.isAdmin&&req.user.id.trim() !== req.params.userId.trim()) {
         return next(errorHandler(403, 'You are not allowed to delete this user'));
@@ -113,7 +113,6 @@ export const getUsers = async (req, res, next) => {
             now.getDate()
         );
 
-        console.log(oneMonthAgo);
         // Find users created in the last month
         const lastMonthUsers = await User.countDocuments({
             createdAt: { $gte: oneMonthAgo },

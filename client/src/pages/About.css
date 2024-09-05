@@ -1,0 +1,90 @@
+.timeline-container {
+    margin-top: 50px;
+    padding: 20px;
+    background-color: #f4f4f4;
+    border-radius: 8px;
+    position: relative;
+  }
+  
+  .timeline-header {
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 50px;
+  }
+  
+  .timeline {
+    position: relative;
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px 0;
+  }
+  
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: #3498db;
+    transform: translateX(-50%);
+    z-index: 1;
+  }
+  
+  .timeline-item {
+    position: relative;
+    width: 50%;
+    padding: 20px;
+    box-sizing: border-box;
+    opacity: 1;
+    transform: translateX(0);
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  .timeline-item.left {
+    left: 0;
+    text-align: right;
+  }
+  
+  .timeline-item.right {
+    left: 50%;
+    text-align: left;
+  }
+  
+  .timeline-item::before {
+    content: '';
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    width: 12px;
+    height: 12px;
+    background-color: #3498db;
+    border-radius: 50%;
+    z-index: 2;
+    transform: translateX(-50%);
+  }
+  
+  .timeline-content {
+    padding: 15px;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  .timeline-item.left .timeline-content {
+    transform: translateX(-100%);
+    text-align: right;
+  }
+  
+  .timeline-item.right .timeline-content {
+    transform: translateX(100%);
+    text-align: left;
+  }
+  
+  /* 鼠标悬浮时，内容框移动到轴的中心 */
+  .timeline-item:hover .timeline-content {
+    transform: translateX(0);
+  }
