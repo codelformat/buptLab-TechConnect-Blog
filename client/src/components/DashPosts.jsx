@@ -15,11 +15,17 @@ export default function DashPosts() {
   const [postIdToDelete, setPostIdToDelete] = useState('');
   console.log(currentUser);
   useEffect(() => {
-    const fetchPosts = async () => {
+    const fetchPosts = async (isAdmin) => {
       try {
         console.log(currentUser);
-        //const res = await fetch(`/api/post/getposts?userId=${currentUser.rest._id}`);
-        const res = await fetch("/api/post/getposts", {
+        let url = null;
+        if(isAdmin){
+          url = `/api/post/getposts`
+        } else {
+          url = `/api/post/getposts?userId=${currentUser._id}`
+        }
+        console.log(url)
+        const res = await fetch(url, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -29,6 +35,7 @@ export default function DashPosts() {
         const data = await res.json();
         if (res.ok) {
           setUserPosts(data.posts);
+          console.log(data.posts);
           if (data.posts.length < 9) {
             setShowMore(false);
           }
@@ -37,8 +44,8 @@ export default function DashPosts() {
         console.log(error.message);
       }
     };
-    if (currentUser && currentUser.isAdmin) {
-      fetchPosts();
+    if (currentUser) {
+      fetchPosts(currentUser.isAdmin);
     }
   }, [currentUser]);
 
@@ -69,7 +76,7 @@ export default function DashPosts() {
       //     method: 'DELETE',
       //   }
       // );
-      const res = await fetch('/api/post/deletepost', {
+      const res = await fetch(`/api/post/deletepost?userId=${currentUser._id}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -91,7 +98,7 @@ export default function DashPosts() {
 
   return (
     <div className='table-auto overflow-x-scroll md:mx-auto p-3 scrollbar scrollbar-track-slate-100 scrollbar-thumb-slate-300 dark:scrollbar-track-slate-700 dark:scrollbar-thumb-slate-500'>
-      {currentUser && currentUser.isAdmin && userPosts.length > 0 ? (
+      {currentUser && userPosts.length > 0 ? (
         <>
           <Table hoverable className='shadow-md'>
             <Table.Head>

@@ -13,7 +13,7 @@ export default function NavLinks() {
         <Link to="/about">关于</Link>
       </Navbar.Link>
       <Navbar.Link active={path === "/projects"} as={"div"}>
-        <Link to="/projects">项目</Link>
+        <Link to="/posts">帖子</Link>
       </Navbar.Link>
     </Navbar.Collapse>
   );
