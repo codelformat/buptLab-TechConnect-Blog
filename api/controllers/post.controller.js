@@ -67,7 +67,7 @@ export const getposts = async (req, res, next) => {
       .skip(startIndex)
       .limit(limit);
 
-    console.log(posts)
+    // console.log(posts)
 
     const totalPosts = await Post.countDocuments();
     
@@ -113,7 +113,7 @@ export const getposts = async (req, res, next) => {
       }
     ]);
     
-    console.log(clickNumByDay);
+    // console.log(clickNumByDay);
     
 
     res.status(200).json({
@@ -129,8 +129,8 @@ export const getposts = async (req, res, next) => {
 
 export const deletepost = async (req, res, next) => {
   const {user, postId} = req.body
-  console.log('user')
-  console.log(user)
+  // console.log('user')
+  // console.log(user)
   // if (!req.user.isAdmin || req.user.id !== req.params.userId) {
   //   return next(errorHandler(403, 'You are not allowed to delete this post'));
   // }
@@ -193,8 +193,8 @@ export const updatepost = async (req, res, next) => {
 
 export const get_required_post = async (req, res, next) => {
   const { postId } = req.body;
-  console.log('get_required_post 方法内部:')
-  console.log(postId);
+  // console.log('get_required_post 方法内部:')
+  // console.log(postId);
 
   // if (!user.isAdmin || user.id !== req.params.userId) {
   //   return next(errorHandler(403, 'You are not allowed to update this post'));

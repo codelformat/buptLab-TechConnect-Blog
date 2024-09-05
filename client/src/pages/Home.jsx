@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import PostCard from "../components/PostCard";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
 const Home = () => {
   const [recentPosts, setRecentPosts] = useState([]);
@@ -8,13 +10,23 @@ const Home = () => {
   const [loading, setLoading] = useState(true); // 定义 loading 状态
   const [loadingProgress, setLoadingProgress] = useState(0); // 定义加载进度状态
 
+  // 定义类别颜色映射
+  const categoryColors = {
+    "React.js": "bg-blue-200 text-blue-800",
+    "Next.js": "bg-green-200 text-green-800",
+    javascript: "bg-yellow-200 text-yellow-800",
+    uncategorized: "bg-gray-200 text-gray-800",
+  };
+
   const fetchUser = async (userId) => {
     try {
-      const res = await fetch(`/api/user/getusers?userId=${userId}`);
+      console.log("fetching users...");
+      const res = await fetch(`/api/user/${userId}`);
+      console.log(res.ok);
       if (res.ok) {
-        const { users } = await res.json();
-        //console.log(users);
-        return users[0];
+        const data = await res.json();
+        console.log(data);
+        return data;
       } else {
         console.error("Failed to fetch username");
       }
@@ -37,7 +49,7 @@ const Home = () => {
         setLoadingProgress(30); // 更新进度到30%
         if (res.ok) {
           const data = await res.json();
-          
+          console.log(data.posts);
           const postsWithUserDetails = await Promise.all(
             data.posts.map(async (post, index, array) => {
               const user = await fetchUser(post.userId);
@@ -78,13 +90,26 @@ const Home = () => {
         <div className="relative flex flex-col items-center">
           {/* 旋转加载环 */}
           <div className="loader relative ease-linear rounded-full border-8 border-t-8 border-gray-200 h-24 w-24 mb-4 flex items-center justify-center">
-            <span className="absolute text-xl font-bold">{Math.round(loadingProgress)}%</span>
+            <span className="absolute text-xl font-bold">
+              {Math.round(loadingProgress)}%
+            </span>
           </div>
           <p className="text-2xl font-bold">Loading...</p>
         </div>
       </div>
     );
   }
+
+  // 设置轮播图的参数
+  const sliderSettings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 3000,
+  };
 
   return (
     <div className="max-w-7xl mx-auto px-5 py-10">
@@ -117,163 +142,60 @@ const Home = () => {
         </Link>
       </div>
 
-      {/* 最近的文章 */}
+      {/* 最近的文章轮播图 */}
       <div className="mb-12">
         <h2 className="text-4xl font-bold mb-8">Recent blog posts</h2>
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-8">
-          {/* 第一篇文章 */}
-          {recentPosts.length > 0 && (
+        <Slider {...sliderSettings}>
+          {recentPosts.map((post) => (
             <div
-              key={recentPosts[0]._id}
-              className="md:col-span-3 row-span-2 bg-white rounded-lg shadow-md overflow-hidden group transform transition-transform duration-300 hover:scale-105"
+              key={post._id}
+              className="relative group bg-white rounded-lg shadow-md overflow-hidden"
             >
               <img
-                src={recentPosts[0].image}
-                alt={recentPosts[0].title}
-                className="w-full h-48 md:h-96 object-cover"
+                src={post.image}
+                alt={post.title}
+                className="w-full h-96 object-cover"
               />
-              <div className="p-6">
-                <div className="flex items-center text-gray-600 text-sm mb-2">
-                  <img
-                    src={recentPosts[0].profilePicture}
-                    alt={recentPosts[0].username}
-                    className="w-8 h-8 rounded-full object-cover mr-2"
-                  />
-                  <span className="font-semibold">
-                    {recentPosts[0].username}
-                  </span>
-                  <span className="mx-2">•</span>
-                  <span>
-                    {recentPosts[0].createdAt &&
-                      new Date(recentPosts[0].createdAt).toLocaleDateString()}
-                  </span>
-                </div>
-                <h3 className="text-2xl font-bold mt-2">
-                  <Link to={`/post/${recentPosts[0].slug}`}>
-                    {recentPosts[0].title}
-                  </Link>
-                </h3>
-                <p className="mt-4 text-gray-600">
-                  {recentPosts[0].content.substring(0, 150)}...
-                </p>
-                <div className="mt-4">
-                  <span className="inline-block bg-purple-100 text-purple-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded">
-                    {recentPosts[0].category}
-                  </span>
-                </div>
-
-                <Link
-                  to={`/post/${recentPosts[0].slug}`}
-                  className="z-10 group-hover:bottom-0 absolute bottom-[-200px] left-0 right-0 border border-teal-500 text-teal-500 hover:bg-teal-500 hover:text-white transition-all duration-300 text-center py-2 rounded-md !rounded-tl-none m-2"
-                >
-                  Read the article
-                </Link>
-              </div>
-            </div>
-          )}
-
-          {/* 第三篇和第四篇文章 */}
-          <div className="flex flex-col gap-8 md:row-span-2 md:col-span-2">
-            {recentPosts.slice(2, 4).map((post) => (
-              <div
-                key={post._id}
-                className="bg-white rounded-lg shadow-md overflow-hidden flex group transform transition-transform duration-300 hover:scale-105"
-              >
-                <img
-                  src={post.image}
-                  alt={post.title}
-                  className="w-1/2 h-auto object-cover"
-                />
-                <div className="p-6 flex flex-col justify-between">
-                  <div>
-                    <div className="flex items-center text-gray-600 text-sm mb-2">
-                      <img
-                        src={post.profilePicture}
-                        alt={post.username}
-                        className="w-8 h-8 rounded-full object-cover mr-2"
-                      />
-                      <span className="font-semibold">{post.username}</span>
-                      <span className="mx-2">•</span>
-                      <span>
-                        {post.createdAt &&
-                          new Date(post.createdAt).toLocaleDateString()}
-                      </span>
-                    </div>
-                    <h3 className="text-xl font-bold mt-2">
-                      <Link to={`/post/${post.slug}`}>{post.title}</Link>
-                    </h3>
-                    <p className="mt-4 text-gray-600">
-                      {post.content.substring(0, 150)}...
-                    </p>
-                    <div className="mt-4">
-                      <span className="inline-block bg-purple-100 text-purple-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded">
-                        {post.category}
-                      </span>
-                    </div>
+              <div className="absolute inset-0 bg-black bg-opacity-50 flex flex-col justify-center items-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <div className="text-center">
+                  <div className="flex items-center justify-center text-gray-300 text-sm mb-2">
+                    <img
+                      src={post.profilePicture}
+                      alt={post.username}
+                      className="w-8 h-8 rounded-full object-cover mr-2"
+                    />
+                    <span className="font-semibold">{post.username}</span>
+                    <span className="mx-2">•</span>
+                    <span>{post.createdAt && formatDate(post.createdAt)}</span>
+                  </div>
+                  <h3 className="text-2xl font-bold text-white mt-2">
+                    <Link to={`/post/${post.slug}`} className="hover:underline">
+                      {post.title}
+                    </Link>
+                  </h3>
+                  <p className="mt-4 text-gray-300 hidden md:block">
+                    {post.content.substring(0, 150)}...
+                  </p>
+                  <div className="mt-4">
+                    <span
+                      className={`inline-block ${
+                        categoryColors[post.category]
+                      } text-xs font-semibold mr-2 px-2.5 py-0.5 rounded`}
+                    >
+                      {post.category}
+                    </span>
                   </div>
                   <Link
                     to={`/post/${post.slug}`}
-                    className="z-10 group-hover:bottom-0 absolute bottom-[-200px] left-0 right-0 border border-teal-500 text-teal-500 hover:bg-teal-500 hover:text-white transition-all duration-300 text-center py-2 rounded-md !rounded-tl-none m-2"
+                    className="z-10 mt-4 inline-block px-6 py-2 border border-teal-500 text-teal-500 hover:bg-teal-500 hover:text-white transition-all duration-300 text-center rounded-md"
                   >
                     Read the article
                   </Link>
                 </div>
               </div>
-            ))}
-          </div>
-
-          {/* 第二篇文章 */}
-          {recentPosts.length > 1 && (
-            <div
-              key={recentPosts[1]._id}
-              className="md:col-span-5 bg-white rounded-lg shadow-md overflow-hidden group transform transition-transform duration-300 hover:scale-105 flex"
-            >
-              <img
-                src={recentPosts[1].image}
-                alt={recentPosts[1].title}
-                className="w-1/2 h-auto object-cover"
-              />
-              <div className="p-6 flex flex-col justify-between">
-                <div>
-                  <div className="flex items-center text-gray-600 text-sm mb-2">
-                    <img
-                      src={recentPosts[1].profilePicture}
-                      alt={recentPosts[1].username}
-                      className="w-8 h-8 rounded-full object-cover mr-2"
-                    />
-                    <span className="font-semibold">
-                      {recentPosts[1].username}
-                    </span>
-                    <span className="mx-2">•</span>
-                    <span>
-                      {recentPosts[1].createdAt &&
-                        new Date(recentPosts[1].createdAt).toLocaleDateString()}
-                    </span>
-                  </div>
-                  <h3 className="text-xl font-bold mt-2">
-                    <Link to={`/post/${recentPosts[1].slug}`}>
-                      {recentPosts[1].title}
-                    </Link>
-                  </h3>
-                  <p className="mt-4 text-gray-600">
-                    {recentPosts[1].content.substring(0, 150)}...
-                  </p>
-                  <div className="mt-4">
-                    <span className="inline-block bg-purple-100 text-purple-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded">
-                      {recentPosts[1].category}
-                    </span>
-                  </div>
-                </div>
-                <Link
-                  to={`/post/${recentPosts[1].slug}`}
-                  className="z-10 group-hover:bottom-0 absolute bottom-[-200px] left-0 right-0 border border-teal-500 text-teal-500 hover:bg-teal-500 hover:text-white transition-all duration-300 text-center py-2 rounded-md !rounded-tl-none m-2"
-                >
-                  Read the article
-                </Link>
-              </div>
             </div>
-          )}
-        </div>
+          ))}
+        </Slider>
       </div>
 
       {/* 所有文章 */}
@@ -312,7 +234,11 @@ const Home = () => {
                     {post.content.substring(0, 100)}...
                   </p>
                   <div className="mt-4">
-                    <span className="inline-block bg-purple-100 text-purple-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded">
+                    <span
+                      className={`inline-block ${
+                        categoryColors[post.category]
+                      } text-xs font-semibold mr-2 px-2.5 py-0.5 rounded`}
+                    >
                       {post.category}
                     </span>
                   </div>
