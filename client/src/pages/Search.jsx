@@ -58,11 +58,17 @@ export default function Search() {
   }, [location.search]);
 
   const handleChange = (e) => {
-    const { id, value } = e.target;
-    setSidebarData((prevData) => ({
-      ...prevData,
-      [id]: value || (id === 'sort' ? 'desc' : 'uncategorized'),
-    }));
+    if (e.target.id === 'searchTerm') {
+      setSidebarData({ ...sidebarData, searchTerm: e.target.value });
+    }
+    if (e.target.id === 'sort') {
+      const order = e.target.value || 'desc';
+      setSidebarData({ ...sidebarData, sort: order });
+    }
+    if (e.target.id === 'category') {
+      const category = e.target.value || 'uncategorized';
+      setSidebarData({ ...sidebarData, category });
+    }
   };
 
   const handleSubmit = (e) => {
