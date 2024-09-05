@@ -203,3 +203,15 @@ export const getpostsByCategory = async (req, res, next) => {
     next(error);
   }
 }
+
+export const incPostClick = async (req, res, next) => {
+  const { postId } = req.body;
+  try {
+    const post = await Post.findById(postId);
+    post.clickNum++;
+    await post.save();
+    res.status(200).json(post);
+  } catch (error) {
+    next(error);
+  }
+}

@@ -106,6 +106,7 @@ export default function DashPosts() {
               <Table.HeadCell>帖子图片</Table.HeadCell>
               <Table.HeadCell>帖子标题</Table.HeadCell>
               <Table.HeadCell>类别</Table.HeadCell>
+              <Table.HeadCell>点击量</Table.HeadCell>
               <Table.HeadCell>删除帖子</Table.HeadCell>
               <Table.HeadCell>
                 <span>编辑</span>
@@ -113,7 +114,7 @@ export default function DashPosts() {
             </Table.Head>
             {userPosts.map((post) => (
               <Table.Body className='divide-y'>
-                <Table.Row className='bg-white dark:border-gray-700 dark:bg-gray-800'>
+                <Table.Row key={post._id} className='bg-white dark:border-gray-700 dark:bg-gray-800'>
                   <Table.Cell>
                     {new Date(post.updatedAt).toLocaleDateString()}
                   </Table.Cell>
@@ -135,6 +136,9 @@ export default function DashPosts() {
                     </Link>
                   </Table.Cell>
                   <Table.Cell>{post.category}</Table.Cell>
+                  <Table.Cell>
+                    {post.clickNum}
+                  </Table.Cell>
                   <Table.Cell>
                     <span
                       onClick={() => {
@@ -158,14 +162,14 @@ export default function DashPosts() {
               </Table.Body>
             ))}
           </Table>
-          {showMore && (
+          {/* {showMore && (
             <button
               onClick={handleShowMore}
               className='w-full text-teal-500 self-center text-sm py-7'
             >
               Show more
             </button>
-          )}
+          )} */}
         </>
       ) : (
         <p>You have no posts yet!</p>
