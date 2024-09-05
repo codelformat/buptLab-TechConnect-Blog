@@ -1,5 +1,4 @@
-// /client/src/pages/UpdatePost.jsx
-import { Alert, Button, FileInput, Select, TextInput } from 'flowbite-react';
+import { Alert, Button, FileInput, Select, TextInput,Spinner} from 'flowbite-react';
 import ReactQuill from 'react-quill';
 import '../../node_modules/react-quill/dist/quill.snow.css';
 import {
@@ -14,7 +13,7 @@ import { CircularProgressbar } from 'react-circular-progressbar';
 import '../../node_modules/react-circular-progressbar/dist/styles.css';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-
+import VditorEditor from '../components/VditorEditor';
 export default function UpdatePost() {
   const [file, setFile] = useState(null);
   const [imageUploadProgress, setImageUploadProgress] = useState(null);
@@ -23,6 +22,8 @@ export default function UpdatePost() {
   const [publishError, setPublishError] = useState(null);
   const { postId } = useParams();
   const [_id,set_id] = useState(null);
+  const [dataReady, setDataReady] = useState(false);
+
   console.log('postId:')
   console.log(postId);
 
@@ -100,8 +101,17 @@ export default function UpdatePost() {
       console.log(error);
     }
   };
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const contentReady = (content) => {
+    setFormData({ ...formData, content });
+    setDataReady(true);
+  }
+  useEffect(() => {
+    if (dataReady) {
+      handleSubmit()
+    }
+  },[dataReady])
+  const handleSubmit = async () => {
+    //e.preventDefault();
     try {
       console.log('formData,_id',formData._id)
       const res = await fetch(`/api/post/update-post/${_id}`, {
@@ -194,7 +204,7 @@ export default function UpdatePost() {
             className='w-full h-72 object-cover'
           />
         )}
-        <ReactQuill
+        {/* <ReactQuill
           theme='snow'
           value={formData.content}
           placeholder='Write something...'
@@ -205,8 +215,14 @@ export default function UpdatePost() {
           }}
         />
         <Button type='submit' gradientDuoTone='purpleToPink'>
-          更新帖子
-        </Button>
+          Update post
+        </Button> */}{
+          formData.content?
+          <VditorEditor value={formData && formData.content} id="vditor_create" handleClickButton={contentReady} />
+            :(<div className='flex justify-center items-center min-h-screen'>
+              <Spinner size='xl'/>
+            </div>)
+        }
         {publishError && (
           <Alert className='mt-5' color='failure'>
             {publishError}
