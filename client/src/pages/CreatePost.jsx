@@ -8,19 +8,20 @@ import {
   uploadBytesResumable,
 } from 'firebase/storage';
 import { app } from '../firebase';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { CircularProgressbar } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import '../../node_modules/react-circular-progressbar/dist/styles.css'
 import { useNavigate } from 'react-router-dom';
+import VditorEditor from '../components/VditorEditor';
 
 export default function CreatePost() {
   const [file, setFile] = useState(null);
   const [imageUploadProgress, setImageUploadProgress] = useState(null);
   const [imageUploadError, setImageUploadError] = useState(null);
-  const [formData, setFormData] = useState({});
+  const [formData, setFormData] = useState({});  
   const [publishError, setPublishError] = useState(null);
-
+  const [dataReady, setDataReady] = useState(false);
   const navigate = useNavigate();
 
   const handleUpdloadImage = async () => {
@@ -59,8 +60,8 @@ export default function CreatePost() {
       console.log(error);
     }
   };
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async () => {
+    //e.preventDefault();
     try {
       const res = await fetch('/api/post/create', {
         method: 'POST',
@@ -83,10 +84,19 @@ export default function CreatePost() {
       setPublishError('Something went wrong');
     }
   };
+  const contentReady = (content) => {
+    setFormData({ ...formData, content });
+    setDataReady(true);
+  }
+  useEffect(() => {
+    if (dataReady) {
+      handleSubmit()
+    }
+  },[dataReady])
   return (
     <div className='p-3 max-w-3xl mx-auto min-h-screen'>
       <h1 className='text-center text-3xl my-7 font-semibold'>发布新帖子</h1>
-      <form className='flex flex-col gap-4' onSubmit={handleSubmit}>
+      <form className='flex flex-col gap-4' >
         <div className='flex flex-col gap-4 sm:flex-row justify-between'>
           <TextInput
             type='text'
@@ -143,7 +153,7 @@ export default function CreatePost() {
             className='w-full h-72 object-cover'
           />
         )}
-        <ReactQuill
+        {/* {<ReactQuill
           theme='snow'
           placeholder='Write something...'
           className='h-72 mb-12'
@@ -151,10 +161,9 @@ export default function CreatePost() {
           onChange={(value) => {
             setFormData({ ...formData, content: value });
           }}
-        />
-        <Button type='submit' gradientDuoTone='purpleToPink'>
-          Publish
-        </Button>
+        />} */}
+        <VditorEditor id="vditor_create" handleClickButton={contentReady } />
+        
         {publishError && (
           <Alert className='mt-5' color='failure'>
             {publishError}
