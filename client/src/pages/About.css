@@ -75,16 +75,20 @@
   }
   
   .timeline-item.left .timeline-content {
-    transform: translateX(-100%);
+    /* transform: translateX(-50%); */
     text-align: right;
   }
   
   .timeline-item.right .timeline-content {
-    transform: translateX(100%);
+    /* transform: translateX(100%); */
     text-align: left;
   }
   
   /* 鼠标悬浮时，内容框移动到轴的中心 */
-  .timeline-item:hover .timeline-content {
-    transform: translateX(0);
+  .timeline-item.left:hover .timeline-content {
+    transform: translateX(-100%);
+  }
+  /* 鼠标悬浮时，内容框移动到轴的中心 */
+  .timeline-item.right:hover .timeline-content {
+    transform: translateX(100%);
   }
