@@ -10,8 +10,9 @@ const Home = () => {
     try {
       const res = await fetch(`/api/user/getusers?userId=${userId}`);
       if (res.ok) {
-        const user = await res.json();
-        return user.username;
+        const { users } = await res.json();
+        console.log(users);
+        return users[0].username;
       } else {
         console.error("Failed to fetch username");
       }
@@ -60,14 +61,28 @@ const Home = () => {
     <div className="max-w-7xl mx-auto px-5 py-10">
       {/* 顶部标题部分 */}
       <div className="text-center mb-12">
-        <h1 className="text-6xl font-bold mb-4">Welcome to my Blog</h1>
-        <p className="text-lg text-gray-600">
+        {/* 上方分割线 */}
+        <hr className="border-t-2 border-black mb-8" />
+
+        {/* 标题和分割线之间的容器 */}
+        <div className="relative">
+          {/* 标题 */}
+          <h1 className="text-6xl font-extrabold mb-4">Welcome to my Blog</h1>
+
+          {/* 下方分割线 */}
+          <hr className="border-t-2 border-black mt-8" />
+        </div>
+
+        {/* 描述部分 */}
+        <p className="text-lg text-gray-600 mt-8 mb-10">
           Here you’ll find a variety of articles and tutorials on topics such as
           web development, software engineering, and programming languages.
         </p>
+
+        {/* 按钮部分 */}
         <Link
           to="/posts"
-          className="mt-6 inline-block bg-black text-white py-3 px-6 rounded-full text-lg"
+          className="inline-block bg-black text-white py-3 px-6 rounded-full text-lg font-semibold hover:bg-gray-800 transition-colors duration-200"
         >
           View all posts
         </Link>
