@@ -50,6 +50,7 @@ export const getposts = async (req, res, next) => {
     console.log('limit',limit);
 
     const sortDirection = req.query.order === 'asc' ? 1 : -1;
+    console.log('sortDirection',sortDirection);
 
     const posts = await Post.find({
       ...(req.query.userId && { userId: req.query.userId }),
@@ -63,11 +64,15 @@ export const getposts = async (req, res, next) => {
         ],
       }),
     })
-      .sort({ updateTime: sortDirection })
+      .sort({ updatedAt: sortDirection })
       .skip(startIndex)
       .limit(limit);
 
-    // console.log(posts)
+    console.log(posts)
+    posts.forEach((post) => { 
+      console.log(post.updatedAt)
+    });
+
 
     const totalPosts = await Post.countDocuments();
     
