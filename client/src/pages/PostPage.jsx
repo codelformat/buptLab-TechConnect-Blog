@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom';
 import CommentSection from '../components/CommentSection';
 import PostCard from '../components/PostCard';
 import { useSelector } from 'react-redux';
+import MarkdownRenderer from '../components/MarkdownRendered';
 
 
 export default function PostPage()
@@ -70,34 +71,34 @@ export default function PostPage()
 
   //获取最近文章
   useEffect(() => {
-    //console.log('Post Page useEffect');
+    console.log('Post Page useEffect');
     try {
       const fetchRecentPosts = async () => {
-        const res = await fetch('/api/post/getposts',{
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },  
-          body: JSON.stringify({ limit: recentPostsCount+1 }),
+        const res = await fetch(`/api/post/get-recent-posts?order=des&limit=${recentPostsCount+1}`,{
+          method: 'GET',
+          // headers: {
+          //   'Content-Type': 'application/json',
+          // },  
+          // body: JSON.stringify({ limit: recentPostsCount+1 }),
         });
         //const res = await fetch(`/api/post/getposts?limit=3`);
         const data = await res.json();
-        console.log('recent posts', data.posts);
+        console.log('recent posts', data);
         if (res.ok) {
           console.log('data:')
           console.log(data)
-          let samePost = data.posts.find(post => post.slug === postslug);
+          let samePost = data.find(post => post.slug === postslug);
           if (samePost) {
             //如果有相同的文章，则去除此文章
-            setRecentPosts(data.posts.filter(post => post.slug !== postslug));
+            setRecentPosts(data.filter(post => post.slug !== postslug));
           }
           else {
-            setRecentPosts(data.posts.slice(0,recentPostsCount));
+            setRecentPosts(data.slice(0,recentPostsCount));
           }
           
         }
         else{
-          console.log('res is not ok! ',data.message);
+          console.log('res is not ok! ');
         }
       }
       
@@ -106,7 +107,7 @@ export default function PostPage()
     catch (error) {
       //console.log(error.message);
     }
-  },[])
+  },[postslug])//防止点击read recent articles 时recent article不刷新
 
   //处理点击量
   // const handleClick = async () => 
@@ -145,7 +146,7 @@ export default function PostPage()
       
       <div className="flex justify-between p-3 border-b border-slate-500 mx-auto w-full max-w-2xl text-xs">
         <span>Created at: {post && new Date(post.createdAt).toLocaleDateString()}</span>
-        <span className='italic'>{post && (post.content.length / 1000).toFixed(0)} mins to read</span>
+        <span className='italic'>{post && (post.content.length / 2000).toFixed(0)} mins to read</span>
       </div>
       <h1 className='text-3xl mt-10 p-3 text-center font-serif max-w-2xl mx-auto lg:text-4xl'>
         {post && post.title}
@@ -155,8 +156,9 @@ export default function PostPage()
           {post&& post.category}
         </Button>
       </Link>
-      <div className='p-3 max-w-2xl mx-auto w-full post-content' dangerouslySetInnerHTML={{__html:post&& post.content}}>
-      </div>
+      {/* <div className='p-3 max-w-2xl mx-auto w-full post-content' dangerouslySetInnerHTML={{__html:post&& post.content}}>
+      </div> */}
+      <MarkdownRenderer markdown={post&& post.content}/>
       <CommentSection postId={post._id} />
       <div className='flex flex-col justify-center items-center mb-5'>
         <h1 className='text-xl mt-5'>Recent articles</h1>
