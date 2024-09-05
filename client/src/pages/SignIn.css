@@ -7,6 +7,13 @@
   animation: gradientAnimation 15s ease infinite;
 }
 
+/* 绚丽的蓝紫色偏暗弥散光背景 */
+.dynamic-bg-dark {
+  background: radial-gradient(circle at 50% 50%, #3b5998, #6a5acd, #483d8b, #8a2be2, #4b0082);
+  background-size: 400% 400%;
+  animation: gradientAnimation 15s ease infinite;
+}
+
 @keyframes gradientAnimation {
   0% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }

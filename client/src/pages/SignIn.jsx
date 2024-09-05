@@ -28,6 +28,7 @@ export default function SignIn() {
   const [passwordFocused, setPasswordFocused] = useState(false);
 
   const { loading, error: errorMessage } = useSelector((state) => state.user);
+  const { theme } = useSelector((state) => state.theme); // 获取当前的theme
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -95,7 +96,11 @@ export default function SignIn() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center dynamic-bg relative">
+    <div
+      className={`min-h-screen flex items-center justify-center relative ${
+        theme === "dark" ? "dynamic-bg-dark" : "dynamic-bg"
+      }`}
+    >
       <div className="relative z-10 bg-white bg-opacity-40 backdrop-blur-lg p-8 rounded-lg w-full max-w-md shadow-lg">
         <h1 className="text-3xl font-bold text-center mb-6">登录</h1>
         <form

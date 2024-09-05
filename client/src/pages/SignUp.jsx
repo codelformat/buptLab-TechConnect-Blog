@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import OAuth from "../components/OAuth";
 import { HiMail, HiLockClosed, HiUser } from "react-icons/hi";
+import { useSelector } from "react-redux";
 import './SignUp.css'; // 引入CSS文件
 
 export default function SignUp() {
@@ -16,6 +17,7 @@ export default function SignUp() {
   const [passwordFocused, setPasswordFocused] = useState(false);
 
   const navigate = useNavigate();
+  const {theme} = useSelector((state) => state.theme);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value.trim() });
@@ -52,7 +54,11 @@ export default function SignUp() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center dynamic-bg relative">
+    <div
+      className={`min-h-screen flex items-center justify-center relative ${
+        theme === "dark" ? "dynamic-bg-dark" : "dynamic-bg"
+      }`}
+    >
       <div className="relative z-10 bg-white bg-opacity-40 backdrop-blur-lg p-8 rounded-lg w-full max-w-md shadow-lg">
         <h1 className="text-3xl font-bold text-center mb-6">注册</h1>
         <form className="flex flex-col gap-6 items-center" onSubmit={handleSubmit}>
