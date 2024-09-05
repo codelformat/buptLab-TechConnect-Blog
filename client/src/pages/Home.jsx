@@ -130,7 +130,7 @@ const Home = () => {
               <img
                 src={recentPosts[0].image}
                 alt={recentPosts[0].title}
-                className="w-full h-48 md:h-64 object-cover"
+                className="w-full h-48 md:h-96 object-cover"
               />
               <div className="p-6">
                 <div className="flex items-center text-gray-600 text-sm mb-2">
