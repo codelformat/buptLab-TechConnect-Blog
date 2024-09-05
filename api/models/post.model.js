@@ -33,6 +33,10 @@ const postSchema = new mongoose.Schema(
     clickNum:{
       type: Number,
       default: 0
+    },
+    updateTime:{
+      type: Date,
+      default: () => new Date()
     }
   },
   { timestamps: true }
