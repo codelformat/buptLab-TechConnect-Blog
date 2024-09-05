@@ -32,7 +32,7 @@ const Home = () => {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ limit: 12 }), // 获取最多12篇文章
+          body: JSON.stringify({ limit: 10 }), // 获取最多12篇文章
         });
         setLoadingProgress(30); // 更新进度到30%
         if (res.ok) {
@@ -53,7 +53,7 @@ const Home = () => {
           );
 
           setRecentPosts(postsWithUserDetails.slice(0, 4)); // 最近的4篇文章
-          setAllPosts(postsWithUserDetails); // 所有的文章
+          setAllPosts(postsWithUserDetails.slice(0, 6)); // 所有的文章
           setLoadingProgress(100); // 更新进度到100%
         }
       } catch (error) {
@@ -326,6 +326,16 @@ const Home = () => {
               </div>
             </div>
           ))}
+        </div>
+
+        {/* Show More 按钮 */}
+        <div className="flex justify-center mt-10">
+          <Link
+            to="/posts"
+            className="inline-block bg-blue-600 text-white py-3 px-8 rounded-full text-lg font-semibold hover:bg-blue-700 transition duration-200 shadow-lg"
+          >
+            Show More
+          </Link>
         </div>
       </div>
     </div>
