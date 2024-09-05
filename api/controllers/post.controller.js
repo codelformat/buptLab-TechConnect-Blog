@@ -40,7 +40,8 @@ export const create = async (req, res, next) => {
   }
 };
 
-export const getposts = async (req, res, next) => {
+export const getSearchPosts = async (req, res, next) => {
+
   try {
     const limit0 = req.body.limit;
     //console.log(req);
@@ -49,7 +50,7 @@ export const getposts = async (req, res, next) => {
     const limit = parseInt(limit0);
     console.log('limit',limit);
 
-    const sortDirection = req.query.order === 'asc' ? 1 : -1;
+    const sortDirection = req.query.sort === 'asc' ? 1 : -1;
     console.log('sortDirection',sortDirection);
 
     const posts = await Post.find({
@@ -60,11 +61,78 @@ export const getposts = async (req, res, next) => {
       ...(req.query.searchTerm && {
         $or: [
           { title: { $regex: req.query.searchTerm, $options: 'i' } },
-          { content: { $regex: req.query.searchTerm, $options: 'i' } },
+          // { content: { $regex: req.query.searchTerm, $options: 'i' } },
         ],
       }),
     })
-      .sort({ updatedAt: sortDirection })
+      
+      .sort({ createdAt: sortDirection })
+
+      .skip(startIndex)
+      .limit(limit);
+
+    console.log(posts)
+    posts.forEach((post) => { 
+      console.log(post.updatedAt)
+    });
+
+
+    const totalPosts = await Post.countDocuments();
+    
+
+    const now = new Date();
+
+    const oneMonthAgo = new Date(
+      now.getFullYear(),
+      now.getMonth() - 1,
+      now.getDate()
+    );
+
+    const lastMonthPosts = await Post.countDocuments({
+      createdAt: { $gte: oneMonthAgo },
+    });
+   
+    // console.log(clickNumByDay);
+    
+
+    res.status(200).json({
+      posts,
+      totalPosts,
+      lastMonthPosts,
+    });
+  } catch (error) {
+    next(error);
+  }
+
+ }
+
+export const getposts = async (req, res, next) => {
+  try {
+    const limit0 = req.body.limit;
+    //console.log(req);
+    const startIndex = parseInt(req.query.startIndex) || 0;
+    //const limit = parseInt(req.query.limit) || 9;
+    const limit = parseInt(limit0);
+    console.log('limit',limit);
+
+    const sortDirection = req.query.sort === 'asc' ? 1 : -1;
+    console.log('sortDirection',sortDirection);
+
+    const posts = await Post.find({
+      ...(req.query.userId && { userId: req.query.userId }),
+      ...(req.query.category && { category: req.query.category }),
+      ...(req.query.slug && { slug: req.query.slug }),
+      ...(req.query.postId && { _id: req.query.postId }),
+      ...(req.query.searchTerm && {
+        $or: [
+          { title: { $regex: req.query.searchTerm, $options: 'i' } },
+          // { content: { $regex: req.query.searchTerm, $options: 'i' } },
+        ],
+      }),
+    })
+      
+      .sort({ updateTime: sortDirection })
+
       .skip(startIndex)
       .limit(limit);
 
