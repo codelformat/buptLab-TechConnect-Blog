@@ -14,8 +14,8 @@ const Home = () => {
 
   // 定义类别颜色映射
   const categoryColors = {
-    "React.js": "bg-blue-200 text-blue-800",
-    "Next.js": "bg-green-200 text-green-800",
+    "reactjs": "bg-blue-200 text-blue-800",
+    "nextjs": "bg-green-200 text-green-800",
     "javascript": "bg-yellow-200 text-yellow-800",
     "uncategorized": "bg-gray-200 text-gray-800",
   };
@@ -127,7 +127,7 @@ const Home = () => {
         {/* 标题和分割线之间的容器 */}
         <div className="relative">
           {/* 标题 */}
-          <h1 className="text-6xl font-extrabold mb-4">Welcome to my Blog</h1>
+          <h1 className="text-6xl font-extrabold mb-4">TechConnect Blogposts</h1>
 
           {/* 下方分割线 */}
           <hr
@@ -139,7 +139,7 @@ const Home = () => {
 
         {/* 描述部分 */}
         <p className="text-lg text-gray-600 mt-8 mb-10">
-          Here you’ll find a variety of articles and tutorials on topics such as
+          Here you'll find a variety of articles and tutorials on topics such as
           web development, software engineering, and programming languages.
         </p>
 
