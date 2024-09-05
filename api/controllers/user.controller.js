@@ -82,15 +82,17 @@ export const signout = (req, res) => {
 };
 
 export const getUsers = async (req, res, next) => {
-    if(!req.user.isAdmin){
-        return next(errorHandler(403, 'You are not allowed to get all users'));
-    }
+    // if(!req.user.isAdmin){
+    //     return next(errorHandler(403, 'You are not allowed to get all users'));
+    // }
     try {
         const startIndex = parseInt(req.query.startIndex) || 0;
         const limit = parseInt(req.query.limit) || 9;
         const sortDirection = req.query.sortDirection === 'asc' ? 1 : -1;
-
-        const users = await User.find()
+        console.log(`getting user for id ${req.query.userId}...`)
+        const users = await User.find({
+            ...(req.query && req.query.userId && {_id: req.query.userId})
+        })
             .sort({ createdAt: sortDirection })
             .skip(startIndex)
             .limit(limit);
@@ -100,6 +102,7 @@ export const getUsers = async (req, res, next) => {
             return rest;
         });
 
+        
         const totalUsers = await User.countDocuments();
         
         const now = new Date();
