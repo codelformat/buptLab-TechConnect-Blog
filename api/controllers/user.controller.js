@@ -89,9 +89,9 @@ export const getUsers = async (req, res, next) => {
         const startIndex = parseInt(req.query.startIndex) || 0;
         const limit = parseInt(req.query.limit) || 9;
         const sortDirection = req.query.sortDirection === 'asc' ? 1 : -1;
-
+        console.log(`getting user for id ${req.query.userId}...`)
         const users = await User.find({
-            ...(req.params && req.params.userId && {_id: req.params.userId})
+            ...(req.query && req.query.userId && {_id: req.query.userId})
         })
             .sort({ createdAt: sortDirection })
             .skip(startIndex)
@@ -102,6 +102,7 @@ export const getUsers = async (req, res, next) => {
             return rest;
         });
 
+        
         const totalUsers = await User.countDocuments();
         
         const now = new Date();
