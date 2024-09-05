@@ -8,7 +8,7 @@ import Home from './pages/Home';
 import Projects from './pages/Projects';
 import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
-import Posts from './pages/Posts';
+import ViewPosts from './pages/Viewposts';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import PrivateRoute from './components/PrivateRoute';
@@ -28,7 +28,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About/>} />
-        <Route path="/posts" element={<Posts/>} />
+        <Route path="/posts" element={<ViewPosts/>} />
         {/* 子路由  私有化了dashboard*/}
         <Route element={<PrivateRoute />}>
           <Route path="/dashboard" element={<Dashboard />} />
@@ -38,7 +38,7 @@ export default function App() {
         <Route path='/search' element={<Search />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password" element={<ResetPassword />} />
-        <Route path="/projects" element={<Projects />} />
+        {/* <Route path="/projects" element={<Projects />} /> */}
         {/* 只有admin才能访问的私有路由 */}
         {/* <Route element={<OnlyAdminPrivateRoute />}> */}
           <Route path='/create-post' element={<CreatePost />} />
