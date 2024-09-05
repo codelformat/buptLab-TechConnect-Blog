@@ -1,3 +1,4 @@
+// /client/src/pages/Dashboard.jsx
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import DashSidebar from '../components/DashSidebar';

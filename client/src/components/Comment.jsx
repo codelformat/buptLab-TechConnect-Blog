@@ -8,17 +8,17 @@ import { Button, Textarea } from 'flowbite-react';
 export default function Comment({ comment, onLike ,onEdit,onDelete}) {
     const [user, setUser] = useState({});
     const tempUser = useSelector((state) => state.user);
-    console.log(tempUser);
+    //console.log(tempUser);
     const currentUser = tempUser.currentUser?(tempUser.currentUser.rest? tempUser.currentUser.rest : tempUser.currentUser):null;
   
     
     //const { currentUser:{rest:currentUser} } = useSelector((state) => state.user);
     const [isEditing, setIsEditing] = useState(false);
     const [editedContent, setEditedContent] = useState(comment.content);
-    console.log('Comment!');
-    console.log('currentUser', currentUser);
-    console.log('comment',comment);
-    console.log('user',user);
+    //console.log('Comment!');
+    //console.log('currentUser', currentUser);
+    //console.log('comment',comment);
+    //console.log('user',user);
     const getUser = async () => {
         try {
             const res = await fetch(`/api/user/${comment.userId}`,{method:'GET'});

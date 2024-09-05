@@ -1,3 +1,4 @@
+// /api/controllers/comment.controller.js
 import { errorHandler } from "../utils/error.js";
 import Comment from "../models/comment.model.js";
 
@@ -25,14 +26,19 @@ export const createComment = async (req, res) => {
 
 export const getComments = async (req, res) => {
     // console.log(req.user);
-    if (!req.user.isAdmin) {
-        next(errorHandler(403, 'You are not allowed to get all comments'));
-    }
+    // const {user} = req.body;
+    // if (!req.user.isAdmin && (req.params.userId || req.params.userId !== user.id)) {
+    //     next(errorHandler(403, 'You are not allowed to get all comments'));
+    // }
     try {
+        console.log("getting comments")
         const startIndex = parseInt(req.query.startIndex) || 0;
         const limit = parseInt(req.query.limit) || 9;
         const sortDirection = req.query.sort === 'desc' ? -1 : 1;
-        const comments = await Comment.find()
+        console.log("finding comments...")
+        const comments = await Comment.find(
+            {...(req.query.userId && { userId: req.query.userId }),}
+        )
             .sort({ createdAt: sortDirection })
             .skip(startIndex)
             .limit(limit);
@@ -42,6 +48,7 @@ export const getComments = async (req, res) => {
         const lastMonthComments = await Comment.countDocuments({
             createdAt: { $gte: oneMonthAgo },
         });
+        // console.log(comments);
         res.status(200).json({
             comments,
             totalComments,

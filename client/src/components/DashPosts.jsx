@@ -15,11 +15,17 @@ export default function DashPosts() {
   const [postIdToDelete, setPostIdToDelete] = useState('');
   console.log(currentUser);
   useEffect(() => {
-    const fetchPosts = async () => {
+    const fetchPosts = async (isAdmin) => {
       try {
         console.log(currentUser);
-        //const res = await fetch(`/api/post/getposts?userId=${currentUser.rest._id}`);
-        const res = await fetch("/api/post/getposts", {
+        let url = null;
+        if(isAdmin){
+          url = `/api/post/getposts`
+        } else {
+          url = `/api/post/getposts?userId=${currentUser._id}`
+        }
+        console.log(url)
+        const res = await fetch(url, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -29,6 +35,7 @@ export default function DashPosts() {
         const data = await res.json();
         if (res.ok) {
           setUserPosts(data.posts);
+          console.log(data.posts);
           if (data.posts.length < 9) {
             setShowMore(false);
           }
@@ -37,8 +44,8 @@ export default function DashPosts() {
         console.log(error.message);
       }
     };
-    if (currentUser && currentUser.isAdmin) {
-      fetchPosts();
+    if (currentUser) {
+      fetchPosts(currentUser.isAdmin);
     }
   }, [currentUser]);
 
@@ -69,7 +76,7 @@ export default function DashPosts() {
       //     method: 'DELETE',
       //   }
       // );
-      const res = await fetch('/api/post/deletepost', {
+      const res = await fetch(`/api/post/deletepost?userId=${currentUser._id}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -91,24 +98,25 @@ export default function DashPosts() {
 
   return (
     <div className='table-auto overflow-x-scroll md:mx-auto p-3 scrollbar scrollbar-track-slate-100 scrollbar-thumb-slate-300 dark:scrollbar-track-slate-700 dark:scrollbar-thumb-slate-500'>
-      {currentUser && currentUser.isAdmin && userPosts.length > 0 ? (
+      {currentUser && userPosts.length > 0 ? (
         <>
           <Table hoverable className='shadow-md'>
             <Table.Head>
-              <Table.HeadCell>Date updated</Table.HeadCell>
-              <Table.HeadCell>Post image</Table.HeadCell>
-              <Table.HeadCell>Post title</Table.HeadCell>
-              <Table.HeadCell>Category</Table.HeadCell>
-              <Table.HeadCell>Delete</Table.HeadCell>
+              <Table.HeadCell>更新日期</Table.HeadCell>
+              <Table.HeadCell>帖子图片</Table.HeadCell>
+              <Table.HeadCell>帖子标题</Table.HeadCell>
+              <Table.HeadCell>类别</Table.HeadCell>
+              <Table.HeadCell>点击量</Table.HeadCell>
+              <Table.HeadCell>删除帖子</Table.HeadCell>
               <Table.HeadCell>
-                <span>Edit</span>
+                <span>编辑</span>
               </Table.HeadCell>
             </Table.Head>
             {userPosts.map((post) => (
               <Table.Body className='divide-y'>
-                <Table.Row className='bg-white dark:border-gray-700 dark:bg-gray-800'>
+                <Table.Row key={post._id} className='bg-white dark:border-gray-700 dark:bg-gray-800'>
                   <Table.Cell>
-                    {new Date(post.updatedAt).toLocaleDateString()}
+                    {new Date(post.updateTime).toLocaleDateString()}
                   </Table.Cell>
                   <Table.Cell>
                     <Link to={`/post/${post.slug}`}>
@@ -129,6 +137,9 @@ export default function DashPosts() {
                   </Table.Cell>
                   <Table.Cell>{post.category}</Table.Cell>
                   <Table.Cell>
+                    {post.clickNum}
+                  </Table.Cell>
+                  <Table.Cell>
                     <span
                       onClick={() => {
                         setShowModal(true);
@@ -136,7 +147,7 @@ export default function DashPosts() {
                       }}
                       className='font-medium text-red-500 hover:underline cursor-pointer'
                     >
-                      Delete
+                      删除
                     </span>
                   </Table.Cell>
                   <Table.Cell>
@@ -144,21 +155,21 @@ export default function DashPosts() {
                       className='text-teal-500 hover:underline'
                       to={`/update-post/${post._id}`}
                     >
-                      <span>Edit</span>
+                      <span>编辑</span>
                     </Link>
                   </Table.Cell>
                 </Table.Row>
               </Table.Body>
             ))}
           </Table>
-          {showMore && (
+          {/* {showMore && (
             <button
               onClick={handleShowMore}
               className='w-full text-teal-500 self-center text-sm py-7'
             >
               Show more
             </button>
-          )}
+          )} */}
         </>
       ) : (
         <p>You have no posts yet!</p>

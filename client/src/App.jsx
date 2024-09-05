@@ -1,3 +1,4 @@
+// /client/src/App.jsx
 import {BrowserRouter, Routes, Route} from 'react-router-dom';
 import About from './pages/About';
 import Dashboard from './pages/Dashboard';
@@ -7,6 +8,7 @@ import Home from './pages/Home';
 import Projects from './pages/Projects';
 import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
+import ViewPosts from './pages/Viewposts';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import PrivateRoute from './components/PrivateRoute';
@@ -26,7 +28,8 @@ export default function App() {
       <Header />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/about" element={<About />} />
+        <Route path="/about" element={<About/>} />
+        <Route path="/posts" element={<ViewPosts/>} />
         {/* 子路由  私有化了dashboard*/}
         <Route element={<PrivateRoute />}>
           <Route path="/dashboard" element={<Dashboard />} />
@@ -36,12 +39,12 @@ export default function App() {
         <Route path='/search' element={<Search />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password" element={<ResetPassword />} />
-        <Route path="/projects" element={<Projects />} />
+        {/* <Route path="/projects" element={<Projects />} /> */}
         {/* 只有admin才能访问的私有路由 */}
-        <Route element={<OnlyAdminPrivateRoute />}>
+        {/* <Route element={<OnlyAdminPrivateRoute />}> */}
           <Route path='/create-post' element={<CreatePost />} />
           <Route path='/update-post/:postId' element={<UpdatePost />} />
-        </Route>
+        {/* </Route> */}
         <Route path="/post/:postslug" element={<PostPage />} />
         <Route path="/post/" element={<PostIndex />} />
         <Route path='/mark' element={<TestMarkDown/>}/>

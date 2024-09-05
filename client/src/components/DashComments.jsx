@@ -15,11 +15,21 @@ export default function DashComments() {
   const [showModal, setShowModal] = useState(false);
   const [commentIdToDelete, setCommentIdToDelete] = useState('');
   useEffect(() => {
-    const fetchComments = async () => {
+    const fetchComments = async (isAdmin) => {
       try {
-        const res = await fetch(`/api/comment/getcomments`);
+        let url = null;
+        if (isAdmin){
+          url = `/api/comment/getcomments`
+        } else {
+          url = `/api/comment/getcomments?userId=${currentUser._id}`
+        }
+        console.log(url)
+        const res = await fetch(url ,{
+          method: "GET",
+        });
         const data = await res.json();
         if (res.ok) {
+          console.log(data.comments)
           setComments(data.comments);
           if (data.comments.length < 9) {
             setShowMore(false);
@@ -29,8 +39,8 @@ export default function DashComments() {
         console.log(error.message);
       }
     };
-    if (currentUser.isAdmin) {
-      fetchComments();
+    if (currentUser) {
+      fetchComments(currentUser.isAdmin);
     }
   }, [currentUser._id]);
 
@@ -77,16 +87,16 @@ export default function DashComments() {
 
   return (
     <div className='table-auto overflow-x-scroll md:mx-auto p-3 scrollbar scrollbar-track-slate-100 scrollbar-thumb-slate-300 dark:scrollbar-track-slate-700 dark:scrollbar-thumb-slate-500'>
-      {currentUser.isAdmin && comments.length > 0 ? (
+      {comments.length > 0 ? (
         <>
           <Table hoverable className='shadow-md'>
             <Table.Head>
-              <Table.HeadCell>Date updated</Table.HeadCell>
-              <Table.HeadCell>Comment content</Table.HeadCell>
-              <Table.HeadCell>Number of likes</Table.HeadCell>
-              <Table.HeadCell>PostId</Table.HeadCell>
-              <Table.HeadCell>UserId</Table.HeadCell>
-              <Table.HeadCell>Delete</Table.HeadCell>
+              <Table.HeadCell>更新日期</Table.HeadCell>
+              <Table.HeadCell>评论内容</Table.HeadCell>
+              <Table.HeadCell>点赞数</Table.HeadCell>
+              <Table.HeadCell>帖子Id</Table.HeadCell>
+              <Table.HeadCell>用户Id</Table.HeadCell>
+              <Table.HeadCell>删除评论</Table.HeadCell>
             </Table.Head>
             {comments.map((comment) => (
               <Table.Body className='divide-y' key={comment._id}>
@@ -106,7 +116,7 @@ export default function DashComments() {
                       }}
                       className='font-medium text-red-500 hover:underline cursor-pointer'
                     >
-                      Delete
+                      删除
                     </span>
                   </Table.Cell>
                 </Table.Row>
@@ -118,12 +128,12 @@ export default function DashComments() {
               onClick={handleShowMore}
               className='w-full text-teal-500 self-center text-sm py-7'
             >
-              Show more
+              展示更多
             </button>
           )}
         </>
       ) : (
-        <p>You have no comments yet!</p>
+        <p>还没有评论!</p>
       )}
       <Modal
         show={showModal}
@@ -136,14 +146,14 @@ export default function DashComments() {
           <div className='text-center'>
             <HiOutlineExclamationCircle className='h-14 w-14 text-gray-400 dark:text-gray-200 mb-4 mx-auto' />
             <h3 className='mb-5 text-lg text-gray-500 dark:text-gray-400'>
-              Are you sure you want to delete this comment?
+              你确定删除这条评论吗?
             </h3>
             <div className='flex justify-center gap-4'>
               <Button color='failure' onClick={handleDeleteComment}>
-                Yes, I'm sure
+                是，确定
               </Button>
               <Button color='gray' onClick={() => setShowModal(false)}>
-                No, cancel
+                不，取消
               </Button>
             </div>
           </div>
