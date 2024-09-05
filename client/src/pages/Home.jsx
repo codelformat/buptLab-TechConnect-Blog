@@ -5,14 +5,16 @@ import PostCard from "../components/PostCard";
 const Home = () => {
   const [recentPosts, setRecentPosts] = useState([]);
   const [allPosts, setAllPosts] = useState([]);
+  const [loading, setLoading] = useState(true); // 定义 loading 状态
+  const [loadingProgress, setLoadingProgress] = useState(0); // 定义加载进度状态
 
-  const fetchUsername = async (userId) => {
+  const fetchUser = async (userId) => {
     try {
       const res = await fetch(`/api/user/getusers?userId=${userId}`);
       if (res.ok) {
         const { users } = await res.json();
-        console.log(users);
-        return users[0].username;
+        //console.log(users);
+        return users[0];
       } else {
         console.error("Failed to fetch username");
       }
@@ -32,19 +34,32 @@ const Home = () => {
           },
           body: JSON.stringify({ limit: 12 }), // 获取最多12篇文章
         });
+        setLoadingProgress(30); // 更新进度到30%
         if (res.ok) {
           const data = await res.json();
-          const postsWithUsernames = await Promise.all(
-            data.posts.map(async (post) => {
-              const username = await fetchUsername(post.userId);
-              return { ...post, username };
+          
+          const postsWithUserDetails = await Promise.all(
+            data.posts.map(async (post, index, array) => {
+              const user = await fetchUser(post.userId);
+              // 更新进度，计算每个用户信息加载后更新的进度
+              setLoadingProgress(30 + 50 * ((index + 1) / array.length));
+              console.log(user.profilePicture);
+              return {
+                ...post,
+                username: user.username,
+                profilePicture: user.profilePicture,
+              };
             })
           );
-          setRecentPosts(postsWithUsernames.slice(0, 4)); // 最近的4篇文章
-          setAllPosts(postsWithUsernames); // 所有的文章
+
+          setRecentPosts(postsWithUserDetails.slice(0, 4)); // 最近的4篇文章
+          setAllPosts(postsWithUserDetails); // 所有的文章
+          setLoadingProgress(100); // 更新进度到100%
         }
       } catch (error) {
         console.log(error.message);
+      } finally {
+        setTimeout(() => setLoading(false), 500); // 延迟一点时间以确保用户能看到100%
       }
     };
 
@@ -56,6 +71,20 @@ const Home = () => {
     const options = { year: "numeric", month: "short", day: "numeric" };
     return new Date(dateString).toLocaleDateString(undefined, options);
   };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <div className="relative flex flex-col items-center">
+          {/* 旋转加载环 */}
+          <div className="loader relative ease-linear rounded-full border-8 border-t-8 border-gray-200 h-24 w-24 mb-4 flex items-center justify-center">
+            <span className="absolute text-xl font-bold">{Math.round(loadingProgress)}%</span>
+          </div>
+          <p className="text-2xl font-bold">Loading...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-7xl mx-auto px-5 py-10">
@@ -105,12 +134,19 @@ const Home = () => {
               />
               <div className="p-6">
                 <div className="flex items-center text-gray-600 text-sm mb-2">
-                  {/* 显示用户名 */}
+                  <img
+                    src={recentPosts[0].profilePicture}
+                    alt={recentPosts[0].username}
+                    className="w-8 h-8 rounded-full object-cover mr-2"
+                  />
                   <span className="font-semibold">
                     {recentPosts[0].username}
                   </span>
                   <span className="mx-2">•</span>
-                  <span>{formatDate(recentPosts[0].createdAt)}</span>
+                  <span>
+                    {recentPosts[0].createdAt &&
+                      new Date(recentPosts[0].createdAt).toLocaleDateString()}
+                  </span>
                 </div>
                 <h3 className="text-2xl font-bold mt-2">
                   <Link to={`/post/${recentPosts[0].slug}`}>
@@ -151,9 +187,17 @@ const Home = () => {
                 <div className="p-6 flex flex-col justify-between">
                   <div>
                     <div className="flex items-center text-gray-600 text-sm mb-2">
+                      <img
+                        src={post.profilePicture}
+                        alt={post.username}
+                        className="w-8 h-8 rounded-full object-cover mr-2"
+                      />
                       <span className="font-semibold">{post.username}</span>
                       <span className="mx-2">•</span>
-                      <span>{formatDate(post.createdAt)}</span>
+                      <span>
+                        {post.createdAt &&
+                          new Date(post.createdAt).toLocaleDateString()}
+                      </span>
                     </div>
                     <h3 className="text-xl font-bold mt-2">
                       <Link to={`/post/${post.slug}`}>{post.title}</Link>
@@ -192,11 +236,19 @@ const Home = () => {
               <div className="p-6 flex flex-col justify-between">
                 <div>
                   <div className="flex items-center text-gray-600 text-sm mb-2">
+                    <img
+                      src={recentPosts[1].profilePicture}
+                      alt={recentPosts[1].username}
+                      className="w-8 h-8 rounded-full object-cover mr-2"
+                    />
                     <span className="font-semibold">
                       {recentPosts[1].username}
                     </span>
                     <span className="mx-2">•</span>
-                    <span>{formatDate(recentPosts[1].createdAt)}</span>
+                    <span>
+                      {recentPosts[1].createdAt &&
+                        new Date(recentPosts[1].createdAt).toLocaleDateString()}
+                    </span>
                   </div>
                   <h3 className="text-xl font-bold mt-2">
                     <Link to={`/post/${recentPosts[1].slug}`}>
@@ -241,9 +293,17 @@ const Home = () => {
               <div className="p-6">
                 <div>
                   <div className="flex items-center text-gray-600 text-sm mb-2">
+                    <img
+                      src={post.profilePicture}
+                      alt={post.username}
+                      className="w-8 h-8 rounded-full object-cover mr-2"
+                    />
                     <span className="font-semibold">{post.username}</span>
                     <span className="mx-2">•</span>
-                    <span>{formatDate(post.createdAt)}</span>
+                    <span>
+                      {post.createdAt &&
+                        new Date(post.createdAt).toLocaleDateString()}
+                    </span>
                   </div>
                   <h3 className="text-xl font-bold mt-2">
                     <Link to={`/post/${post.slug}`}>{post.title}</Link>
