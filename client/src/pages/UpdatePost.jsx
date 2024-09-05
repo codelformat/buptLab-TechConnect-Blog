@@ -113,7 +113,8 @@ export default function UpdatePost() {
           title: formData.title,
           content: formData.content,
           category: formData.category,
-          image: formData.image
+          image: formData.image,
+          updateTime: new Date(),
         })
       });
       const data = await res.json();
