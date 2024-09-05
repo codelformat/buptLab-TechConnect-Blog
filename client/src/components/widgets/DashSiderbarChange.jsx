@@ -6,6 +6,7 @@ import {
   HiOutlineUserGroup,
   HiAnnotation,
   HiChartPie,
+  HiBell,
 } from "react-icons/hi";
 import { Link, useLocation } from "react-router-dom";
 import { signoutSuccess } from "../../redux/user/userSlice";
@@ -101,6 +102,17 @@ export default function DashSidebarChange({ currentUser, tab, setTab }) {
                 as="div"
               >
                 评论
+              </Sidebar.Item>
+            </Link>
+          }
+          {
+            <Link to="/dashboard?tab=notifications">
+              <Sidebar.Item
+                active={tab === "notifications"}
+                icon={HiBell}
+                as="div"
+              >
+                通知
               </Sidebar.Item>
             </Link>
           }
