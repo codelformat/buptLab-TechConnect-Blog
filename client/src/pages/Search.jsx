@@ -38,12 +38,13 @@ export default function Search() {
     const fetchPosts = async () => {
       setLoading(true);
       const searchQuery = urlParams.toString();
-      const res = await fetch(`/api/post/getposts?${searchQuery}`,
+      const res = await fetch(`/api/post/getSearchPosts?${searchQuery}`,
         {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
+          body: JSON.stringify({ limit: 5 }),
         });
       if (!res.ok) {
         setLoading(false);
@@ -58,11 +59,17 @@ export default function Search() {
   }, [location.search]);
 
   const handleChange = (e) => {
-    const { id, value } = e.target;
-    setSidebarData((prevData) => ({
-      ...prevData,
-      [id]: value || (id === 'sort' ? 'desc' : 'uncategorized'),
-    }));
+    if (e.target.id === 'searchTerm') {
+      setSidebarData({ ...sidebarData, searchTerm: e.target.value });
+    }
+    if (e.target.id === 'sort') {
+      const order = e.target.value || 'desc';
+      setSidebarData({ ...sidebarData, sort: order });
+    }
+    if (e.target.id === 'category') {
+      const category = e.target.value || 'uncategorized';
+      setSidebarData({ ...sidebarData, category });
+    }
   };
 
   const handleSubmit = (e) => {
@@ -72,7 +79,27 @@ export default function Search() {
       sort: sidebarData.sort,
       category: sidebarData.category,
     });
-    navigate(`/search?${urlParams.toString()}`);
+    const fetchPosts = async () => {
+      setLoading(true);
+      const searchQuery = urlParams.toString();
+      const res = await fetch(`/api/post/getSearchPosts?${searchQuery}`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ limit: 5 }),
+        });
+      if (!res.ok) {
+        setLoading(false);
+        return;
+      }
+      const data = await res.json();
+      setPosts(data.posts);
+      setLoading(false);
+      setShowMore(data.posts.length === 9);
+    };
+    fetchPosts();
   };
 
   const handleShowMore = async () => {
@@ -80,7 +107,7 @@ export default function Search() {
     const urlParams = new URLSearchParams(location.search);
     urlParams.set('startIndex', startIndex);
     const searchQuery = urlParams.toString();
-    const res = await fetch(`/api/post/getposts?${searchQuery}`);
+    const res = await fetch(`/api/post/getSearchPosts?${searchQuery}`);
     if (res.ok) {
       const data = await res.json();
       setPosts((prevPosts) => [...prevPosts, ...data.posts]);
