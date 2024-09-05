@@ -18,6 +18,7 @@ import Search from './pages/Search'
 import PostPage from './pages/PostPage';
 import ScrollToTop from './components/ScrollToTop';
 import PostIndex from './pages/PostIndex';
+import TestMarkDown from './pages/TestMarkDown';
 export default function App() {
   return (
     <BrowserRouter>
@@ -43,6 +44,7 @@ export default function App() {
         </Route>
         <Route path="/post/:postslug" element={<PostPage />} />
         <Route path="/post/" element={<PostIndex />} />
+        <Route path='/mark' element={<TestMarkDown/>}/>
       </Routes>
       <Footer />
     </BrowserRouter> 
