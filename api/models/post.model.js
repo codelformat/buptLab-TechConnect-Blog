@@ -1,3 +1,4 @@
+// /api/models/post.model.js
 import mongoose from 'mongoose';
 
 const postSchema = new mongoose.Schema(
@@ -29,6 +30,14 @@ const postSchema = new mongoose.Schema(
       required: true,
       unique: true,
     },
+    clickNum:{
+      type: Number,
+      default: 0
+    },
+    updateTime:{
+      type: Date,
+      default: () => new Date()
+    }
   },
   { timestamps: true }
 );

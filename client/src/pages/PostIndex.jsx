@@ -1,3 +1,4 @@
+// /client/src/pages/PostIndex.jsx
 import { Button, HR } from 'flowbite-react';
 import React from 'react'
 import { useState, useEffect } from 'react';

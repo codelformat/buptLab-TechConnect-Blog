@@ -1,3 +1,4 @@
+// /client/src/components/ThemeProvider.jsx
 import { useSelector } from "react-redux";
 
 export default function ThemeProvider({ children }) {

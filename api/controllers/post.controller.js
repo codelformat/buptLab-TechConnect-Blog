@@ -1,12 +1,14 @@
+// /api/controllers/post.controller.js
 import Post from '../models/post.model.js';
 import { errorHandler } from '../utils/error.js';
 import pinyin from 'pinyin'; 
 
 export const create = async (req, res, next) => {
-  if (!req.user.isAdmin) {
-    return next(errorHandler(403, 'You are not allowed to create a post'));
-  }
-  if (!req.body.title || !req.body.content) {
+  // if (!req.user.isAdmin) {
+  //   return next(errorHandler(403, 'You are not allowed to create a post'));
+  // }
+  if (!req.body.title || !req.body.content) 
+  {
     return next(errorHandler(400, 'Please provide all required fields'));
   }
 
@@ -23,10 +25,12 @@ export const create = async (req, res, next) => {
   //   .join('-')
   //   .toLowerCase()
   //   .replace(/[^a-zA-Z0-9-]/g, '');
+  const updateTime = Date.now();
   const newPost = new Post({
     ...req.body,
     slug,
     userId: req.user.id,
+    updateTime: updateTime,
   });
   try {
     const savedPost = await newPost.save();
@@ -42,10 +46,10 @@ export const getposts = async (req, res, next) => {
     //console.log(req);
     const startIndex = parseInt(req.query.startIndex) || 0;
     //const limit = parseInt(req.query.limit) || 9;
-    const limit = parseInt(limit0) || 9;
+    const limit = parseInt(limit0);
+    console.log('limit',limit);
 
     const sortDirection = req.query.order === 'asc' ? 1 : -1;
-
     const posts = await Post.find({
       ...(req.query.userId && { userId: req.query.userId }),
       ...(req.query.category && { category: req.query.category }),
@@ -58,11 +62,14 @@ export const getposts = async (req, res, next) => {
         ],
       }),
     })
-      .sort({ updatedAt: sortDirection })
+      .sort({ updateTime: sortDirection })
       .skip(startIndex)
       .limit(limit);
 
+    // console.log(posts)
+
     const totalPosts = await Post.countDocuments();
+    
 
     const now = new Date();
 
@@ -75,11 +82,44 @@ export const getposts = async (req, res, next) => {
     const lastMonthPosts = await Post.countDocuments({
       createdAt: { $gte: oneMonthAgo },
     });
+   
+    const clickNumByDay = await Post.aggregate([
+      {
+        $group: {
+          _id: {
+            year: { $year: "$createdAt" },
+            month: { $month: "$createdAt" },
+            day: { $dayOfMonth: "$createdAt" }
+          },
+          totalClicks: { $sum: "$clickNum" }
+        }
+      },
+      {
+        $sort: { "_id.year": 1, "_id.month": 1, "_id.day": 1 } 
+      },
+      {
+        $project: {
+          _id: 0,
+          date: { 
+            $concat: [
+              { $toString: "$_id.year" }, "-",
+              { $toString: "$_id.month" }, "-",
+              { $toString: "$_id.day" }
+            ]
+          },
+          totalClicks: 1
+        }
+      }
+    ]);
+    
+    // console.log(clickNumByDay);
+    
 
     res.status(200).json({
       posts,
       totalPosts,
       lastMonthPosts,
+      clickNumByDay
     });
   } catch (error) {
     next(error);
@@ -88,12 +128,12 @@ export const getposts = async (req, res, next) => {
 
 export const deletepost = async (req, res, next) => {
   const {user, postId} = req.body
-  console.log('user')
-  console.log(user)
+  // console.log('user')
+  // console.log(user)
   // if (!req.user.isAdmin || req.user.id !== req.params.userId) {
   //   return next(errorHandler(403, 'You are not allowed to delete this post'));
   // }
-  if(!user.isAdmin) {
+  if(!user.isAdmin && user.id !== req.params.userId) {
     return next(errorHandler(403, 'You are not allowed to delete this post!!'));
   }
   try {
@@ -115,6 +155,7 @@ export const updatepost = async (req, res, next) => {
           content: content,
           category: category,
           image: image,
+          updatedTime: Date.now(),
         },
       },
       { new: true }
@@ -151,8 +192,8 @@ export const updatepost = async (req, res, next) => {
 
 export const get_required_post = async (req, res, next) => {
   const { postId } = req.body;
-  console.log('get_required_post 方法内部:')
-  console.log(postId);
+  // console.log('get_required_post 方法内部:')
+  // console.log(postId);
 
   // if (!user.isAdmin || user.id !== req.params.userId) {
   //   return next(errorHandler(403, 'You are not allowed to update this post'));
@@ -183,6 +224,45 @@ export const getPostsCount = async (req, res, next) => {
     const count = await Post.countDocuments();
     res.status(200).json({ count });
     //console.log(res);
+  }
+  catch (error) {
+    next(error);
+  }
+}
+
+
+export const getpostsByCategory = async (req, res, next) => {
+  const { category } = req.body;
+  try {
+    const posts = await Post.find({ category: category });
+    res.status(200).json(posts);
+  } catch (error) {
+    next(error);
+  }
+}
+
+export const incPostClick = async (req, res, next) => {
+  const { postId } = req.body;
+  try {
+    const post = await Post.findById(postId);
+    post.clickNum++;
+    await post.save();
+    res.status(200).json(post);
+  } catch (error) {
+    next(error);
+  }
+}
+
+export const getRecentPosts = async (req, res, next) => {
+  const sortDirection = req.query.order === 'asc' ? 1 : -1;
+  const limit = req.query.limit || 3;
+  const startIndex = req.query.startIndex || 0;
+  try {
+    const posts=await Post.find()
+      .sort({ createdAt: sortDirection })
+      .skip(startIndex)
+      .limit(limit);
+    res.status(200).json(posts);
   }
   catch (error) {
     next(error);
