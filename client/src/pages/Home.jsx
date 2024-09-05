@@ -16,8 +16,8 @@ const Home = () => {
   const categoryColors = {
     "React.js": "bg-blue-200 text-blue-800",
     "Next.js": "bg-green-200 text-green-800",
-    javascript: "bg-yellow-200 text-yellow-800",
-    uncategorized: "bg-gray-200 text-gray-800",
+    "javascript": "bg-yellow-200 text-yellow-800",
+    "uncategorized": "bg-gray-200 text-gray-800",
   };
 
   const fetchUser = async (userId) => {
