@@ -116,20 +116,27 @@ export const likeComment = async (req, res, next) => {
     try {
         // 找到目标comment
         const comment = await Comment.findById(req.params.commentId);
+        console.log(comment)
         //console.log('req commentId', req.params.commentId);
         if (!comment) {
             return next(errorHandler(404, 'Comment not found'));
         }
         //console.log(req.user);
         const userIndex = comment.likes.indexOf(req.user.id);
+        console.log(`comments: ${userIndex}`)
+        console.log(`comments: ${req.user.id}`)
         //console.log(req.user.id);
         if (userIndex == -1) {
             comment.numberOfLikes += 1;
+            console.log("pushing...")
             comment.likes.push(req.user.id);
+            console.log("push done")
             /// 若有点赞，创建Notification
             const goalUserId = comment.userId;
-            const message = `You have received a like for your comment "${comment.content}" on post ${postId}`;
+            console.log(`comments: ${goalUserId}`)
+            const message = `You have received a like for your comment "${comment.content}" on post ${comment.postId}`;
 
+            console.log(message)
             // 创建Notification
             const notification = new Notification({
                 userId: goalUserId,
