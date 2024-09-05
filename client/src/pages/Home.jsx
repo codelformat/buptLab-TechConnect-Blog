@@ -3,12 +3,14 @@ import { Link } from "react-router-dom";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import { useSelector } from "react-redux";
 
 const Home = () => {
   const [recentPosts, setRecentPosts] = useState([]);
   const [allPosts, setAllPosts] = useState([]);
   const [loading, setLoading] = useState(true); // 定义 loading 状态
   const [loadingProgress, setLoadingProgress] = useState(0); // 定义加载进度状态
+  const { theme } = useSelector((state) => state.theme);
 
   // 定义类别颜色映射
   const categoryColors = {
@@ -116,7 +118,11 @@ const Home = () => {
       {/* 顶部标题部分 */}
       <div className="text-center mb-12">
         {/* 上方分割线 */}
-        <hr className="border-t-2 border-black mb-8" />
+        <hr
+          className={`border-t-2 mb-8 ${
+            theme === "dark" ? "border-white" : "border-black"
+          }`}
+        />
 
         {/* 标题和分割线之间的容器 */}
         <div className="relative">
@@ -124,7 +130,11 @@ const Home = () => {
           <h1 className="text-6xl font-extrabold mb-4">Welcome to my Blog</h1>
 
           {/* 下方分割线 */}
-          <hr className="border-t-2 border-black mt-8" />
+          <hr
+            className={`border-t-2 mt-8 ${
+              theme === "dark" ? "border-white" : "border-black"
+            }`}
+          />
         </div>
 
         {/* 描述部分 */}

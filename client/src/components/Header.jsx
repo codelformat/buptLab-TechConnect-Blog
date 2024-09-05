@@ -12,18 +12,21 @@ import ".././pages/SignIn.css";
 
 export default function Header() {
   const userData = useSelector((state) => state.user.currentUser);
+  const { theme } = useSelector((state) => state.theme);
   const location = useLocation();
   const isSignInPage = location.pathname === "/sign-in";
   const isSignUpPage = location.pathname === "/sign-up";
-  const isForgotPage = location.pathname === "/forgot-password"
-  const isResetPage = location.pathname === "/reset-password"
+  const isForgotPage = location.pathname === "/forgot-password";
+  const isResetPage = location.pathname === "/reset-password";
 
   const currentUser = userData?.rest || userData;
 
   return (
     <Navbar
       className={` ${
-        isSignInPage || isSignUpPage || isForgotPage || isResetPage ? " dynamic-bg" : ".default-bg"
+        isSignInPage || isSignUpPage || isForgotPage || isResetPage
+          ? (theme === 'dark' ? "dynamic-bg-dark" : "dynamic-bg")
+          : ".default-bg"
       }`}
     >
       <Logo />
