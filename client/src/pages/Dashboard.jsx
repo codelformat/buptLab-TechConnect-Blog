@@ -7,6 +7,7 @@ import DashPosts from '../components/DashPosts';
 import DashUsers from '../components/DashUsers';
 import DashComments from '../components/DashComments';
 import DashboardComp from '../components/DashboardComp';
+import DashNotifications from '../components/DashNotifications'; // 新增的组件
 
 export default function Dashboard() {
   //通过tab判断显示哪个组件
@@ -37,6 +38,8 @@ export default function Dashboard() {
       {tab === 'comments' && <DashComments />}
       {/* dashboard comp */}
       {tab === 'dash' && <DashboardComp />}
+      {/* notifications */}
+      {tab === 'notifications' && <DashNotifications />} {/* 新增的路由 */}
     </div>
   );
 }

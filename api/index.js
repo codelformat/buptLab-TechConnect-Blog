@@ -7,6 +7,7 @@ import authRoutes from './routes/auth.route.js';  // Import auth routes
 import postRoutes from './routes/post.route.js';  // Import post routes
 import commentRoutes from './routes/comment.route.js';  // Import comment routes
 import clickRoutes from './routes/click.route.js';
+import notificationRoutes from './routes/notification.route.js';
 import cookieParser from 'cookie-parser';
 dotenv.config();
 
@@ -33,6 +34,7 @@ app.use('/api/auth', authRoutes);  // Use auth routes
 app.use('/api/post', postRoutes);  // Use post routes
 app.use('/api/comment', commentRoutes);  // Use comment routes
 app.use('/api/click', clickRoutes);
+app.use('/api/notifications', notificationRoutes);
 
 // Middleware to handle errors
 app.use((err, req, res, next) => {

@@ -1,6 +1,8 @@
 // /api/controllers/comment.controller.js
 import { errorHandler } from "../utils/error.js";
 import Comment from "../models/comment.model.js";
+import Post from "../models/post.model.js";
+import Notification from "../models/notification.model.js";
 
 export const createComment = async (req, res) => {
     //console.log('createComment');
@@ -11,13 +13,34 @@ export const createComment = async (req, res) => {
             return res.status(403).json({ message: 'You are not allowed to create comment for this user' });
         }
 
+        /// Create Notification
+        // 找到评论的post
+        const commentedPost = await Post.findById(postId);
+
+        // 创建通知内容
+        const message = `You have received a comment from user ${userId} on your post "${commentedPost.title}"`
+
+        // 为目标用户创建Notification
+        const notification = new Notification({
+            userId: commentedPost.userId,
+            message,
+        })
+
+        // 保存通知
+        await notification.save();
+
+        /// Create Comments
+        // 创建新评论
         const newComment = new Comment({
             content,
             postId,
             userId,
         });
+
+        // 保存评论
         await newComment.save();
 
+        // 返回json
         res.status(200).json(newComment);
     } catch(error) {
 
@@ -91,6 +114,7 @@ export const getPostComments = async (req, res, next) => {
 
 export const likeComment = async (req, res, next) => {
     try {
+        // 找到目标comment
         const comment = await Comment.findById(req.params.commentId);
         //console.log('req commentId', req.params.commentId);
         if (!comment) {
@@ -102,12 +126,27 @@ export const likeComment = async (req, res, next) => {
         if (userIndex == -1) {
             comment.numberOfLikes += 1;
             comment.likes.push(req.user.id);
+            /// 若有点赞，创建Notification
+            const goalUserId = comment.userId;
+            const message = `You have received a like for your comment "${comment.content}" on post ${postId}`;
+
+            // 创建Notification
+            const notification = new Notification({
+                userId: goalUserId,
+                message,
+            });
+            
+            // 保存Notification
+            await notification.save();
         }
         else {
             comment.numberOfLikes -= 1;
             comment.likes.splice(userIndex, 1);
         }
+
+        // 保存comment
         await comment.save();
+
         res.status(200).json(comment);
     }
     catch (error) {
