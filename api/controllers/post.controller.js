@@ -1,14 +1,15 @@
 // /api/controllers/post.controller.js
 import Post from '../models/post.model.js';
+import Comment from '../models/comment.model.js'
+import Click from '../models/click.model.js';
 import { errorHandler } from '../utils/error.js';
-import pinyin from 'pinyin'; 
+import pinyin from 'pinyin';
 
 export const create = async (req, res, next) => {
   // if (!req.user.isAdmin) {
   //   return next(errorHandler(403, 'You are not allowed to create a post'));
   // }
-  if (!req.body.title || !req.body.content) 
-  {
+  if (!req.body.title || !req.body.content) {
     return next(errorHandler(400, 'Please provide all required fields'));
   }
 
@@ -20,11 +21,7 @@ export const create = async (req, res, next) => {
     .join('-')                  // 使用 '-' 连接所有拼音
     .replace(/[^a-zA-Z0-9-]/g, '-') // 替换任何非字母数字字符为 '-'
     .toLowerCase();             // 转换为小写
-  // const slug = req.body.title
-  //   .split(' ')
-  //   .join('-')
-  //   .toLowerCase()
-  //   .replace(/[^a-zA-Z0-9-]/g, '');
+  
   const updateTime = Date.now();
   const newPost = new Post({
     ...req.body,
@@ -47,7 +44,7 @@ export const getposts = async (req, res, next) => {
     const startIndex = parseInt(req.query.startIndex) || 0;
     //const limit = parseInt(req.query.limit) || 9;
     const limit = parseInt(limit0);
-    console.log('limit',limit);
+    console.log('limit', limit);
 
     const sortDirection = req.query.order === 'asc' ? 1 : -1;
     const posts = await Post.find({
@@ -69,7 +66,7 @@ export const getposts = async (req, res, next) => {
     // console.log(posts)
 
     const totalPosts = await Post.countDocuments();
-    
+
 
     const now = new Date();
 
@@ -82,7 +79,7 @@ export const getposts = async (req, res, next) => {
     const lastMonthPosts = await Post.countDocuments({
       createdAt: { $gte: oneMonthAgo },
     });
-   
+
     const clickNumByDay = await Post.aggregate([
       {
         $group: {
@@ -95,12 +92,12 @@ export const getposts = async (req, res, next) => {
         }
       },
       {
-        $sort: { "_id.year": 1, "_id.month": 1, "_id.day": 1 } 
+        $sort: { "_id.year": 1, "_id.month": 1, "_id.day": 1 }
       },
       {
         $project: {
           _id: 0,
-          date: { 
+          date: {
             $concat: [
               { $toString: "$_id.year" }, "-",
               { $toString: "$_id.month" }, "-",
@@ -111,9 +108,9 @@ export const getposts = async (req, res, next) => {
         }
       }
     ]);
-    
+
     // console.log(clickNumByDay);
-    
+
 
     res.status(200).json({
       posts,
@@ -127,16 +124,60 @@ export const getposts = async (req, res, next) => {
 };
 
 export const deletepost = async (req, res, next) => {
-  const {user, postId} = req.body
-  // console.log('user')
-  // console.log(user)
-  // if (!req.user.isAdmin || req.user.id !== req.params.userId) {
-  //   return next(errorHandler(403, 'You are not allowed to delete this post'));
-  // }
-  if(!user.isAdmin && user.id !== req.params.userId) {
+  const { user, postId } = req.body
+
+  if (!user.isAdmin && user.id !== req.params.userId) {
     return next(errorHandler(403, 'You are not allowed to delete this post!!'));
   }
   try {
+    // 先找到post
+    const post = await Post.findById(postId);
+    console.log(post)
+    /// 再找到对应外键postId的Comment
+    Comment.find({ postId: post._id })
+      .then(comments => {
+        console.log(comments)
+
+        // 若找不到相应的comments
+        if (comments.length === 0) {
+          console.log("post deletion: no comments related found.")
+          return;
+        }
+        // 删除相关的comments
+        comments.forEach(async (comment) => {
+          await Comment.findByIdAndDelete(comment._id);
+        });
+
+        console.log("Post deletion: comments deletion done")
+      })
+      .catch(err => {
+        console.log(err);
+        next(err);
+      });
+
+    /// 再找到对应外键postId的Click
+    Click.find({ postId: post._id })
+    .then(clicks=> {
+      console.log(clicks)
+
+      // 找不到相关的click
+      if (clicks.length === 0) {
+        console.log("post deletion: no clicks related found.")
+        return;
+      }
+
+      // 删除相关的clicks
+      clicks.forEach(async (click) => {
+        await Click.findByIdAndDelete(click._id);
+      });
+      console.log("clicks deletion done")
+    })
+    .catch(err => {
+      console.log(err);
+      next(err);
+    });
+
+    /// 最后删除post
     await Post.findByIdAndDelete(postId);
     res.status(200).json('The post has been deleted');
   } catch (error) {
@@ -146,7 +187,9 @@ export const deletepost = async (req, res, next) => {
 
 export const updatepost = async (req, res, next) => {
   try {
-    const { title,content,category,image } = req.body;
+    const { title, content, category, image } = req.body;
+
+    /// 先更新Post
     const updatedPost = await Post.findByIdAndUpdate(
       req.params.postId,
       {
@@ -165,30 +208,6 @@ export const updatepost = async (req, res, next) => {
     next(error);
   }
 };
-// export const updatepost = async (req, res, next) => {
-//   // if (!req.user.isAdmin || req.user.id !== req.params.userId) {
-//   //   return next(errorHandler(403, 'You are not allowed to update this post'));
-//   // }
-
-//   try {
-//     ////const { title,content,category,image } = req.body;
-//     const updatedPost = await Post.findByIdAndUpdate(
-//       req.params.postId,
-//       {
-//         $set: {
-//           title: req.body.title,
-//           content: req.body.content,
-//           category: req.body.category,
-//           image: req.body.image,
-//         },
-//       },
-//       { new: true }
-//     );
-//     res.status(200).json(updatedPost);
-//   } catch (error) {
-//     next(error);
-//   }
-// };
 
 export const get_required_post = async (req, res, next) => {
   const { postId } = req.body;
@@ -199,7 +218,7 @@ export const get_required_post = async (req, res, next) => {
   //   return next(errorHandler(403, 'You are not allowed to update this post'));
   // }
   try {
-    const post =await Post.find({ _id: postId });
+    const post = await Post.find({ _id: postId });
     console.log('find之后一行')
     res.status(200).json(post);
   } catch (error) {
@@ -258,7 +277,7 @@ export const getRecentPosts = async (req, res, next) => {
   const limit = req.query.limit || 3;
   const startIndex = req.query.startIndex || 0;
   try {
-    const posts=await Post.find()
+    const posts = await Post.find()
       .sort({ createdAt: sortDirection })
       .skip(startIndex)
       .limit(limit);
