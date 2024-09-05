@@ -7,7 +7,8 @@ export const create = async (req, res, next) => {
   // if (!req.user.isAdmin) {
   //   return next(errorHandler(403, 'You are not allowed to create a post'));
   // }
-  if (!req.body.title || !req.body.content) {
+  if (!req.body.title || !req.body.content) 
+  {
     return next(errorHandler(400, 'Please provide all required fields'));
   }
 
@@ -24,10 +25,12 @@ export const create = async (req, res, next) => {
   //   .join('-')
   //   .toLowerCase()
   //   .replace(/[^a-zA-Z0-9-]/g, '');
+  const updateTime = Date.now();
   const newPost = new Post({
     ...req.body,
     slug,
     userId: req.user.id,
+    updateTime: updateTime,
   });
   try {
     const savedPost = await newPost.save();
@@ -60,7 +63,7 @@ export const getposts = async (req, res, next) => {
         ],
       }),
     })
-      .sort({ updatedAt: sortDirection })
+      .sort({ updateTime: sortDirection })
       .skip(startIndex)
       .limit(limit);
 
@@ -119,6 +122,7 @@ export const updatepost = async (req, res, next) => {
           content: content,
           category: category,
           image: image,
+          updatedTime: Date.now(),
         },
       },
       { new: true }
