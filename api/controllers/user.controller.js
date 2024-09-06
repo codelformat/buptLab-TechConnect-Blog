@@ -1,6 +1,10 @@
 // /api/controllers/user.controller.js
 import bcryptjs from 'bcryptjs';
 import User from '../models/user.model.js';
+import Notification from '../models/notification.model.js';
+import Post from '../models/post.model.js';
+import Click from '../models/click.model.js';
+import Comment from '../models/comment.model.js';
 import { errorHandler } from '../utils/error.js';
 import e from 'express';
 
@@ -62,7 +66,92 @@ export const deleteUser = async (req, res, next) => {
         return next(errorHandler(403, 'You are not allowed to delete this user'));
     }
     try {
-        await User.findByIdAndDelete(req.params.userId.trim());
+        const userId = req.params.userId.trim()
+        /// 先找到user
+        const user = await User.findById(userId);
+
+        /// 再找到对应外键userId的Notification
+        Notification.find({userId: userId})
+        .then(notifications => {
+            // 若找不到对应的notifications
+            if (notifications.length === 0){
+                return;
+            }
+
+            // 删除相关的notifications
+            notifications.forEach(async (notification) => {
+                await Notification.findByIdAndDelete(notification._id);
+            });
+
+            console.log("User Deletion: notifications deletion done")
+        })
+        .catch(err => {
+            console.log(err);
+            next(err);
+        })
+
+        /// 再找到对应外键userId的Clicks
+        Click.find({userId: userId})
+        .then(clicks => {
+            // 若找不到对应的clicks
+            if(clicks.length === 0){
+                return;
+            }
+
+            // 删除相关的clicks
+            clicks.forEach(async (click) => {
+                await Click.findByIdAndDelete(click._id);
+            });
+
+            console.log("User Deletion: Clicks deletion done");
+        })
+        .catch(err => {
+            console.log(err)
+            next(err)
+        })
+
+        /// 再找到对应外键userId的Posts
+        Post.find({userId: userId})
+        .then(posts => {
+            // 若找不到对应的posts
+            if(posts.length === 0){
+                return;
+            }
+
+            // 删除相关posts
+            posts.forEach(async (post) => {
+                await Post.findByIdAndDelete(post._id);
+            });
+
+            console.log("User Deletion: Posts deletion done")
+        })
+        .catch(err => {
+            console.log(err);
+            next(err);
+        });
+
+        /// 再找到对应外键userId的Comments
+        Comment.find({userId: userId})
+        .then(comments => {
+            // 若找不到对应的comments
+            if(comments.length === 0){
+                return;
+            }
+
+            // 删除相关comments
+            comments.forEach(async (comment) => {
+                await Comment.findByIdAndDelete(comment._id);
+            });
+
+            console.log("User Deletion: Comments deletion done")
+        })
+        .catch(err => {
+            console.log(err);
+            next(err);
+        });
+
+        /// 最后再删user
+        await User.findByIdAndDelete(userId);
         res.status(200).json({ message: 'User has been deleted' });
     } catch (error) {
         next(error); // handle error with middleware

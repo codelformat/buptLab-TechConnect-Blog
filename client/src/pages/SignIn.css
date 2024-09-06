@@ -2,76 +2,76 @@
 
 /* 动态亮色弥散光背景 */
 .dynamic-bg {
-  background: radial-gradient(circle at 50% 50%, #ff9a9e, #fad0c4, #fad0c4, #fbc2eb, #a6c1ee);
-  background-size: 400% 400%;
-  animation: gradientAnimation 15s ease infinite;
+  background: radial-gradient(circle at 50% 50%, #ff9a9e, #fad0c4, #fad0c4, #fbc2eb, #a6c1ee); /* 设置从中心向外扩散的渐变色背景 */
+  background-size: 400% 400%; /* 将背景图放大4倍，使动画效果更显著 */
+  animation: gradientAnimation 15s ease infinite; /* 应用渐变背景动画，15秒循环一次 */
 }
 
 /* 绚丽的蓝紫色偏暗弥散光背景 */
 .dynamic-bg-dark {
-  background: radial-gradient(circle at 50% 50%, #3b5998, #6a5acd, #483d8b, #8a2be2, #4b0082);
+  background: radial-gradient(circle at 50% 50%, #3b5998, #6a5acd, #483d8b, #8a2be2, #4b0082); /* 设置深色主题的渐变背景 */
   background-size: 400% 400%;
   animation: gradientAnimation 15s ease infinite;
 }
 
 @keyframes gradientAnimation {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+  0% { background-position: 0% 50%; } /* 起始位置从左边 */
+  50% { background-position: 100% 50%; } /* 动画中间背景移到右边 */
+  100% { background-position: 0% 50%; } /* 动画结束背景回到左边 */
 }
 
 /* 输入框图标动画 */
 .input-container {
-  position: relative;
+  position: relative; /* 设置相对定位，用于包含绝对定位的图标 */
   margin: 0 auto;
-  width: 100%;
+  width: 100%; /* 输入框宽度占满父容器 */
 }
 
 .icon {
-  position: absolute;
-  left: 0.75rem;
-  top: 50%;
-  transform: translateY(-50%);
-  transition: transform 0.3s ease, font-size 0.3s ease, top 0.3s ease;
-  color: #4b5563;
+  position: absolute; /* 绝对定位图标 */
+  left: 0.75rem; /* 图标距离左边0.75rem */
+  top: 50%; /* 图标垂直居中 */
+  transform: translateY(-50%); /* 确保图标完全居中 */
+  transition: transform 0.3s ease, font-size 0.3s ease, top 0.3s ease; /* 设置图标动画效果 */
+  color: #4b5563; /* 图标初始颜色 */
 }
 
 .icon-focused {
-  transform: translateY(-150%) scale(0.75);
+  transform: translateY(-150%) scale(0.75); /* 当输入框被聚焦时，图标缩小并上移 */
   top: 0.25rem;
   font-size: 0.75rem;
-  color: #3b82f6;
+  color: #3b82f6; /* 聚焦时图标颜色改变 */
 }
 
 .input-field {
-  padding-left: 2.5rem; /* 为了给图标留出空间 */
-  width: 100%; /* 确保输入框的宽度适应父容器 */
+  padding-left: 2.5rem; /* 输入框左边内边距，给图标留出空间 */
+  width: 100%; /* 输入框宽度适应父容器 */
   padding: 0.75rem;
-  border-radius: 0.375rem !important;
-  border: px solid #cbd5e0!important;
-  transition: padding-left 0.3s ease;
+  border-radius: 0.375rem !important; /* 输入框圆角 !important 优先级声明 */
+  border: 1px solid #cbd5e0 !important; /* 输入框边框颜色 !important 优先级声明*/
+  transition: padding-left 0.3s ease; /* 输入框左侧内边距动画 */
 }
 
 .input-field:focus {
-  outline: none;
-  border-color: #3b82f6;
+  outline: none; /* 焦点时去掉默认的外边框 */
+  border-color: #3b82f6; /* 焦点时边框颜色改变 */
 }
 
 /* 浮动标签样式 */
 .floating-label {
-  position: absolute;
-  left: 2.5rem;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 1rem;
-  color: #9ca3af;
-  pointer-events: none;
-  transition: all 0.3s ease;
+  position: absolute; /* 绝对定位浮动标签 */
+  left: 2.5rem; /* 标签位置与输入框内边距对齐 */
+  top: 50%; /* 标签垂直居中 */
+  transform: translateY(-50%); /* 确保标签完全居中 */
+  font-size: 1rem; /* 标签字体大小 */
+  color: #9ca3af; /* 标签初始颜色 */
+  pointer-events: none; /* 禁用标签的鼠标事件，避免影响输入 */
+  transition: all 0.3s ease; /* 设置标签动画效果 */
 }
 
 .label-focused {
-  top: 0.25rem;
-  transform: translateY(-150%);
-  font-size: 0.75rem;
-  color: #3b82f6;
+  top: 0.25rem; /* 聚焦时标签上移 */
+  transform: translateY(-150%); /* 使标签上移并缩小 */
+  font-size: 0.75rem; /* 标签字体变小 */
+  color: #3b82f6; /* 聚焦时标签颜色改变 */
 }

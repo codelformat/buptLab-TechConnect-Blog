@@ -1,9 +1,8 @@
 // /api/routes/post.route.js
 import express from 'express';
 import { verifyToken } from '../utils/verifyUser.js';
-import { create, deletepost, getposts, updatepost,
-    get_required_post ,getpostBySlug, getPostsCount,getpostsByCategory,
-    getRecentPosts
+import { create, deletepost, getposts, updatepost, getRecentPosts,
+    get_required_post ,getpostBySlug, getPostsCount,getpostsByCategory, getSearchPosts
 } from '../controllers/post.controller.js';
 
 const router = express.Router();
@@ -17,4 +16,6 @@ router.post('/getpostBySlug',getpostBySlug)
 router.get('/getPostsCount',getPostsCount)
 router.post('/getpostsByCategory',getpostsByCategory)
 router.get('/get-recent-posts',getRecentPosts)
+router.post('/getSearchPosts', getSearchPosts)
+
 export default router;

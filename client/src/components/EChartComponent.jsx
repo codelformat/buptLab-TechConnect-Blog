@@ -6,7 +6,6 @@ const EChartComponent = () => {
   const [clickNumByDay, setClickNumByDay] = useState([]);
   const chartRef = useRef(null);
 
-    // 获取数据
     const tempUser = useSelector((state) => state.user);
     const currentUser = tempUser.currentUser.rest
       ? tempUser.currentUser.rest
@@ -30,7 +29,7 @@ const EChartComponent = () => {
         console.log(error.message);
       }
       };
-      fetchPosts(); // 在组件挂载时获取数据
+      fetchPosts(); 
   }, [currentUser]);
   console.log(clickNumByDay);
   const date = clickNumByDay.map((item) => item.date);
@@ -57,7 +56,7 @@ const EChartComponent = () => {
       xAxis: {
         type: "category",
         boundaryGap: false,
-        data: date, // 可能需要检查 `date` 是否存在
+        data: date, 
       },
       yAxis: {
         type: "value",
@@ -66,13 +65,13 @@ const EChartComponent = () => {
         {
           name: "点击量",
           type: "line",
-          data: totalClicks, // 可能需要检查 `totalClicks` 是否存在
-          smooth: true, // 平滑线
+          data: totalClicks, 
+          smooth: true, 
           lineStyle: {
-            color: "#FF6600", // 线条颜色
+            color: "#FF6600", 
           },
           itemStyle: {
-            color: "#FF6600", // 点的颜色
+            color: "#FF6600",
           },
         },
       ],
@@ -88,7 +87,7 @@ const EChartComponent = () => {
       window.removeEventListener("resize", handleResize);
       chartInstance.dispose(); // 清理 ECharts 实例
     };
-  }, [clickNumByDay]); // 添加依赖项，以便数据变化时更新图表
+  }, [clickNumByDay]); 
 
   return (
     <div

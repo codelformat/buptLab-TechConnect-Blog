@@ -67,42 +67,44 @@ export default function DashNotifications() {
   }
 
   return (
-    <div className="p-5">
-      <h1 className="text-2xl font-bold mb-5">通知</h1>
+    <div className="p-5 w-full">
+      <h1 className="text-2xl font-bold mb-5 text-center">通知</h1>
       {notifications.length === 0 ? (
-        <p>暂无通知</p>
+        <p className="text-center">暂无通知</p>
       ) : (
-        <Table hoverable className="shadow-md">
-          <Table.Head>
-            <Table.HeadCell>消息</Table.HeadCell>
-            <Table.HeadCell>操作</Table.HeadCell>
-          </Table.Head>
-          {notifications.map((notification) => (
-            <Table.Body className="divide-y" key={notification._id}>
-              <Table.Row className={notification.isRead ? "bg-gray-100" : ""}>
-                <Table.Cell>{notification.message}</Table.Cell>
-                <Table.Cell>
-                  {!notification.isRead && (
+        <div className="flex justify-center w-full">
+          <Table hoverable className="shadow-md w-full max-w-7xl">
+            <Table.Head>
+              <Table.HeadCell>消息</Table.HeadCell>
+              <Table.HeadCell>操作</Table.HeadCell>
+            </Table.Head>
+            {notifications.map((notification) => (
+              <Table.Body className="divide-y" key={notification._id}>
+                <Table.Row className={notification.isRead ? "bg-gray-100" : ""}>
+                  <Table.Cell>{notification.message}</Table.Cell>
+                  <Table.Cell>
+                    {!notification.isRead && (
+                      <Button
+                        onClick={() => markAsRead(notification._id)}
+                        size="xs"
+                      >
+                        标记为已读
+                      </Button>
+                    )}
                     <Button
-                      onClick={() => markAsRead(notification._id)}
+                      onClick={() => deleteNotification(notification._id)}
                       size="xs"
+                      color="failure"
+                      className="ml-2"
                     >
-                      标记为已读
+                      删除
                     </Button>
-                  )}
-                  <Button
-                    onClick={() => deleteNotification(notification._id)}
-                    size="xs"
-                    color="failure"
-                    className="ml-2"
-                  >
-                    删除
-                  </Button>
-                </Table.Cell>
-              </Table.Row>
-            </Table.Body>
-          ))}
-        </Table>
+                  </Table.Cell>
+                </Table.Row>
+              </Table.Body>
+            ))}
+          </Table>
+        </div>
       )}
     </div>
   );
