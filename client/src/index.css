@@ -2,7 +2,11 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
+@layer utilities{
+  .display-webkit-box{
+    display:-webkit-box;
+  }
+}
 /* 全局样式 */
 * {
   margin: 0;
