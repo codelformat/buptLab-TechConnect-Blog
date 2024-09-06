@@ -9,7 +9,11 @@ export default {
     flowbite.content(),
   ],
   theme: {
-    extend: {},
+    extend: {
+      display: {
+        'webkit-box':'-webkit-box',
+      },
+    },
   },
   plugins: [
     require('flowbite/plugin'),
