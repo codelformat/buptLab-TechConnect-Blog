@@ -7,12 +7,15 @@
   "scripts": {
     "dev": "nodemon api/index.js",
     "start": "node api/index.js",
-    "build": "npm install && npm install --prefix client && npm run build --prefix client"
+    "build": "npm install && npm install --prefix client && npm run build --prefix client",
+    "dev:notification": "nodemon api/services/notification.service.js",
+    "start:notification": "node api/services/notification.service.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "amqplib": "^0.10.4",
     "axios": "^1.7.7",
     "bcryptjs": "^2.4.3",
     "buptlab-mern-blog": "file:",
@@ -27,6 +30,7 @@
     "multer": "^1.4.5-lts.1",
     "nodemailer": "^6.9.14",
     "nodemon": "^3.1.4",
-    "pinyin": "^4.0.0-alpha.2"
+    "pinyin": "^4.0.0-alpha.2",
+    "ws": "^8.18.0"
   }
 }

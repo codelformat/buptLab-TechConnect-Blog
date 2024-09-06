@@ -4,6 +4,7 @@ import Comment from "../models/comment.model.js";
 import Post from "../models/post.model.js";
 import User from "../models/user.model.js";
 import Notification from "../models/notification.model.js";
+import { sendMessageToQueue } from '../utils/queue.js';
 
 export const createComment = async (req, res) => {
     //console.log('createComment');
@@ -24,14 +25,20 @@ export const createComment = async (req, res) => {
         // 创建通知内容
         const message = `You have received a comment from user "${user.username}" on your post "${commentedPost.title}"`
 
-        // 为目标用户创建Notification
-        const notification = new Notification({
+        // // 为目标用户创建Notification
+        // const notification = new Notification({
+        //     userId: commentedPost.userId,
+        //     message,
+        // })
+
+        // // 保存通知
+        // await notification.save();
+
+        // 发送消息到消息队列
+        await sendMessageToQueue('notificationQueue', JSON.stringify({
             userId: commentedPost.userId,
             message,
-        })
-
-        // 保存通知
-        await notification.save();
+        }));
 
         /// Create Comments
         // 创建新评论
@@ -137,22 +144,30 @@ export const likeComment = async (req, res, next) => {
             console.log("push done")
             /// 若有点赞，创建Notification
             const goalUserId = comment.userId;
+            console.log(goalUserId)
 
             // 找到对应的post
-            const post = await Post.findById(comment._id);
+            const post = await Post.findById(comment.postId);
             const postTitle = post.title
+            console.log(postTitle)
             console.log(`comments: ${goalUserId}`)
             const message = `You have received a like for your comment "${comment.content}" on post "${postTitle}"`;
 
             console.log(message)
-            // 创建Notification
-            const notification = new Notification({
+            // // 创建Notification
+            // const notification = new Notification({
+            //     userId: goalUserId,
+            //     message,
+            // });
+            
+            // // 保存Notification
+            // await notification.save();
+
+            // 发送消息到消息队列
+            await sendMessageToQueue('notificationQueue', JSON.stringify({
                 userId: goalUserId,
                 message,
-            });
-            
-            // 保存Notification
-            await notification.save();
+            }));
         }
         else {
             comment.numberOfLikes -= 1;
