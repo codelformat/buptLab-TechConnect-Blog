@@ -47,8 +47,8 @@
   padding-left: 2.5rem; /* 输入框左边内边距，给图标留出空间 */
   width: 100%; /* 输入框宽度适应父容器 */
   padding: 0.75rem;
-  border-radius: 0.375rem !important; /* 输入框圆角 */
-  border: 1px solid #cbd5e0 !important; /* 输入框边框颜色 */
+  border-radius: 0.375rem !important; /* 输入框圆角 !important 优先级声明 */
+  border: 1px solid #cbd5e0 !important; /* 输入框边框颜色 !important 优先级声明*/
   transition: padding-left 0.3s ease; /* 输入框左侧内边距动画 */
 }
 
