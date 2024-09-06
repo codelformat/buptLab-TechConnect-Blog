@@ -104,8 +104,8 @@ export const google = async (req, res, next) => {
                     httpOnly: true,
                 })
                 .json({ rest });
-            console.log(token);
-            res.json(newUser);
+            // console.log(token);
+            // res.json(newUser);
         } else {
             // If the user already exists, send the user data
             const token = jwt.sign({ id: user._id, isAdmin: user.isAdmin }, process.env.JWT_SECRET);
