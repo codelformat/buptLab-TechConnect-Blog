@@ -25,19 +25,49 @@ export default function Header() {
 
   useEffect(() => {
     if (currentUser) {
-      const interval = setInterval(async () => {
+      const fetchNotifications = async () => {
         try {
           const res = await fetch(`/api/notifications/${currentUser._id}`);
           const notifications = await res.json();
-          console.log(notifications);
           const unread = notifications.filter((n) => !n.isRead).length;
           setUnreadCount(unread);
         } catch (error) {
-          console.error('Failed to fetch unread notifications count', error);
+          console.error("Failed to fetch unread notifications count", error);
         }
-      }, 5000); // Poll every 5 seconds
-  
-      return () => clearInterval(interval);
+      };
+
+      fetchNotifications();
+
+      // 连接 WebSocket
+      const ws = new WebSocket("ws://localhost:6666"); // 使用后端 WebSocket 服务器的地址
+
+      ws.onopen = () => {
+        console.log("WebSocket connection established");
+      };
+
+      ws.onmessage = (event) => {
+        const notification = JSON.parse(event.data);
+        if (notification.userId === currentUser._id) {
+          setUnreadCount((prev) => prev + 1); // 接收到新通知时，更新未读计数
+        }
+      };
+
+      ws.onclose = () => {
+        console.log("WebSocket connection closed");
+      };
+
+      ws.onerror = (error) => {
+        console.error("WebSocket error:", error);
+      };
+
+      // 定时轮询，确保通知数据的准确性
+      const intervalId = setInterval(fetchNotifications, 5000); // 每5s检查一次
+
+      // 清理 WebSocket 连接
+      return () => {
+        ws.close();
+        clearInterval(intervalId);
+      };
     }
   }, [currentUser]);
 
@@ -45,7 +75,9 @@ export default function Header() {
     <Navbar
       className={` ${
         isSignInPage || isSignUpPage || isForgotPage || isResetPage
-          ? (theme === 'dark' ? "dynamic-bg-dark" : "dynamic-bg")
+          ? theme === "dark"
+            ? "dynamic-bg-dark"
+            : "dynamic-bg"
           : ".default-bg"
       }`}
     >
@@ -54,7 +86,11 @@ export default function Header() {
       <div className="flex gap-2 md:order-2">
         <ThemeToggleButton />
         {currentUser ? (
-          <UserDropdown currentUser={currentUser} unreadCount={unreadCount} setUnreadCount={setUnreadCount} />
+          <UserDropdown
+            currentUser={currentUser}
+            unreadCount={unreadCount}
+            setUnreadCount={setUnreadCount}
+          />
         ) : (
           <AuthButton />
         )}
