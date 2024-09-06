@@ -4,7 +4,8 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { useSelector } from "react-redux";
-
+import MarkdownRenderer from "../components/MarkdownRendered";
+import markdownToText from "markdown-to-text"
 const Home = () => {
   const [recentPosts, setRecentPosts] = useState([]);
   const [allPosts, setAllPosts] = useState([]);
@@ -183,8 +184,11 @@ const Home = () => {
                       {post.title}
                     </Link>
                   </h3>
-                  <p className="mt-4 text-gray-300 hidden md:block">
-                    {post.content.substring(0, 150)}...
+                  {/* <div className='relative pb-10 m-2 box-border h-6'>
+                  <MarkdownRenderer markdown={post&& post.content} theme='dark' style=' !overflow-hidden absolute mb-3 max-h-20' />
+                  </div> */}
+                  <p className="mt-4 mx-10  text-gray-200  md:block line-clamp-3 !display-webkit-box">
+                    {markdownToText(post.content)}
                   </p>
                   <div className="mt-4">
                     <span
@@ -197,7 +201,7 @@ const Home = () => {
                   </div>
                   <Link
                     to={`/post/${post.slug}`}
-                    className="z-10 mt-4 inline-block px-6 py-2 border border-teal-500 text-teal-500 hover:bg-teal-500 hover:text-white transition-all duration-300 text-center rounded-md"
+                    className="z-10 mt-4 inline-block px-6 py-2 border border-teal-500 text-white bg-teal-400 hover:bg-teal-500 hover:text-white transition-all duration-300 text-center rounded-md"
                   >
                     Read the article
                   </Link>
@@ -240,8 +244,8 @@ const Home = () => {
                   <h3 className="text-xl font-bold mt-2">
                     <Link to={`/post/${post.slug}`}>{post.title}</Link>
                   </h3>
-                  <p className="mt-4 text-gray-600">
-                    {post.content.substring(0, 100)}...
+                  <p className="mt-4 text-gray-600 line-clamp-3">
+                    {markdownToText(post.content)}
                   </p>
                   <div className="mt-4">
                     <span
