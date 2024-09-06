@@ -2,6 +2,7 @@
 import { errorHandler } from "../utils/error.js";
 import Comment from "../models/comment.model.js";
 import Post from "../models/post.model.js";
+import User from "../models/user.model.js";
 import Notification from "../models/notification.model.js";
 
 export const createComment = async (req, res) => {
@@ -17,8 +18,11 @@ export const createComment = async (req, res) => {
         // 找到评论的post
         const commentedPost = await Post.findById(postId);
 
+        // 找到目标User
+        const user = await User.findById(userId);
+
         // 创建通知内容
-        const message = `You have received a comment from user ${userId} on your post "${commentedPost.title}"`
+        const message = `You have received a comment from user "${user.username}" on your post "${commentedPost.title}"`
 
         // 为目标用户创建Notification
         const notification = new Notification({
@@ -133,8 +137,12 @@ export const likeComment = async (req, res, next) => {
             console.log("push done")
             /// 若有点赞，创建Notification
             const goalUserId = comment.userId;
+
+            // 找到对应的post
+            const post = await Post.findById(comment._id);
+            const postTitle = post.title
             console.log(`comments: ${goalUserId}`)
-            const message = `You have received a like for your comment "${comment.content}" on post ${comment.postId}`;
+            const message = `You have received a like for your comment "${comment.content}" on post "${postTitle}"`;
 
             console.log(message)
             // 创建Notification

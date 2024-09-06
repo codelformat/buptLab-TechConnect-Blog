@@ -139,7 +139,7 @@ export default function SignIn() {
               <label
                 htmlFor="password"
                 className={`floating-label ${
-                  passwordFocused || !formData.password ? "label-focused" : ""
+                  passwordFocused || !formData.password ? "label-focused" : "opacity-0 invisible"
                 }`}
               >
                 密码
